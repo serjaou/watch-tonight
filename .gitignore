@@ -1,0 +1,37 @@
+# Python virtual environments & build artifacts (like bin/ and obj/ in .NET)
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Tool caches (like .vs/ in Visual Studio)
+.pytest_cache/
+.ruff_cache/
+.pyright/
+.import_linter_cache/
+.mutmut-cache/
+.coverage
+htmlcov/
+
+# Harness local state
+.harness/
+
+# Secrets & environment variables (like appsettings.Development.json / user-secrets)
+.env
+.env.*
+!.env.example
+
+# Frontend (web/)
+node_modules/
+web/dist/
+web/.vite/
+
+# OS & editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,111 @@
+[project]
+name = "watch-tonight"
+version = "0.1.0"
+description = "Mood-based movie recommender with verified streaming availability."
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "MIT" }
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "import-linter>=2.1",
+    "poethepoet>=0.32.0",
+    "pyright>=1.1.390",
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.25.0",
+    "ruff>=0.9.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/watch_tonight"]
+
+# ---------------------------------------------------------------------------
+# Task runner: poethepoet (`uv run poe <task>`)
+# Works identically on macOS and Windows (replaces Makefile)
+# ---------------------------------------------------------------------------
+[tool.poe.tasks]
+lint = "ruff check src tests"
+fmt-check = "ruff format --check src tests"
+fmt = [
+    { cmd = "ruff check --fix src tests" },
+    { cmd = "ruff format src tests" },
+]
+typecheck = "pyright"
+arch = "lint-imports"
+test = "pytest -m 'not integration'"
+test-all = "pytest"
+check = ["lint", "fmt-check", "typecheck", "arch", "test"]
+
+# ---------------------------------------------------------------------------
+# Linter & formatter: ruff (like Roslyn analyzers + dotnet format)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes (unused imports/variables)
+    "I",   # isort (import sorting)
+    "B",   # flake8-bugbear (common bugs)
+    "UP",  # pyupgrade (modern Python syntax)
+    "SIM", # flake8-simplify
+    "RUF", # ruff-specific rules
+]
+
+# ---------------------------------------------------------------------------
+# Type checker: pyright (like C# compiler + <Nullable>enable</Nullable>)
+# ---------------------------------------------------------------------------
+[tool.pyright]
+pythonVersion = "3.13"
+include = ["src", "tests"]
+typeCheckingMode = "strict"
+
+# ---------------------------------------------------------------------------
+# Architecture rules: import-linter (like NetArchTest)
+# ---------------------------------------------------------------------------
+[tool.importlinter]
+root_package = "watch_tonight"
+
+[[tool.importlinter.contracts]]
+name = "Domain layer is independent"
+type = "forbidden"
+source_modules = ["watch_tonight.domain"]
+forbidden_modules = [
+    "watch_tonight.application",
+    "watch_tonight.infra",
+    "watch_tonight.api",
+    "watch_tonight.mcp_server",
+    "watch_tonight.jobs",
+]
+
+[[tool.importlinter.contracts]]
+name = "Application layer depends only on domain"
+type = "forbidden"
+source_modules = ["watch_tonight.application"]
+forbidden_modules = [
+    "watch_tonight.infra",
+    "watch_tonight.api",
+    "watch_tonight.mcp_server",
+    "watch_tonight.jobs",
+]
+
+# ---------------------------------------------------------------------------
+# Test runner: pytest (like xUnit)
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-ra -q"
+markers = [
+    "integration: tests that require Docker / external services (deselect with '-m \"not integration\"')",
+]
