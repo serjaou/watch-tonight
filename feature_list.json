@@ -1,0 +1,34 @@
+{
+  "features": [
+    {
+      "id": "feat-001",
+      "type": "chore",
+      "name": "Repo skeleton and harness v0",
+      "stories": [],
+      "status": "in_progress",
+      "dependencies": [],
+      "spec": null,
+      "evidence": "uv run poe check -> ruff check: All checks passed!; ruff format --check: 8 files already formatted; pyright: 0 errors, 0 warnings; lint-imports: 2 kept, 0 broken; pytest: 1 passed in 0.01s"
+    },
+    {
+      "id": "feat-002",
+      "type": "spike",
+      "name": "Spike: TMDB terms, rate limits and watch-provider coverage for ES, US and BO",
+      "stories": ["US1"],
+      "status": "todo",
+      "dependencies": ["feat-001"],
+      "spec": "docs/spikes/02-tmdb-and-providers.md",
+      "evidence": ""
+    },
+    {
+      "id": "feat-003",
+      "type": "spike",
+      "name": "Spike: Atlas free tier, vector-search pre-filters and the atlas-local image",
+      "stories": ["US1", "US2"],
+      "status": "todo",
+      "dependencies": ["feat-001"],
+      "spec": "docs/spikes/03-atlas-vector-search.md",
+      "evidence": ""
+    }
+  ]
+}
