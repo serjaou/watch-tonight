@@ -9,4 +9,4 @@ description: >-
 
 1. Run the **Session start protocol** in [AGENTS.md](../../../AGENTS.md), steps 1–4.
 2. For the CI result, use `gh run list --branch <branch> --limit 1` if `gh` is installed; otherwise ask the owner to check the Actions tab on GitHub.
-3. Send the step-4 report, then stop and wait for the owner's "go".
+3. Send the step-4 report. Then continue or wait for "go", as step 4 says.
