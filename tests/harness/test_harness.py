@@ -5,17 +5,22 @@ Verifies:
 2. `feature_list.json` obeys structural invariants (at most 1 `in_progress`, valid types/statuses,
    `done` requires non-empty `evidence`, valid dependency references).
 3. Required harness files (skills, reviewer, hooks, state docs) exist.
-4. `stop_gate.py` blocks when checks fail and allows after `MAX_ATTEMPTS` or when checks pass.
+4. `stop_gate.py` allows stopping when no code changed, blocks while checks fail, and gives up
+   after `MAX_ATTEMPTS`. It runs in a throwaway git repo so the result never depends on this
+   repo's git state (a clean checkout in CI must behave like a dirty laptop).
 """
 
 from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 from typing import TypedDict
+
+import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 VALID_TYPES = {"feature", "spike", "chore"}
@@ -100,39 +105,59 @@ def test_required_harness_files_exist() -> None:
         assert (REPO_ROOT / rel_path).is_file(), f"Missing harness file: {rel_path}"
 
 
-def test_stop_gate_blocks_on_failure_and_allows_on_success() -> None:
-    script = REPO_ROOT / "scripts" / "hooks" / "stop_gate.py"
-    counter = REPO_ROOT / ".harness" / "stop_gate_attempts"
-    counter.unlink(missing_ok=True)
+FAILING_CHECK = f"{sys.executable} -c import_error_xyz"
+PASSING_CHECK = f"{sys.executable} -V"
 
-    try:
-        # 1. Simulate a failing check command -> should return decision: "continue"
-        env_fail = {**os.environ, "STOP_GATE_CMD": f"{sys.executable} -c import_error_xyz"}
-        res_fail = subprocess.run(
-            [sys.executable, str(script)],
-            input=json.dumps({"terminationReason": "NO_TOOL_CALL"}),
-            capture_output=True,
-            text=True,
-            env=env_fail,
-            check=True,
-        )
-        out_fail: dict[str, str] = json.loads(res_fail.stdout.strip())
-        assert out_fail["decision"] == "continue"
-        assert "attempt 1/3" in out_fail["reason"]
-        assert counter.is_file() and counter.read_text().strip() == "1"
 
-        # 2. Simulate a passing check command -> should return decision: "allow" & clear counter
-        env_pass = {**os.environ, "STOP_GATE_CMD": f"{sys.executable} -V"}
-        res_pass = subprocess.run(
-            [sys.executable, str(script)],
-            input=json.dumps({"terminationReason": "NO_TOOL_CALL"}),
-            capture_output=True,
-            text=True,
-            env=env_pass,
-            check=True,
-        )
-        out_pass: dict[str, str] = json.loads(res_pass.stdout.strip())
-        assert out_pass["decision"] == "allow"
-        assert not counter.exists()
-    finally:
-        counter.unlink(missing_ok=True)
+@pytest.fixture
+def gate_repo(tmp_path: Path) -> Path:
+    """A throwaway git repo holding a copy of `stop_gate.py` and no code changes."""
+    hooks_dir = tmp_path / "scripts" / "hooks"
+    hooks_dir.mkdir(parents=True)
+    shutil.copy(REPO_ROOT / "scripts" / "hooks" / "stop_gate.py", hooks_dir)
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    # Hide the copied script itself, otherwise it counts as an untracked change in `scripts/`.
+    (tmp_path / ".git" / "info" / "exclude").write_text("scripts/hooks/stop_gate.py\n")
+    return tmp_path
+
+
+def run_stop_gate(repo: Path, check_cmd: str) -> dict[str, str]:
+    result = subprocess.run(
+        [sys.executable, str(repo / "scripts" / "hooks" / "stop_gate.py")],
+        input=json.dumps({"terminationReason": "NO_TOOL_CALL"}),
+        capture_output=True,
+        text=True,
+        env={**os.environ, "STOP_GATE_CMD": check_cmd},
+        check=True,
+    )
+    return json.loads(result.stdout.strip())
+
+
+def test_stop_gate_allows_stop_without_checking_when_no_code_changed(gate_repo: Path) -> None:
+    assert run_stop_gate(gate_repo, FAILING_CHECK)["decision"] == "allow"
+    assert not (gate_repo / ".harness" / "stop_gate_attempts").exists()
+
+
+def test_stop_gate_blocks_until_check_passes(gate_repo: Path) -> None:
+    (gate_repo / "src").mkdir()
+    (gate_repo / "src" / "app.py").write_text("x = 1\n")
+    counter = gate_repo / ".harness" / "stop_gate_attempts"
+
+    blocked = run_stop_gate(gate_repo, FAILING_CHECK)
+    assert blocked["decision"] == "continue"
+    assert "attempt 1/3" in blocked["reason"]
+    assert counter.read_text().strip() == "1"
+
+    assert run_stop_gate(gate_repo, PASSING_CHECK)["decision"] == "allow"
+    assert not counter.exists()
+
+
+def test_stop_gate_gives_up_after_max_attempts(gate_repo: Path) -> None:
+    (gate_repo / "src").mkdir()
+    (gate_repo / "src" / "app.py").write_text("x = 1\n")
+    counter = gate_repo / ".harness" / "stop_gate_attempts"
+    counter.parent.mkdir()
+    counter.write_text("3")
+
+    assert run_stop_gate(gate_repo, FAILING_CHECK)["decision"] == "allow"
+    assert not counter.exists()

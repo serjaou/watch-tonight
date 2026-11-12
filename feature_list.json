@@ -21,6 +21,16 @@
       "evidence": "uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 13 passed in 0.19s; reviewer subagent: No findings; /defend: 3/3 questions completed and logged in LEARNING.md"
     },
     {
+      "id": "feat-004",
+      "type": "chore",
+      "name": "Harness review: first Windows session, Claude Code support, inception review",
+      "stories": [],
+      "status": "in_progress",
+      "dependencies": ["feat-001"],
+      "spec": null,
+      "evidence": ""
+    },
+    {
       "id": "feat-002",
       "type": "spike",
       "name": "Spike: TMDB terms, rate limits and watch-provider coverage for ES, US and BO",
