@@ -25,15 +25,15 @@
       "type": "chore",
       "name": "Harness review: first Windows session, Claude Code support, inception review",
       "stories": [],
-      "status": "in_progress",
+      "status": "done",
       "dependencies": ["feat-001"],
       "spec": null,
-      "evidence": ""
+      "evidence": "Windows, 2026-11-12: uv run poe check -> ruff: All checks passed!; pyright strict: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed. pre-commit run --all-files -> gitleaks, ruff check, ruff format: Passed. Real Claude Code Stop hook (uv run --no-sync python scripts/hooks/stop_gate.py with a Stop payload): decision block on a real F401 lint error, no output when green. CI on GitHub and Antigravity on the Mac: see PROGRESS.md / feat-007."
     },
     {
       "id": "feat-005",
       "type": "chore",
-      "name": "Architecture v0 (docs/architecture.md, max 2 pages, open questions listed) and the question files for spikes feat-002, feat-003 and feat-006",
+      "name": "Architecture v0 (docs/architecture.md, max 2 pages, open questions listed) and the question files for spikes feat-008, feat-009 and feat-010",
       "stories": [],
       "status": "todo",
       "dependencies": ["feat-001"],
@@ -41,62 +41,62 @@
       "evidence": ""
     },
     {
-      "id": "feat-002",
-      "type": "spike",
-      "name": "Spike: TMDB terms, rate limits and watch-provider coverage for ES, US and BO",
-      "stories": ["US1"],
-      "status": "todo",
-      "dependencies": ["feat-001", "feat-005"],
-      "spec": "docs/spikes/02-tmdb-and-providers.md",
-      "evidence": ""
-    },
-    {
-      "id": "feat-003",
-      "type": "spike",
-      "name": "Spike: Atlas free tier, vector-search pre-filters and the atlas-local image",
-      "stories": ["US1", "US2"],
-      "status": "todo",
-      "dependencies": ["feat-001", "feat-005"],
-      "spec": "docs/spikes/03-atlas-vector-search.md",
-      "evidence": ""
-    },
-    {
       "id": "feat-006",
-      "type": "spike",
-      "name": "Spike: query-time embedding runtime (model, container size and memory on free hosting tiers)",
-      "stories": ["US1"],
+      "type": "chore",
+      "name": "Metrics: docs/metrics.md (product and process metrics) and a /handoff row per finished feature, so the spikes are already measured",
+      "stories": [],
       "status": "todo",
-      "dependencies": ["feat-005"],
-      "spec": "docs/spikes/06-embedding-runtime.md",
+      "dependencies": ["feat-001"],
+      "spec": null,
       "evidence": ""
     },
     {
       "id": "feat-007",
       "type": "chore",
-      "name": "Architecture refinement with the spike results (ADRs) and slicing the MVP backlog: thin end-to-end slice first; slice mode and size rules in /spec",
+      "name": "Antigravity on the Mac (needs the Mac): verify the harness changes of feat-004 (Stop hook still fires and blocks after the stop_gate.py changes; reviewer tool names read_file vs view_file; agent runs /review and /handoff on its own)",
       "stories": [],
       "status": "todo",
-      "dependencies": ["feat-002", "feat-003", "feat-006"],
+      "dependencies": ["feat-004"],
       "spec": null,
       "evidence": ""
     },
     {
       "id": "feat-008",
-      "type": "chore",
-      "name": "Metrics: docs/metrics.md (product and process metrics) and a /handoff row per finished feature",
-      "stories": [],
+      "type": "spike",
+      "name": "Spike: TMDB terms, rate limits and watch-provider coverage for ES, US and BO",
+      "stories": ["US1"],
       "status": "todo",
-      "dependencies": ["feat-001"],
-      "spec": null,
+      "dependencies": ["feat-005"],
+      "spec": "docs/spikes/08-tmdb-and-providers.md",
       "evidence": ""
     },
     {
       "id": "feat-009",
+      "type": "spike",
+      "name": "Spike: Atlas free tier, vector-search pre-filters and the atlas-local image",
+      "stories": ["US1", "US2"],
+      "status": "todo",
+      "dependencies": ["feat-005"],
+      "spec": "docs/spikes/09-atlas-vector-search.md",
+      "evidence": ""
+    },
+    {
+      "id": "feat-010",
+      "type": "spike",
+      "name": "Spike: query-time embedding runtime (model, container size and memory on free hosting tiers)",
+      "stories": ["US1"],
+      "status": "todo",
+      "dependencies": ["feat-005"],
+      "spec": "docs/spikes/10-embedding-runtime.md",
+      "evidence": ""
+    },
+    {
+      "id": "feat-011",
       "type": "chore",
-      "name": "Antigravity on the Mac: verify the harness changes of feat-004 (Stop hook still fires and blocks after the stop_gate.py changes; reviewer tool names read_file vs view_file; agent runs /review and /handoff on its own)",
+      "name": "Architecture refinement with the spike results (ADRs) and slicing the MVP backlog: thin end-to-end slice first; slice mode and size rules in /spec",
       "stories": [],
       "status": "todo",
-      "dependencies": ["feat-004"],
+      "dependencies": ["feat-008", "feat-009", "feat-010"],
       "spec": null,
       "evidence": ""
     }
