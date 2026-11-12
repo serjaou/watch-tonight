@@ -4,9 +4,17 @@ repos:
     hooks:
       - id: gitleaks
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.10
+  # ruff from the project's own environment (version pinned in uv.lock), so pre-commit and
+  # `uv run poe check` always run the same ruff. Requires `uv sync` (README "Machine setup").
+  - repo: local
     hooks:
-      - id: ruff
-        args: [--fix]
+      - id: ruff-check
+        name: ruff check
+        entry: uv run --no-sync ruff check --fix
+        language: system
+        types_or: [python, pyi]
       - id: ruff-format
+        name: ruff format
+        entry: uv run --no-sync ruff format
+        language: system
+        types_or: [python, pyi]

@@ -9,7 +9,7 @@ Describe how you feel tonight, pick your country and streaming services, and get
 - **Backend:** Python 3.13 · FastAPI · MongoDB Atlas Vector Search · Gemini · MCP Python SDK
 - **Frontend:** Web UI in `web/`
 - **Tooling:** `uv` · `ruff` · `pyright` · `import-linter` · `pytest` · `poethepoet`
-- **AI coding tools:** Google Antigravity and Claude Code, sharing one harness ([ADR 0003](docs/decisions/0003-support-antigravity-and-claude-code.md))
+- **AI coding tools:** Google Antigravity (Mac) and Claude Code (Windows), sharing one harness ([ADR 0003](docs/decisions/0003-support-antigravity-and-claude-code.md))
 
 ## Machine setup (once per machine)
 
@@ -28,10 +28,15 @@ pre-commit install   # adds the git hook (once per clone)
 uv run poe check     # must be green before any work
 ```
 
-**Claude Code on a machine that also has a work setup:** run this repo in a separate personal profile, logged in with your personal account, so no work MCP servers, skills or hooks load here:
+## Repository settings (once, on GitHub)
 
-- macOS (zsh): `alias claude-personal='CLAUDE_CONFIG_DIR=$HOME/.claude-personal claude'`
-- Windows (PowerShell `$PROFILE`): `function claude-personal { $env:CLAUDE_CONFIG_DIR = "$HOME\.claude-personal"; try { claude @args } finally { Remove-Item Env:CLAUDE_CONFIG_DIR } }`
+Agents work on branches and open PRs; these settings make sure nothing reaches `main` unchecked ([ADR 0004](docs/decisions/0004-autonomous-task-runs-owner-gates.md)):
+
+1. **Settings → Branches → Add branch ruleset** (or classic branch protection) for `main`:
+   - require a pull request before merging;
+   - require status checks to pass: `check` (workflow `CI`) and `gates` (workflow `PR gates`);
+   - block force pushes.
+2. **Issues → Labels → New label:** `tests-approved`. Only you add it, after reviewing changes to `tests/acceptance/` or `evals/`.
 
 ## Documentation
 

@@ -107,6 +107,8 @@ def test_required_harness_files_exist() -> None:
         "docs/conventions.md",
         ".claude/settings.json",
         ".claude/agents/reviewer.md",
+        ".github/workflows/pr-gates.yml",
+        "scripts/ci/pr_gates.py",
     ]
     for rel_path in required:
         assert (REPO_ROOT / rel_path).is_file(), f"Missing harness file: {rel_path}"
@@ -234,3 +236,28 @@ def test_stop_gate_blocks_when_failing_check_prints_non_ascii(gate_repo: Path) -
     blocked = run_stop_gate(gate_repo, f"{sys.executable} {noisy_check}")
     assert blocked["decision"] == "continue"
     assert "BROKEN" in blocked["reason"]
+
+
+@pytest.mark.parametrize(
+    ("changed", "labels", "passes"),
+    [
+        ("src/watch_tonight/domain/x.py,tests/unit/test_x.py", "", True),
+        ("tests/acceptance/test_dry_run.py", "", False),
+        ("evals/queries.yaml", "documentation", False),
+        ("tests/acceptance/test_dry_run.py,evals/queries.yaml", "tests-approved", True),
+        ("tests/acceptance_helpers.py", "", True),
+    ],
+)
+def test_pr_gate_protects_acceptance_tests_and_evals(
+    changed: str, labels: str, passes: bool
+) -> None:
+    result = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "ci" / "pr_gates.py")],
+        capture_output=True,
+        encoding="utf-8",
+        env={**os.environ, "PR_GATES_CHANGED_FILES": changed, "LABELS": labels},
+        check=False,
+    )
+    assert (result.returncode == 0) == passes, result.stdout
+    if not passes:
+        assert "tests-approved" in result.stdout
