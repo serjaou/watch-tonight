@@ -2,7 +2,7 @@
 
 **What this file is:** what the product does, for whom, and where it stops. It holds the product judgment an agent can't infer from the code. Architecture lives in `docs/architecture.md`; per-feature detail lives in `docs/specs/`.
 **Owner:** Sergio. Agents may propose changes but never edit this file on their own.
-**Status:** draft · **Last updated:** 2026-11-11. Items marked **(to confirm)** are proposals the owner hasn't settled yet. Items marked **(verify)** depend on the Week 1 spike.
+**Status:** draft · **Last updated:** 2026-11-12. Items marked **(to confirm)** are proposals the owner hasn't settled yet. Items marked **(verify)** depend on the Week 1 spike.
 
 ---
 
@@ -24,6 +24,7 @@
 | **Input** | Free text (mood and preferences, max 500 characters); country; one or more streaming services; optional constraints (e.g. max runtime, "nothing too intense") |
 | **Output** | 5 movies. Each has a title, year, runtime, service(s) where it's streamable, a short pitch, a link to its TMDB page, and the availability date |
 | **Countries at launch** | ES, US, BO **(verify BO provider coverage)** |
+| **Language at launch** | English only: the mood text, the UI and the pitches. More languages later (section 8). What happens with non-English input: **(to confirm)** |
 
 The more detail the user gives, the more specific the results. Vague input (e.g. *"anything"*) still returns results.
 
@@ -95,6 +96,7 @@ Agents must not break these. Each rule should end up backed by a test or an eval
 - Accounts and saved preferences (services, country, things to avoid).
 - Links to trailers.
 - TV series.
+- More languages for the mood text, the UI and the pitches (e.g. Spanish for ES and BO).
 
 ## 9. Glossary
 
