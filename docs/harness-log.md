@@ -27,7 +27,7 @@ Records every time an agent, hook, or handoff fails or reveals a gap, along with
 - **Layer:** verification.
 - **Root cause:** the gate was only ever run on macOS, where the default encoding is UTF-8.
 - **Harness change:** subprocess output decoded as UTF-8 (`errors="replace"`); BOM stripped; regression tests for both.
-- **Still open:** `.agents/hooks.json` calls `python3`, which on this Windows machine is the Microsoft Store stub ("Python was not found"); Antigravity isn't installed here to test it (feat-009).
+- **Not fixed (by decision):** `.agents/hooks.json` calls `python3`, which on this Windows machine is the Microsoft Store stub ("Python was not found"). Antigravity runs only on the Mac (ADR 0003), so it doesn't matter.
 - **Lesson:** L10 end-to-end checks: run the real hook command on every OS it must support.
 
 ## 2026-11-12 · Windows · Claude Code (`feat-004`)
@@ -41,8 +41,16 @@ Records every time an agent, hook, or handoff fails or reveals a gap, along with
 - **Finding:** agents chained phases on their own (e.g. ran `/handoff` and further steps without asking). The Stepped/Autonomous modes existed only as prose, and "Session end protocol (always, even mid-task)" read as permission to run it unprompted. Skills also restated AGENTS.md and had drifted from it.
 - **Layer:** context.
 - **Root cause:** declarative modes with nothing selecting or enforcing them; the same rule written in several places.
-- **Harness change:** ADR 0004: stepped workflow only, explicit "finish a phase, report, stop" rule in AGENTS.md; skills point to AGENTS.md instead of restating it; Claude Code workflow skills are owner-only (`disable-model-invocation`).
-- **Lesson:** L04 one source per rule; instructions describe only what is enforced or expected now.
+- **Harness change:** ADR 0004: one default, no modes. A ready task runs end to end (build, check, review + fixes, handoff, PR); the owner decides at spec approval, merge and any human-decision point, and can ask for "step by step". `/defend` is optional. The rules that matter are enforced, not just written: branch protection on `main` and a CI gate on `tests/acceptance/` and `evals/` (`tests-approved` label). Skills point to AGENTS.md instead of restating it.
+- **Note:** the owner first chose "stepped only", then reversed it the same day: the point of a harness is that agents complete tasks without constant supervision, and the gates are what make that safe.
+- **Lesson:** L04 one source per rule; L13 the human sets direction and decides at the gates, the harness makes the rest safe.
+
+## 2026-11-12 · Windows · Claude Code (`feat-004`)
+- **Finding:** `.pre-commit-config.yaml` pinned ruff v0.9.10 while `uv.lock` had ruff 0.17.4, so a commit could pass pre-commit and fail `poe fmt-check` (or the reverse).
+- **Layer:** environment.
+- **Root cause:** two places pinned the same tool.
+- **Harness change:** pre-commit runs the project's ruff (`uv run --no-sync ruff`, a local hook); `uv.lock` is the only pin.
+- **Lesson:** L04 one source of truth, also for tool versions.
 
 ## 2026-11-12 · Mac · Antigravity (`feat-001`)
 - **Finding:** Two environment assumptions in the initial `stop_gate.py` sketch would have failed at runtime:

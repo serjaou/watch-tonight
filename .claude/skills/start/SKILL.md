@@ -3,7 +3,6 @@ name: start
 description: >-
   Start-of-session routine. Use when the owner opens a new session, switches
   machines, or types /start.
-disable-model-invocation: true
 ---
 
 Read [.agents/skills/start/SKILL.md](../../../.agents/skills/start/SKILL.md) and follow it.

@@ -4,7 +4,6 @@ description: >-
   Run the independent read-only Reviewer subagent to check the current diff
   against the active feature's spec. Use after implementation and `uv run poe
   check` pass, or when the owner types /review.
-disable-model-invocation: true
 ---
 
 Read [.agents/skills/review/SKILL.md](../../../.agents/skills/review/SKILL.md) and follow it.

@@ -1,9 +1,9 @@
 ---
 name: defend
 description: >-
-  End-of-task Socratic "Defend it" gate and LEARNING.md updater. Use after
-  implementation and review pass and before closing/merging a feature, or when
-  the owner types /defend.
+  Optional Socratic "Defend it" session and LEARNING.md updater. Use only when
+  the owner types /defend, optionally with a feature id, a commit or a commit
+  range to discuss.
 disable-model-invocation: true
 ---
 
