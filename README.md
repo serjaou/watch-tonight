@@ -2,20 +2,36 @@
 
 Describe how you feel tonight, pick your country and streaming services, and get **5 movies you can stream right now**, each with a short pitch grounded in the movie's data.
 
-> **Status:** `feat-001` — Repo skeleton and harness v0 in progress. See [PROGRESS.md](PROGRESS.md) and [docs/product.md](docs/product.md).
+> **Status:** harness in place, product work not started. See [PROGRESS.md](PROGRESS.md) and [docs/product.md](docs/product.md).
 
 ## Stack
 
 - **Backend:** Python 3.13 · FastAPI · MongoDB Atlas Vector Search · Gemini · MCP Python SDK
 - **Frontend:** Web UI in `web/`
 - **Tooling:** `uv` · `ruff` · `pyright` · `import-linter` · `pytest` · `poethepoet`
+- **AI coding tools:** Google Antigravity and Claude Code, sharing one harness ([ADR 0003](docs/decisions/0003-support-antigravity-and-claude-code.md))
 
-## Quickstart
+## Machine setup (once per machine)
+
+| Tool | macOS | Windows | Why |
+|---|---|---|---|
+| uv | `brew install uv` | `winget install --id=astral-sh.uv -e` | Installs Python 3.13 and the locked packages |
+| pre-commit | `uv tool install pre-commit` | `uv tool install pre-commit` | Runs gitleaks and ruff before each commit |
+| Docker Desktop | optional | optional | Only for `uv run poe test-all` (integration tests) |
+| GitHub CLI | `brew install gh` (optional) | `winget install --id=GitHub.cli -e` (optional) | Lets `/start` read the last CI run |
+
+Then, in the repo:
 
 ```bash
-uv sync
-uv run poe check
+uv sync              # creates .venv with Python 3.13 and the exact locked packages
+pre-commit install   # adds the git hook (once per clone)
+uv run poe check     # must be green before any work
 ```
+
+**Claude Code on a machine that also has a work setup:** run this repo in a separate personal profile, logged in with your personal account, so no work MCP servers, skills or hooks load here:
+
+- macOS (zsh): `alias claude-personal='CLAUDE_CONFIG_DIR=$HOME/.claude-personal claude'`
+- Windows (PowerShell `$PROFILE`): `function claude-personal { $env:CLAUDE_CONFIG_DIR = "$HOME\.claude-personal"; try { claude @args } finally { Remove-Item Env:CLAUDE_CONFIG_DIR } }`
 
 ## Documentation
 
