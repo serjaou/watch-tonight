@@ -115,6 +115,7 @@ def main() -> None:
         return
 
     if not has_code_changes():
+        COUNTER.unlink(missing_ok=True)
         respond(allow=True, claude=claude)
         return
 

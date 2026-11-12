@@ -192,8 +192,12 @@ def add_code_change(repo: Path) -> None:
 
 
 def test_stop_gate_allows_stop_without_checking_when_no_code_changed(gate_repo: Path) -> None:
+    counter = gate_repo / ".harness" / "stop_gate_attempts"
+    counter.parent.mkdir()
+    counter.write_text("2")
+
     assert run_stop_gate(gate_repo, FAILING_CHECK)["decision"] == "allow"
-    assert not (gate_repo / ".harness" / "stop_gate_attempts").exists()
+    assert not counter.exists()
 
 
 def test_stop_gate_blocks_until_check_passes(gate_repo: Path) -> None:
