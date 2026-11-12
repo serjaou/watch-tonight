@@ -139,7 +139,14 @@ def test_both_tools_wire_the_stop_gate() -> None:
 FAILING_CHECK = f"{sys.executable} -c import_error_xyz"
 PASSING_CHECK = f"{sys.executable} -V"
 ANTIGRAVITY_STOP = {"terminationReason": "NO_TOOL_CALL"}
-CLAUDE_STOP = {"hook_event_name": "Stop", "stop_hook_active": False}
+# Claude Code sends raw UTF-8 (not \u escapes), including the last assistant message.
+CLAUDE_STOP = {
+    "hook_event_name": "Stop",
+    "stop_hook_active": False,
+    "last_assistant_message": "Fixed the ═ box art → done",
+}
+# Shell-dependent variables that would hide encoding bugs (set in some shells, not in Git Bash).
+ENCODING_OVERRIDES = ("PYTHONIOENCODING", "PYTHONUTF8")
 
 
 @pytest.fixture
@@ -161,14 +168,18 @@ def run_stop_gate(
     *,
     bom: bool = False,
 ) -> dict[str, str]:
-    """Run the gate copy; returns its JSON reply, or `{}` when it prints nothing."""
+    """Run the gate copy like a hook would; returns its JSON reply, or `{}` when it prints nothing.
+
+    The child gets the platform's default encodings (no PYTHONIOENCODING/PYTHONUTF8), so the
+    result doesn't depend on which shell runs the tests.
+    """
+    env = {k: v for k, v in os.environ.items() if k not in ENCODING_OVERRIDES}
     result = subprocess.run(
         [sys.executable, str(repo / "scripts" / "hooks" / "stop_gate.py")],
-        input=("﻿" if bom else "") + json.dumps(payload),
+        input=("﻿" if bom else "") + json.dumps(payload, ensure_ascii=False),
         encoding="utf-8",
         capture_output=True,
-        text=True,
-        env={**os.environ, "STOP_GATE_CMD": check_cmd},
+        env={**env, "STOP_GATE_CMD": check_cmd},
         check=True,
     )
     out = result.stdout.strip()
