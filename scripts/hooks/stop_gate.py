@@ -88,8 +88,11 @@ def respond(allow: bool, reason: str = "", *, claude: bool = False) -> None:
 
 
 def read_payload() -> dict[str, Any]:
-    # Windows PowerShell 5.1 prefixes piped text with a UTF-8 BOM.
-    raw = sys.stdin.read().lstrip("﻿").strip()
+    # Decode as UTF-8 ourselves: on Windows `sys.stdin` uses the ANSI code page (cp1252) unless
+    # PYTHONIOENCODING/PYTHONUTF8 happen to be set, and the payload is UTF-8 (Claude Code's
+    # includes the last assistant message). "utf-8-sig" also drops the BOM that Windows
+    # PowerShell 5.1 adds when it pipes text.
+    raw = sys.stdin.buffer.read().decode("utf-8-sig", errors="replace").strip()
     if not raw:
         return {}
     try:
