@@ -10,8 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **Adapters in `.claude/`:**
   - Skill stubs in `.claude/skills/<name>/SKILL.md` load `.agents/skills/<name>/SKILL.md`. Adding or renaming a skill means adding its stub too; a harness test checks this.
-  - The workflow skills are owner-only (`disable-model-invocation`), so phases start when the owner types them (ADR 0004).
+  - You run `/review` and `/handoff` yourself during a task (ADR 0004). `/defend` is owner-only (`disable-model-invocation`).
   - The `reviewer` subagent stub (`.claude/agents/reviewer.md`) loads `.agents/agents/reviewer.md`.
 - **Stop hook:** `.claude/settings.json` runs `scripts/hooks/stop_gate.py`. It won't let you end a turn that changed code while `uv run poe check` fails, and gives up after 3 attempts.
-- **Profile:** use this repo only with the owner's personal Claude Code profile (`CLAUDE_CONFIG_DIR`, see "Machine setup" in README.md), never a work profile.
 - **Log lines:** `PROGRESS.md` entries use `Claude Code` as the tool.

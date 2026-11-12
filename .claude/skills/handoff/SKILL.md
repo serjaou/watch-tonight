@@ -3,7 +3,6 @@ name: handoff
 description: >-
   End-of-session handoff routine. Use when the owner says they are stopping,
   closing the session, switching machines, or types /handoff.
-disable-model-invocation: true
 ---
 
 Read [.agents/skills/handoff/SKILL.md](../../../.agents/skills/handoff/SKILL.md) and follow it.

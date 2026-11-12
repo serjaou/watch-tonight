@@ -93,7 +93,7 @@
     {
       "id": "feat-009",
       "type": "chore",
-      "name": "Antigravity on Windows: verify the Stop hook command (python3 is the Microsoft Store stub) and the reviewer's tool names (read_file vs view_file)",
+      "name": "Antigravity on the Mac: verify the harness changes of feat-004 (Stop hook still fires and blocks after the stop_gate.py changes; reviewer tool names read_file vs view_file; agent runs /review and /handoff on its own)",
       "stories": [],
       "status": "todo",
       "dependencies": ["feat-004"],
