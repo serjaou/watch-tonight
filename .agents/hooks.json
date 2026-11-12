@@ -1,0 +1,11 @@
+{
+  "check-gate": {
+    "Stop": [
+      {
+        "type": "command",
+        "command": "python3 ../scripts/hooks/stop_gate.py",
+        "timeout": 300
+      }
+    ]
+  }
+}
