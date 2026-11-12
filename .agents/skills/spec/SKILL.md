@@ -11,7 +11,7 @@ description: >-
 
 1. Read [docs/product.md](../../../docs/product.md), [feature_list.json](../../../feature_list.json), and any existing draft in `docs/specs/`.
 2. Interview the owner to complete `docs/specs/NN-slug.md` (maximum 1 page):
-   - Ask **only questions that change the design or acceptance criteria**, at most **5 questions at a time**, each with your **recommended option**.
+   - Ask **only questions whose answer changes the design or the acceptance tests**, most important first, each with your **recommended option**. Ask as many rounds as the feature needs; when a sensible default exists, state it instead of asking.
    - If a question cannot be answered without experimentation (e.g. third-party API behavior, DB index limits) and changes the design, stop and create a timeboxed `spike` entry in `feature_list.json` + `docs/spikes/NN-slug.md` that the feature depends on.
 3. Draft the spec using this structure:
    ```markdown
