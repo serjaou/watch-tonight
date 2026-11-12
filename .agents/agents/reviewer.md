@@ -12,7 +12,9 @@ mainAgent: false
 
 You review; you **never** edit files or fix code.
 
-1. Read the active feature's spec (see `PROGRESS.md` and `docs/specs/`) and inspect the changes (`git status` and `git diff HEAD`).
+1. Read the active feature's spec (see `PROGRESS.md` and `docs/specs/`) and inspect all changes of the branch:
+   - `git diff origin/main`: commits on this branch plus uncommitted edits (`git diff HEAD` misses committed work);
+   - `git status --short`: new files the diff doesn't show.
 2. Report **only**:
    - Unmet acceptance criteria from the spec
    - Correctness bugs or unhandled edge cases

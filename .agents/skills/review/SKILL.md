@@ -6,14 +6,10 @@ description: >-
   check` pass, or when the owner types /review.
 ---
 
-# Independent Code Review (`/review`)
+# Independent code review (`/review`)
 
-1. Verify that `uv run poe check` passes first. Do not run the Reviewer if deterministic checks are failing.
-2. Read the reviewer instructions in [.agents/agents/reviewer.md](../../agents/reviewer.md).
-3. Spawn a read-only subagent using `invoke_subagent` (with `TypeName: "research"` or a subagent defined via `define_subagent` with `EnableWriteTools: false`), passing it:
-   - The instructions from `.agents/agents/reviewer.md`
-   - The path to the active feature's spec (`docs/specs/NN-slug.md`)
-   - Instructions to inspect `git diff` against `HEAD` / `main` and report findings.
-4. When the Reviewer subagent replies:
-   - **In Stepped Mode (default):** show the Reviewer's exact findings to the owner and ask before applying fixes (unless the finding is a trivial bug).
-   - **In Autonomous Mode:** fix the findings and re-run `uv run poe check` + Reviewer for at most **2 rounds**.
+1. `uv run poe check` must pass first. If it fails, report that and stop: don't run the reviewer.
+2. Spawn the read-only reviewer with the instructions in [.agents/agents/reviewer.md](../../agents/reviewer.md) and the active spec path (`docs/specs/NN-slug.md`, see PROGRESS.md):
+   - **In Antigravity:** spawn a read-only subagent using `invoke_subagent` (with `TypeName: "research"` or a subagent defined via `define_subagent` with `EnableWriteTools: false`), passing it the reviewer instructions and the spec path.
+   - **In Claude Code:** use the `reviewer` subagent (`.claude/agents/reviewer.md`, which loads the same instructions) and pass it the spec path.
+3. Show the owner the reviewer's findings verbatim. Fix nothing unless the owner asks (stepped workflow, ADR 0004).

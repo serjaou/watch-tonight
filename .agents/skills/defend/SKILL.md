@@ -10,9 +10,9 @@ description: >-
 
 Goal: ensure the owner can defend every design and Python choice in the task's diff before the task is marked `done`.
 
-1. Inspect the changes for the active task (`git diff` / changed files in `src/`, `tests/`, `scripts/`, or `pyproject.toml`) and read [LEARNING.md](../../../LEARNING.md).
+1. Inspect the task's changes (`git diff origin/main`, plus new files from `git status --short`) and read [LEARNING.md](../../../LEARNING.md).
 2. Formulate **3 Socratic "why" questions** about concrete decisions in the diff (Python idioms, type annotations, library choices, architectural trade-offs, or edge cases).
-3. **Ask one question at a time** (or present all 3 clearly and wait for the owner's answers—never give away the answers upfront).
+3. **Ask one question at a time** and wait for the owner's answer before the next. Never give the answer first.
 4. After the owner answers:
    - Validate or deepen each answer with a **C# / .NET comparison** and point out any subtle Python pitfalls.
    - Update [LEARNING.md](../../../LEARNING.md):

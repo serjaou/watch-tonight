@@ -1,5 +1,7 @@
 # watch-tonight harness: a simple workflow for working from two computers
 
+> **Historical (inception, Nov 2026). Don't act on it.** The harness it proposed is built: the rules are in `AGENTS.md`, the owner's guide in `docs/workflow.md`, and later changes in `docs/decisions/` (full harness upfront: 0002; Antigravity *and* Claude Code, so §1.6's "Antigravity only" no longer holds: 0003; stepped workflow only: 0004). Where this file disagrees with them, they win.
+
 **Complements:** `personal-project-brief.md` (its section 8 and the questions Q1–Q2).
 **Date:** 10 Nov 2026. **Status:** proposal; nothing is implemented yet.
 
