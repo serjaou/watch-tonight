@@ -31,12 +31,22 @@
       "evidence": ""
     },
     {
+      "id": "feat-005",
+      "type": "chore",
+      "name": "Architecture v0 (docs/architecture.md, max 2 pages, open questions listed) and the question files for spikes feat-002, feat-003 and feat-006",
+      "stories": [],
+      "status": "todo",
+      "dependencies": ["feat-001"],
+      "spec": null,
+      "evidence": ""
+    },
+    {
       "id": "feat-002",
       "type": "spike",
       "name": "Spike: TMDB terms, rate limits and watch-provider coverage for ES, US and BO",
       "stories": ["US1"],
       "status": "todo",
-      "dependencies": ["feat-001"],
+      "dependencies": ["feat-001", "feat-005"],
       "spec": "docs/spikes/02-tmdb-and-providers.md",
       "evidence": ""
     },
@@ -46,8 +56,48 @@
       "name": "Spike: Atlas free tier, vector-search pre-filters and the atlas-local image",
       "stories": ["US1", "US2"],
       "status": "todo",
-      "dependencies": ["feat-001"],
+      "dependencies": ["feat-001", "feat-005"],
       "spec": "docs/spikes/03-atlas-vector-search.md",
+      "evidence": ""
+    },
+    {
+      "id": "feat-006",
+      "type": "spike",
+      "name": "Spike: query-time embedding runtime (model, container size and memory on free hosting tiers)",
+      "stories": ["US1"],
+      "status": "todo",
+      "dependencies": ["feat-005"],
+      "spec": "docs/spikes/06-embedding-runtime.md",
+      "evidence": ""
+    },
+    {
+      "id": "feat-007",
+      "type": "chore",
+      "name": "Architecture refinement with the spike results (ADRs) and slicing the MVP backlog: thin end-to-end slice first; slice mode and size rules in /spec",
+      "stories": [],
+      "status": "todo",
+      "dependencies": ["feat-002", "feat-003", "feat-006"],
+      "spec": null,
+      "evidence": ""
+    },
+    {
+      "id": "feat-008",
+      "type": "chore",
+      "name": "Metrics: docs/metrics.md (product and process metrics) and a /handoff row per finished feature",
+      "stories": [],
+      "status": "todo",
+      "dependencies": ["feat-001"],
+      "spec": null,
+      "evidence": ""
+    },
+    {
+      "id": "feat-009",
+      "type": "chore",
+      "name": "Antigravity on Windows: verify the Stop hook command (python3 is the Microsoft Store stub) and the reviewer's tool names (read_file vs view_file)",
+      "stories": [],
+      "status": "todo",
+      "dependencies": ["feat-004"],
+      "spec": null,
       "evidence": ""
     }
   ]
