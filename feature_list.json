@@ -31,9 +31,19 @@
       "evidence": "Windows, 2026-11-12: uv run poe check -> ruff: All checks passed!; pyright strict: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed. pre-commit run --all-files -> gitleaks, ruff check, ruff format: Passed. Real Claude Code Stop hook (uv run --no-sync python scripts/hooks/stop_gate.py with a Stop payload): decision block on a real F401 lint error, no output when green. CI on GitHub and Antigravity on the Mac: see PROGRESS.md / feat-007."
     },
     {
+      "id": "feat-007",
+      "type": "chore",
+      "name": "Antigravity on the Mac (needs the Mac): verify the harness changes of feat-004 (Stop hook still fires and blocks after the stop_gate.py changes; reviewer tool names read_file vs view_file; agent runs /review and /handoff on its own)",
+      "stories": [],
+      "status": "done",
+      "dependencies": ["feat-004"],
+      "spec": null,
+      "evidence": "Mac, 2026-11-12: live Antigravity Stop hook (.agents/hooks.json -> python3 ../scripts/hooks/stop_gate.py) fired on turn completion and blocked on a temporary F401 lint error in tests/test_smoke.py with decision: continue (attempt 2/3), then returned decision: allow when clean; fixed stop_gate.py to unlink .harness/stop_gate_attempts when has_code_changes() is False; verified Reviewer subagent (TypeName: reviewer from .agents/agents/reviewer.md) has tools [run_command, manage_task, read_file, send_message] (read_file present, view_file and write tools absent); uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed; /review subagent: No findings; /handoff run autonomously."
+    },
+    {
       "id": "feat-005",
       "type": "chore",
-      "name": "Architecture v0 (docs/architecture.md, max 2 pages, open questions listed) and the question files for spikes feat-008, feat-009 and feat-010",
+      "name": "Architecture v0 (docs/architecture.md, max 3 pages, open questions listed) and the question files for spikes feat-008, feat-009 and feat-010",
       "stories": [],
       "status": "todo",
       "dependencies": ["feat-001"],
@@ -47,16 +57,6 @@
       "stories": [],
       "status": "todo",
       "dependencies": ["feat-001"],
-      "spec": null,
-      "evidence": ""
-    },
-    {
-      "id": "feat-007",
-      "type": "chore",
-      "name": "Antigravity on the Mac (needs the Mac): verify the harness changes of feat-004 (Stop hook still fires and blocks after the stop_gate.py changes; reviewer tool names read_file vs view_file; agent runs /review and /handoff on its own)",
-      "stories": [],
-      "status": "todo",
-      "dependencies": ["feat-004"],
       "spec": null,
       "evidence": ""
     },
