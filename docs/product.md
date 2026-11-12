@@ -35,7 +35,7 @@ Agents must not break these. Each rule should end up backed by a test or an eval
 | ID | Rule |
 |---|---|
 | P1 | **Never show a title that isn't streamable** (flat-rate subscription, not rent or buy) on one of the selected services in the selected country, according to the last availability refresh. |
-| P2 | **The pitch is about the movie, never about the user.** It highlights the qualities of the film that are relevant to the request (tone, pace, setting, performances, themes), stated as facts about the film. It never refers to the user, their mood or their request, and never claims the movie is a good fit for them or will make them feel better. Every fact comes from the movie's data, and there are no spoilers. |
+| P2 | **The pitch is about the movie, never about the user.** It highlights the qualities of the film that are relevant to the request (tone, pace, setting, performances, themes), stated as facts about the film. It never refers to the user, their mood or their request, and never claims the movie is a good fit for them or will make them feel better. Every fact comes from the movie's data, and there are no spoilers. It is **at most 350 characters** (about 2–3 sentences), so 5 results stay readable on a phone. |
 | P3 | **Explicit constraints are respected** (runtime, things to avoid). Breaking one counts as a failure, not as a "less good" result. |
 | P4 | **The free-text input is at most 500 characters.** Longer input is rejected with a validation message, not silently truncated. |
 | P5 | **Attribution is shown as the data sources require** **(verify exact terms in the spike)**: in the UI, the TMDB logo (less prominent than ours) and the notice *"This product uses the TMDB API but is not endorsed or certified by TMDB"*, plus *"Streaming availability by JustWatch"* wherever availability is shown. API and MCP responses include an attribution field. |
@@ -55,7 +55,7 @@ Agents must not break these. Each rule should end up backed by a test or an eval
 
 | ID | Story | Acceptance |
 |---|---|---|
-| US1 | As a user, I describe my mood, pick my country and services in the UI, and get 5 movies | P1, P2, P5 and P6 hold; each result has a pitch of 1–2 sentences |
+| US1 | As a user, I describe my mood, pick my country and services in the UI, and get 5 movies | P1, P2, P5 and P6 hold; each result has a pitch of at most 350 characters |
 | US2 | I can add constraints such as max runtime or "nothing too intense" | P3 holds |
 | US3 | I can ask again and exclude what I've already been shown in this session | No movie repeats within the session |
 | US4 | An AI assistant can call the service through MCP | The tool returns the same structured results as the API, including links and attribution |
@@ -80,7 +80,7 @@ Agents must not break these. Each rule should end up backed by a test or an eval
 
 **Product:**
 - US1–US4 acceptance tests pass.
-- Deterministic evals (P1, P3, P4, every result is a real catalogue movie, output schema) pass at 100% in CI.
+- Deterministic evals (P1, P3, P4, pitch length from P2, every result is a real catalogue movie, output schema) pass at 100% in CI.
 - Deployed URL with a working UI.
 
 **Project deliverables:**
@@ -103,6 +103,6 @@ Agents must not break these. Each rule should end up backed by a test or an eval
 | Term | Meaning |
 |---|---|
 | **Streamable** | Available with a flat-rate subscription on the given service in the given country, according to the last refresh (P1) |
-| **Pitch** | The 1–2 sentence text shown with each movie; about the movie, never about the user (P2) |
+| **Pitch** | The text shown with each movie (at most 350 characters); about the movie, never about the user (P2) |
 | **Emotional profile** | The structured description of a movie's tone, pacing, intensity and themes, built offline from its data. Recommendations are based on it |
 | **Refresh** | The daily job that updates which movies are streamable where |
