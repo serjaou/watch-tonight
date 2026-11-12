@@ -41,7 +41,7 @@ YOU                         AGENT (autonomous)                                  
 
 | Step | Who | What happens |
 |---|---|---|
-| **1. Define (`/spec`)** | You + agent | The agent interviews you (max 5 questions at a time) and drafts `docs/specs/NN-slug.md` with acceptance tests. If an unknown blocks the design, it proposes a `spike` first. **You set `status: approved`**: that's the goal and the stop condition. |
+| **1. Define (`/spec`)** | You + agent | The agent interviews you (only questions that change the design or the acceptance tests, most important first) and drafts `docs/specs/NN-slug.md` with acceptance tests. If an unknown blocks the design, it proposes a `spike` first. **You set `status: approved`**: that's the goal and the stop condition. |
 | **2. Build** | Agent | Writes code and unit tests. The **Stop hook** (`stop_gate.py`) won't let it finish a turn that changed code while `uv run poe check` fails (after 3 attempts it stops and asks you). |
 | **3. Review (`/review`)** | Agent | The read-only **reviewer subagent** compares the branch with the spec; the agent fixes the findings (max 2 rounds) and reports any it didn't fix. |
 | **4. Close (`/handoff`)** | Agent | Updates `PROGRESS.md` and `feature_list.json` (with command + output `evidence`), commits, pushes the branch and opens a PR (or gives you the link). Then it stops. |
