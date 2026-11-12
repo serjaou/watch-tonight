@@ -4,10 +4,12 @@ Verifies:
 1. `AGENTS.md` stays concise (<= 150 lines).
 2. `feature_list.json` obeys structural invariants (at most 1 `in_progress`, valid types/statuses,
    `done` requires non-empty `evidence`, valid dependency references).
-3. Required harness files (skills, reviewer, hooks, state docs) exist.
+3. Required harness files (skills, reviewer, hooks, state docs) exist, every `.agents` skill has
+   a `.claude` stub, and both tools wire the Stop hook to `stop_gate.py` (ADR 0003).
 4. `stop_gate.py` allows stopping when no code changed, blocks while checks fail, and gives up
-   after `MAX_ATTEMPTS`. It runs in a throwaway git repo so the result never depends on this
-   repo's git state (a clean checkout in CI must behave like a dirty laptop).
+   after `MAX_ATTEMPTS`, in both tools' reply formats. It runs in a throwaway git repo so the
+   result never depends on this repo's git state (a clean checkout in CI must behave like a
+   dirty laptop).
 """
 
 from __future__ import annotations
@@ -17,6 +19,7 @@ import os
 import shutil
 import subprocess
 import sys
+from collections.abc import Mapping
 from pathlib import Path
 from typing import TypedDict
 
@@ -100,13 +103,41 @@ def test_required_harness_files_exist() -> None:
         ".agents/skills/tutor/SKILL.md",
         ".agents/skills/defend/SKILL.md",
         "scripts/hooks/stop_gate.py",
+        "CLAUDE.md",
+        "docs/conventions.md",
+        ".claude/settings.json",
+        ".claude/agents/reviewer.md",
     ]
     for rel_path in required:
         assert (REPO_ROOT / rel_path).is_file(), f"Missing harness file: {rel_path}"
 
 
+def test_every_skill_has_a_claude_code_stub() -> None:
+    """`.agents/` is the single source (ADR 0003); `.claude/` stubs must point at it."""
+    agents_skills = {p.parent.name for p in (REPO_ROOT / ".agents" / "skills").glob("*/SKILL.md")}
+    claude_skills = {p.parent.name for p in (REPO_ROOT / ".claude" / "skills").glob("*/SKILL.md")}
+    assert agents_skills == claude_skills, (
+        f"Skills without a .claude stub: {sorted(agents_skills - claude_skills)}; "
+        f"stubs without a source skill: {sorted(claude_skills - agents_skills)}"
+    )
+    for name in agents_skills:
+        stub = (REPO_ROOT / ".claude" / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+        assert f".agents/skills/{name}/SKILL.md" in stub, f".claude stub for {name} must load it"
+
+    reviewer_stub = (REPO_ROOT / ".claude" / "agents" / "reviewer.md").read_text(encoding="utf-8")
+    assert ".agents/agents/reviewer.md" in reviewer_stub
+
+
+def test_both_tools_wire_the_stop_gate() -> None:
+    for config in (".agents/hooks.json", ".claude/settings.json"):
+        text = (REPO_ROOT / config).read_text(encoding="utf-8")
+        assert "scripts/hooks/stop_gate.py" in text, f"{config} must run stop_gate.py on Stop"
+
+
 FAILING_CHECK = f"{sys.executable} -c import_error_xyz"
 PASSING_CHECK = f"{sys.executable} -V"
+ANTIGRAVITY_STOP = {"terminationReason": "NO_TOOL_CALL"}
+CLAUDE_STOP = {"hook_event_name": "Stop", "stop_hook_active": False}
 
 
 @pytest.fixture
@@ -121,16 +152,30 @@ def gate_repo(tmp_path: Path) -> Path:
     return tmp_path
 
 
-def run_stop_gate(repo: Path, check_cmd: str) -> dict[str, str]:
+def run_stop_gate(
+    repo: Path,
+    check_cmd: str,
+    payload: Mapping[str, object] = ANTIGRAVITY_STOP,
+    *,
+    bom: bool = False,
+) -> dict[str, str]:
+    """Run the gate copy; returns its JSON reply, or `{}` when it prints nothing."""
     result = subprocess.run(
         [sys.executable, str(repo / "scripts" / "hooks" / "stop_gate.py")],
-        input=json.dumps({"terminationReason": "NO_TOOL_CALL"}),
+        input=("﻿" if bom else "") + json.dumps(payload),
+        encoding="utf-8",
         capture_output=True,
         text=True,
         env={**os.environ, "STOP_GATE_CMD": check_cmd},
         check=True,
     )
-    return json.loads(result.stdout.strip())
+    out = result.stdout.strip()
+    return json.loads(out) if out else {}
+
+
+def add_code_change(repo: Path) -> None:
+    (repo / "src").mkdir()
+    (repo / "src" / "app.py").write_text("x = 1\n")
 
 
 def test_stop_gate_allows_stop_without_checking_when_no_code_changed(gate_repo: Path) -> None:
@@ -139,8 +184,7 @@ def test_stop_gate_allows_stop_without_checking_when_no_code_changed(gate_repo: 
 
 
 def test_stop_gate_blocks_until_check_passes(gate_repo: Path) -> None:
-    (gate_repo / "src").mkdir()
-    (gate_repo / "src" / "app.py").write_text("x = 1\n")
+    add_code_change(gate_repo)
     counter = gate_repo / ".harness" / "stop_gate_attempts"
 
     blocked = run_stop_gate(gate_repo, FAILING_CHECK)
@@ -153,11 +197,40 @@ def test_stop_gate_blocks_until_check_passes(gate_repo: Path) -> None:
 
 
 def test_stop_gate_gives_up_after_max_attempts(gate_repo: Path) -> None:
-    (gate_repo / "src").mkdir()
-    (gate_repo / "src" / "app.py").write_text("x = 1\n")
+    add_code_change(gate_repo)
     counter = gate_repo / ".harness" / "stop_gate_attempts"
     counter.parent.mkdir()
     counter.write_text("3")
 
     assert run_stop_gate(gate_repo, FAILING_CHECK)["decision"] == "allow"
     assert not counter.exists()
+
+
+def test_stop_gate_speaks_claude_code_format(gate_repo: Path) -> None:
+    """Claude Code blocks with `decision: block`; an empty reply lets it stop."""
+    assert run_stop_gate(gate_repo, FAILING_CHECK, CLAUDE_STOP) == {}
+
+    add_code_change(gate_repo)
+    blocked = run_stop_gate(gate_repo, FAILING_CHECK, CLAUDE_STOP)
+    assert blocked["decision"] == "block"
+    assert "attempt 1/3" in blocked["reason"]
+
+    assert run_stop_gate(gate_repo, PASSING_CHECK, CLAUDE_STOP) == {}
+
+
+def test_stop_gate_reads_payload_with_bom(gate_repo: Path) -> None:
+    """Windows PowerShell 5.1 prefixes piped text with a BOM; the gate must still parse it."""
+    assert run_stop_gate(gate_repo, FAILING_CHECK, CLAUDE_STOP, bom=True) == {}
+
+
+def test_stop_gate_blocks_when_failing_check_prints_non_ascii(gate_repo: Path) -> None:
+    """import-linter prints UTF-8 box art; on Windows the default codec (cp1252) can't decode it."""
+    add_code_change(gate_repo)
+    noisy_check = gate_repo / "noisy_failing_check.py"
+    noisy_check.write_text(
+        "import sys\nsys.stdout.buffer.write('╔══╗ BROKEN'.encode())\nsys.exit(1)\n",
+        encoding="utf-8",
+    )
+    blocked = run_stop_gate(gate_repo, f"{sys.executable} {noisy_check}")
+    assert blocked["decision"] == "continue"
+    assert "BROKEN" in blocked["reason"]

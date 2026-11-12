@@ -1,9 +1,15 @@
 """Stop hook: the agent may stop only when `uv run poe check` passes.
 
-Runs only on normal turn completion (`terminationReason == "NO_TOOL_CALL"`) when watched
-code/test directories have uncommitted or branch changes, so Q&A sessions and user
-cancellations are never blocked. After MAX_ATTEMPTS consecutive failures it lets the
-agent stop and hand control back to the owner.
+Shared by both tools (ADR 0003); the stdin payload tells them apart:
+- Antigravity (`.agents/hooks.json`) sends `terminationReason` and expects
+  `{"decision": "continue", "reason": ...}` to keep the agent working.
+- Claude Code (`.claude/settings.json`) sends `hook_event_name: "Stop"` and expects
+  `{"decision": "block", "reason": ...}`; no output lets it stop.
+
+Runs the check only on normal turn completion (Antigravity: `terminationReason ==
+"NO_TOOL_CALL"`) when watched code/test directories have uncommitted or branch changes,
+so Q&A sessions and user cancellations are never blocked. After MAX_ATTEMPTS consecutive
+failures it lets the agent stop and hand control back to the owner.
 """
 
 from __future__ import annotations
@@ -42,14 +48,24 @@ def find_uv() -> str:
     return "uv"
 
 
-def git(*args: str) -> str:
+def run(cmd: list[str]) -> subprocess.CompletedProcess[str]:
+    """Run `cmd` and decode its output as UTF-8.
+
+    Without an explicit encoding Windows decodes with the ANSI code page (cp1252), which
+    crashes on the UTF-8 that git and import-linter print.
+    """
     return subprocess.run(
-        ["git", *args],
+        cmd,
         cwd=REPO_ROOT,
         capture_output=True,
-        text=True,
+        encoding="utf-8",
+        errors="replace",
         check=False,
-    ).stdout
+    )
+
+
+def git(*args: str) -> str:
+    return run(["git", *args]).stdout
 
 
 def has_code_changes() -> bool:
@@ -60,7 +76,11 @@ def has_code_changes() -> bool:
     return bool(committed_on_branch.strip())
 
 
-def respond(allow: bool, reason: str = "") -> None:
+def respond(allow: bool, reason: str = "", *, claude: bool = False) -> None:
+    if claude:
+        if not allow:
+            print(json.dumps({"decision": "block", "reason": reason}))
+        return
     if allow:
         print(json.dumps({"decision": "allow"}))
     else:
@@ -68,7 +88,8 @@ def respond(allow: bool, reason: str = "") -> None:
 
 
 def read_payload() -> dict[str, Any]:
-    raw = sys.stdin.read().strip()
+    # Windows PowerShell 5.1 prefixes piped text with a UTF-8 BOM.
+    raw = sys.stdin.read().lstrip("﻿").strip()
     if not raw:
         return {}
     try:
@@ -83,36 +104,31 @@ def read_payload() -> dict[str, Any]:
 def main() -> None:
     os.chdir(REPO_ROOT)
     payload = read_payload()
+    claude = payload.get("hook_event_name") == "Stop"
 
     termination_reason = payload.get("terminationReason", "NO_TOOL_CALL")
     if termination_reason != "NO_TOOL_CALL":
-        respond(allow=True)
+        respond(allow=True, claude=claude)
         return
 
     if not has_code_changes():
-        respond(allow=True)
+        respond(allow=True, claude=claude)
         return
 
     uv_bin = find_uv()
     check_cmd = os.environ.get("STOP_GATE_CMD")
     cmd = check_cmd.split() if check_cmd else [uv_bin, "run", "--no-sync", "poe", "check"]
 
-    result = subprocess.run(
-        cmd,
-        cwd=REPO_ROOT,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
+    result = run(cmd)
     if result.returncode == 0:
         COUNTER.unlink(missing_ok=True)
-        respond(allow=True)
+        respond(allow=True, claude=claude)
         return
 
     attempts = int(COUNTER.read_text().strip()) + 1 if COUNTER.exists() else 1
     if attempts > MAX_ATTEMPTS:
         COUNTER.unlink(missing_ok=True)
-        respond(allow=True)
+        respond(allow=True, claude=claude)
         return
 
     COUNTER.parent.mkdir(parents=True, exist_ok=True)
@@ -125,6 +141,7 @@ def main() -> None:
             f"`uv run poe check` failed (attempt {attempts}/{MAX_ATTEMPTS}). "
             f"Fix it before stopping.\n{tail}"
         ),
+        claude=claude,
     )
 
 

@@ -19,6 +19,7 @@ htmlcov/
 
 # Harness local state
 .harness/
+.claude/settings.local.json
 
 # Secrets & environment variables (like appsettings.Development.json / user-secrets)
 .env
