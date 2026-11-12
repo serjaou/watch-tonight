@@ -10,6 +10,8 @@ Every task is a poethepoet task in `pyproject.toml` (`[tool.poe.tasks]`) and beh
 - One test: `uv run pytest tests/unit/test_prompt_validation.py::test_subclass_of_value_error`. By name: `uv run pytest -k overlong`.
 - Tests that need Docker or external services carry `@pytest.mark.integration`. `poe check` skips them; `poe test-all` runs them.
 - CI (`.github/workflows/ci.yml`) runs `uv sync --locked` and `uv run poe check`. A dependency change must include the updated `uv.lock`.
+- PR gates (`.github/workflows/pr-gates.yml` → `scripts/ci/pr_gates.py`) fail a PR that changes `tests/acceptance/` or `evals/` until the owner adds the `tests-approved` label.
+- pre-commit runs gitleaks and the project's own ruff (from `uv.lock`) before each commit.
 
 ## Code
 
@@ -28,4 +30,5 @@ Every task is a poethepoet task in `pyproject.toml` (`[tool.poe.tasks]`) and beh
   - `AGENTS.md` is longer than 150 lines;
   - `feature_list.json` breaks an invariant: `type` not in `feature|spike|chore`, `status` not in `todo|in_progress|blocked|done`, more than one `in_progress`, `done` without `evidence`, a `feature` or `spike` without a `spec` path, a dependency on an unknown id;
   - a required harness file is missing (skills, reviewer, hooks, state docs, `stop_gate.py`), or a skill in `.agents/skills/` has no stub in `.claude/skills/`;
-  - `scripts/hooks/stop_gate.py` stops behaving as specified (it runs in a throwaway git repo, so the result never depends on this repo's state).
+  - `scripts/hooks/stop_gate.py` stops behaving as specified (it runs in a throwaway git repo, so the result never depends on this repo's state);
+  - `scripts/ci/pr_gates.py` stops protecting `tests/acceptance/` and `evals/`.

@@ -1,0 +1,21 @@
+name: PR gates
+
+on:
+  pull_request:
+    # `labeled`/`unlabeled` re-run the gate when the owner adds `tests-approved`.
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (full history, to diff against the base)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Protected paths need the owner's tests-approved label
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: python3 scripts/ci/pr_gates.py
