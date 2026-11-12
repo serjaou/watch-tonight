@@ -1,5 +1,5 @@
 # watch-tonight: agent guide
-Movie recommender: free-text mood + country + streaming services → 5 movies streamable now, each with a grounded reason.
+Movie recommender: free-text mood + country + streaming services → 5 movies streamable now, each with a grounded pitch about the movie (never about the user; see `docs/product.md` P2).
 Python 3.13 · FastAPI · MongoDB Atlas Vector Search · Gemini · web UI (React or another common frontend framework) in web/.
 
 The owner is learning Python and agentic engineering through this project.
@@ -8,6 +8,7 @@ Explain non-obvious Python and framework choices with a C# comparison. Prefer sm
 ## Map (read on demand, not all at once)
 - PROGRESS.md: current state and next step. Read first.
 - feature_list.json: all features and their status. Source of truth for scope.
+- docs/workflow.md: human-facing SDLC, session cheat sheet, Stepped vs Autonomous mode
 - docs/product.md: problem, users, scope, out of scope
 - docs/architecture.md: components, data model, layers (domain → application → infra/api)
 - docs/conventions.md: code style, testing, naming

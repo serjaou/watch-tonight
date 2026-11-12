@@ -3,12 +3,22 @@
     {
       "id": "feat-001",
       "type": "chore",
-      "name": "Repo skeleton and harness v0",
+      "name": "Repo skeleton and core harness setup",
       "stories": [],
-      "status": "in_progress",
+      "status": "done",
       "dependencies": [],
       "spec": null,
-      "evidence": "uv run poe check -> ruff check: All checks passed!; ruff format --check: 8 files already formatted; pyright: 0 errors, 0 warnings; lint-imports: 2 kept, 0 broken; pytest: 1 passed in 0.01s"
+      "evidence": "uv run poe check -> ruff check: All checks passed!; ruff format --check: 10 files already formatted; pyright: 0 errors, 0 warnings; lint-imports: 2 kept, 0 broken; pytest: 5 passed (including tests/harness/test_harness.py)"
+    },
+    {
+      "id": "feat-000",
+      "type": "feature",
+      "name": "Harness dry run: mood prompt validator (Product Rule P4)",
+      "stories": ["US1"],
+      "status": "done",
+      "dependencies": ["feat-001"],
+      "spec": "docs/specs/00-dry-run.md",
+      "evidence": "uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 13 passed in 0.19s; reviewer subagent: No findings; /defend: 3/3 questions completed and logged in LEARNING.md"
     },
     {
       "id": "feat-002",
