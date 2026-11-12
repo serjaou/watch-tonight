@@ -1,5 +1,7 @@
 # Personal project brief: "What should I watch tonight?"
 
+> **Historical (inception, Nov 2026). Don't act on it.** Superseded by `docs/product.md` (product), `AGENTS.md` and `docs/workflow.md` (harness), and `docs/decisions/` (e.g. pitch instead of "reason": 0001; Antigravity *and* Claude Code: 0003). Where this file disagrees with them, they win. Its architecture, stack and evals sections (6, 7, 11) are input for `docs/architecture.md` (feat-005).
+
 **Purpose of this document.** It is a hand-off: it should let you, or any AI assistant, continue planning and building the personal project without the original conversation.
 
 It records:
