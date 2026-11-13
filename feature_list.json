@@ -45,10 +45,10 @@
       "type": "chore",
       "name": "Architecture v0 (docs/architecture.md, max 3 pages, open questions listed) and the question files for spikes feat-008, feat-009, feat-010 and feat-011",
       "stories": [],
-      "status": "todo",
+      "status": "done",
       "dependencies": ["feat-001"],
       "spec": null,
-      "evidence": ""
+      "evidence": "Windows, 2026-11-13: docs/architecture.md (128 lines: components, layers and ports, 7-step query flow, offline pipeline, data model, cross-cutting, open questions Q1-Q12) and docs/spikes/08, 09, 10, 11 with explicit questions, each tied to the design decision it changes. uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed. Reviewer subagent: round 1, 12 findings fixed; round 2, 2 findings fixed (max 2 rounds, ADR 0004)."
     },
     {
       "id": "feat-006",

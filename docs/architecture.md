@@ -61,18 +61,10 @@ Keeping each external service behind a port lets a provider be swapped (e.g. whe
 1. **Validate** the request `{text, country, providers[], max_runtime?, avoid?, exclude_ids[]}`: P4 (text ≤ 500 chars, not empty), supported country, at least one provider. Failure → *Invalid input* state.
 2. **Understand:** the LLM turns the text into a typed intent (Pydantic model): wanted tone and themes, things to avoid, max intensity, extra constraints, and an English summary to embed. Language is English only at launch.
 3. **Retrieve:** embed the summary; `$vectorSearch` with a pre-filter **(feat-009)**: `streamable` contains one of `{country}:{provider}`, `runtime ≤ max_runtime`, `_id ∉ exclude_ids`, and the avoid/intensity constraints if they can be expressed as filters (Q11). Take the top 30–50 candidates.
-4. **Re-rank and pitch:** the LLM picks 5 candidates and writes a pitch for each that follows P2 and ADR 0001 (≤ 350 chars).
-5. **Guardrails (deterministic, in `application`):**
-   - every picked ID is one of the candidates (no invented titles);
-   - availability re-checked (P1);
-   - constraints respected (P3): runtime by value; avoid and intensity by comparing the intent with the profile on a shared, closed vocabulary (Q11), never by asking an LLM;
-   - pitch length (P2);
-   - response schema valid.
-
-   Two kinds of failure, handled differently:
-   - **A pick breaks P1 or P3:** drop it and backfill from the remaining candidates. If fewer than 5 candidates pass, the response is *Partial*, with the product.md §4 note.
-   - **The LLM's output is bad** (invented ID, pitch too long, invalid schema): retry or backfill **(feat-011)**. If it still fails, *Service unavailable*. Never *Partial*, because its note ("add a service or relax a constraint") would mislead.
-6. **Respond:** `state` (*Success* or *Partial*) and, for *Partial*, its `note`. Each result has title, year, runtime, services, pitch, TMDB link and its own `availability_updated_at` (P6; a refresh can be half done). Also attribution (P5) and a `trace` (stage timings, tokens, estimated cost).
+4. **Check candidates (deterministic, in `application`):** drop every candidate that breaks P1 (availability re-checked) or P3 (runtime by value; avoid and intensity by comparing the intent with the profile on a shared, closed vocabulary (Q11), never by asking an LLM). If fewer than 5 remain, the response will be *Partial*, with the product.md §4 note.
+5. **Re-rank and pitch:** the LLM picks up to 5 of the remaining candidates and writes a pitch for each that follows P2 and ADR 0001 (≤ 350 chars). Because it only sees valid candidates, the flow stays at 2 LLM calls per query.
+6. **Check the LLM's output (deterministic):** every picked ID is one of the step-4 candidates (no invented titles), pitch length (P2), response schema valid. On failure, retry the call **(feat-011)**. If it still fails, what to return is open (Q8); never *Partial*, because its note ("add a service or relax a constraint") would mislead.
+7. **Respond:** `state` (*Success* or *Partial*) and, for *Partial*, its `note`. Each result has title, year, runtime, services, pitch, TMDB link and its own `availability_updated_at` (P6; a refresh can be half done). Also attribution (P5) and a `trace` (stage timings, tokens, estimated cost).
 
 US3 needs no accounts: the client sends the IDs it has already shown as `exclude_ids`.
 
@@ -129,8 +121,8 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
 | Q5 | Embedding model and where it runs at query time; which free host fits | feat-010 | `Embedder`, container image, hosting |
 | Q6 | Runtime LLM: free-tier limits, data use, structured output, latency, framework (Pydantic AI vs SDK), fallback provider | feat-011 | `LanguageModel`, enrichment feasibility, latency budget, privacy note, *Service unavailable* |
 | Q7 | p95 latency target (product.md: to confirm, guess < 10 s) | Measured in the first end-to-end slice (feat-012 plans it) | Number of LLM calls, caching |
-| Q8 | Fall back to results without pitches when the LLM is down? | Owner (product.md §4) | *Service unavailable* state |
+| Q8 | When the LLM is down, or its output is still invalid after a retry: return the valid results without pitches, only the valid picks, or an error? | Owner (product.md §4) | *Service unavailable* state, query step 6 |
 | Q9 | What happens with non-English input? | Owner (product.md §2) | Validation, query step 2 |
 | Q10 | Frontend framework | Owner, before the UI slice | `web/` |
-| Q11 | How are "avoid" and intensity constraints (P3) represented so they can be checked deterministically: a closed vocabulary of content warnings and an intensity scale shared by the profile and the intent? Applied as a pre-filter or after retrieval? | feat-009 (filter support), then owner in feat-012 | Profile schema, intent schema, query steps 3 and 5 |
+| Q11 | How are "avoid" and intensity constraints (P3) represented so they can be checked deterministically: a closed vocabulary of content warnings and an intensity scale shared by the profile and the intent? Applied as a pre-filter or after retrieval? | feat-009 (filter support), then owner in feat-012 | Profile schema, intent schema, query steps 3 and 4 |
 | Q12 | How often do ingest, enrich and embed re-run to add newly streamable movies? | feat-008 (rate of change), then feat-012 | Job schedule, LLM and embedding cost |
