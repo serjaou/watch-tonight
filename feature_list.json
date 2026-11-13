@@ -51,6 +51,16 @@
       "evidence": "Windows, 2026-11-13: docs/architecture.md (128 lines: components, layers and ports, 7-step query flow, offline pipeline, data model, cross-cutting, open questions Q1-Q12) and docs/spikes/08, 09, 10, 11 with explicit questions, each tied to the design decision it changes. uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed. Reviewer subagent: round 1, 12 findings fixed; round 2, 2 findings fixed (max 2 rounds, ADR 0004)."
     },
     {
+      "id": "feat-013",
+      "type": "chore",
+      "name": "Record owner decisions of 2026-11-13: architecture Q8-Q11 (no-pitch fallback, any input language, React, LLM filters over a closed vocabulary), posters, zero-cost budget, provider-neutral LLM spike",
+      "stories": [],
+      "status": "in_progress",
+      "dependencies": ["feat-005"],
+      "spec": null,
+      "evidence": ""
+    },
+    {
       "id": "feat-006",
       "type": "chore",
       "name": "Metrics: docs/metrics.md (product and process metrics) and a /handoff row per finished feature, so the spikes are already measured",
@@ -93,7 +103,7 @@
     {
       "id": "feat-011",
       "type": "spike",
-      "name": "Spike: runtime LLM (Gemini free-tier limits and data use, structured output, latency, Pydantic AI vs plain SDK, fallback provider)",
+      "name": "Spike: runtime LLM (provider and model: Gemini free tier vs a low-cost OpenAI model; cost per query and per 1,000 profiles; data use; structured output incl. non-English input; latency; Pydantic AI vs plain SDK; fallback provider)",
       "stories": ["US1"],
       "status": "todo",
       "dependencies": ["feat-005"],
@@ -103,7 +113,7 @@
     {
       "id": "feat-012",
       "type": "chore",
-      "name": "Architecture refinement with the spike results (ADRs, open questions Q1–Q12 in docs/architecture.md) and slicing the MVP backlog: thin end-to-end slice first; slice mode and size rules in /spec",
+      "name": "Architecture refinement with the spike results (ADRs incl. Q11, open questions in docs/architecture.md §7) and slicing the MVP backlog: thin end-to-end slice first; profile design (schema, closed vocabulary, prompt, owner-rated sample) as its own feature; slice mode and size rules in /spec",
       "stories": [],
       "status": "todo",
       "dependencies": ["feat-008", "feat-009", "feat-010", "feat-011"],

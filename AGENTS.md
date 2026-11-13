@@ -1,6 +1,6 @@
 # watch-tonight: agent guide
 Movie recommender: free-text mood + country + streaming services → 5 movies streamable now, each with a grounded pitch about the movie (never about the user; see `docs/product.md` P2).
-Python 3.13 · FastAPI · MongoDB Atlas Vector Search · Gemini · web UI (React or another common frontend framework) in web/.
+Python 3.13 · FastAPI · MongoDB Atlas Vector Search · an LLM (provider chosen in feat-011) · React web UI in web/.
 
 The owner is learning Python and agentic engineering through this project.
 Explain non-obvious Python and framework choices with a C# comparison. Prefer small, reviewable steps.
@@ -46,6 +46,7 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 - If implementation proves an approved spec wrong, stop coding, set the spec back to `draft`, explain the gap and get owner approval. If a spec exceeds 1 page or 3 sessions, split the feature.
 - Never edit tests/acceptance/ or evals/ unless the owner asks for it in this session. CI fails a PR that touches them until the owner adds the `tests-approved` label; never add it yourself.
 - Never commit to or push `main`, never commit secrets, never add a dependency without explaining why.
+- Never add a paid service or a recurring cost without the owner's approval (budget: zero cost by default, `docs/product.md` §1).
 - Done = acceptance tests pass (or spike questions answered in `docs/spikes/`) + `uv run poe check` passes + evidence recorded. Paste commands and outputs; don't just claim.
 - Stay in scope. Record ideas outside the feature as new "todo" entries in feature_list.json instead of doing them.
 

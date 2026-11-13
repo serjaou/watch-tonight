@@ -2,7 +2,7 @@
 
 **What this file is:** what the product does, for whom, and where it stops. It holds the product judgment an agent can't infer from the code. Architecture lives in `docs/architecture.md`; per-feature detail lives in `docs/specs/`.
 **Owner:** Sergio. Agents may propose changes but never edit this file on their own.
-**Status:** draft · **Last updated:** 2026-11-12. Items marked **(to confirm)** are proposals the owner hasn't settled yet. Items marked **(verify)** depend on the Week 1 spike.
+**Status:** draft · **Last updated:** 2026-11-13. Items marked **(to confirm)** are proposals the owner hasn't settled yet. Items marked **(verify)** depend on the Week 1 spike.
 
 ---
 
@@ -14,6 +14,7 @@
   - Recommendations are built around genres and popularity, not around people's mood and how their day went.
   - Even when you find something, it often isn't on the services you pay for in your country. Searching the internet for availability doesn't always give accurate information.
 - **Quality bar:** availability is never wrong as of the last refresh, and the pitches make you want to watch the movie.
+- **Budget:** zero cost by default. A small spend is fine when it clearly improves quality; any recurring cost needs the owner's approval. This is a portfolio project first.
 
 ## 2. The one task (MVP)
 
@@ -22,9 +23,9 @@
 | | |
 |---|---|
 | **Input** | Free text (mood and preferences, max 500 characters); country; one or more streaming services; optional constraints (e.g. max runtime, "nothing too intense") |
-| **Output** | 5 movies. Each has a title, year, runtime, service(s) where it's streamable, a short pitch, a link to its TMDB page, and the availability date |
+| **Output** | 5 movies. Each has a title, year, runtime, poster, service(s) where it's streamable, a short pitch, a link to its TMDB page, and the availability date |
 | **Countries at launch** | ES, US, BO **(verify BO provider coverage)** |
-| **Language at launch** | English only: the mood text, the UI and the pitches. More languages later (section 8). What happens with non-English input: **(to confirm)** |
+| **Language at launch** | The mood text can be in any language. The UI, movie titles and pitches are in English only, and the UI says so. More languages later (section 8). |
 
 The more detail the user gives, the more specific the results. Vague input (e.g. *"anything"*) still returns results.
 
@@ -36,7 +37,7 @@ Agents must not break these. Each rule should end up backed by a test or an eval
 |---|---|
 | P1 | **Never show a title that isn't streamable** (flat-rate subscription, not rent or buy) on one of the selected services in the selected country, according to the last availability refresh. |
 | P2 | **The pitch is about the movie, never about the user.** It highlights the qualities of the film that are relevant to the request (tone, pace, setting, performances, themes), stated as facts about the film. It never refers to the user, their mood or their request, and never claims the movie is a good fit for them or will make them feel better. Every fact comes from the movie's data, and there are no spoilers. It is **at most 350 characters** (about 2–3 sentences), so 5 results stay readable on a phone. |
-| P3 | **Explicit constraints are respected** (runtime, things to avoid). Breaking one counts as a failure, not as a "less good" result. |
+| P3 | **Explicit constraints are respected** (runtime, things to avoid). Breaking one counts as a failure, not as a "less good" result. Constraints set in the UI are always applied. Constraints the LLM extracts from the free text are applied exactly once extracted; how well they are extracted is measured by an eval, not guaranteed. |
 | P4 | **The free-text input is at most 500 characters.** Longer input is rejected with a validation message, not silently truncated. |
 | P5 | **Attribution is shown as the data sources require** **(verify exact terms in the spike)**: in the UI, the TMDB logo (less prominent than ours) and the notice *"This product uses the TMDB API but is not endorsed or certified by TMDB"*, plus *"Streaming availability by JustWatch"* wherever availability is shown. API and MCP responses include an attribution field. |
 | P6 | **Show how fresh the data is:** every response says when availability was last refreshed. |
@@ -49,13 +50,14 @@ Agents must not break these. Each rule should end up backed by a test or an eval
 | **Success** | 5 movies pass P1 and the constraints | 5 results with pitches, attribution and the availability date |
 | **Partial** | Fewer than 5 pass (unlikely, but possible with one service in a small market) | The results that pass, plus a short note suggesting to add a service or relax a constraint |
 | **Invalid input** | Empty text or more than 500 characters (P4), no service selected, unsupported country | A validation message on the field at fault |
-| **Service unavailable** | LLM quota exhausted, database or upstream down | A clear error and a "try again later" message. Never silent failure or made-up results. Whether to fall back to results without pitches: **(to confirm)** |
+| **Results without pitches** | The search worked, but the LLM fails when choosing and pitching the results, or its output is still invalid after a retry | The best results that pass P1 and the constraints, without pitches, plus a short note that pitches are temporarily unavailable |
+| **Service unavailable** | The LLM can't interpret the request (quota exhausted or down), or the database or an upstream service is down | A clear error and a "try again later" message. Never silent failure or made-up results. |
 
 ## 5. User stories (MVP)
 
 | ID | Story | Acceptance |
 |---|---|---|
-| US1 | As a user, I describe my mood, pick my country and services in the UI, and get 5 movies | P1, P2, P5 and P6 hold; each result has a pitch of at most 350 characters |
+| US1 | As a user, I describe my mood, pick my country and services in the UI, and get 5 movies | P1, P2, P5 and P6 hold; each result has a poster and a pitch of at most 350 characters (except in the *Results without pitches* state) |
 | US2 | I can add constraints such as max runtime or "nothing too intense" | P3 holds |
 | US3 | I can ask again and exclude what I've already been shown in this session | No movie repeats within the session |
 | US4 | An AI assistant can call the service through MCP | The tool returns the same structured results as the API, including links and attribution |
@@ -96,7 +98,7 @@ Agents must not break these. Each rule should end up backed by a test or an eval
 - Accounts and saved preferences (services, country, things to avoid).
 - Links to trailers.
 - TV series.
-- More languages for the mood text, the UI and the pitches (e.g. Spanish for ES and BO).
+- More languages for the UI, titles and pitches (e.g. Spanish for ES and BO).
 
 ## 9. Glossary
 
