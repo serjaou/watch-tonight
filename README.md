@@ -6,8 +6,8 @@ Describe how you feel tonight, pick your country and streaming services, and get
 
 ## Stack
 
-- **Backend:** Python 3.13 · FastAPI · MongoDB Atlas Vector Search · Gemini · MCP Python SDK
-- **Frontend:** Web UI in `web/`
+- **Backend:** Python 3.13 · FastAPI · MongoDB Atlas Vector Search · an LLM (provider being evaluated) · MCP Python SDK
+- **Frontend:** React web UI in `web/`
 - **Tooling:** `uv` · `ruff` · `pyright` · `import-linter` · `pytest` · `poethepoet`
 - **AI coding tools:** Google Antigravity (Mac) and Claude Code (Windows), sharing one harness ([ADR 0003](docs/decisions/0003-support-antigravity-and-claude-code.md))
 
