@@ -7,7 +7,7 @@ description: >-
 
 # End of session (`/handoff`)
 
-Run the **Session end protocol** in [AGENTS.md](../../../AGENTS.md), with these details:
+Run the **End of Session** steps in [AGENTS.md](../../../AGENTS.md), with these details:
 
 1. First run `uv run poe check` and record the exact result.
 2. The "Now" section of [PROGRESS.md](../../../PROGRESS.md) has these fields:

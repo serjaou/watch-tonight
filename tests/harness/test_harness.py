@@ -3,7 +3,7 @@
 Verifies:
 1. `AGENTS.md` stays concise (<= 150 lines).
 2. `feature_list.json` obeys structural invariants (at most 1 `in_progress`, valid types/statuses,
-   `done` requires non-empty `evidence`, valid dependency references).
+   a non-empty `description`, `done` requires non-empty `evidence`, valid dependency references).
 3. Required harness files (skills, reviewer, hooks, state docs) exist, every `.agents` skill has
    a `.claude` stub, and both tools wire the Stop hook to `stop_gate.py` (ADR 0003).
 4. `stop_gate.py` allows stopping when no code changed, blocks while checks fail, and gives up
@@ -34,6 +34,7 @@ class FeatureItem(TypedDict):
     id: str
     type: str
     name: str
+    description: str
     stories: list[str]
     status: str
     dependencies: list[str]
@@ -68,6 +69,9 @@ def test_feature_list_invariants() -> None:
 
         assert item["type"] in VALID_TYPES, f"{feat_id} has invalid type {item['type']}"
         assert item["status"] in VALID_STATUSES, f"{feat_id} has invalid status {item['status']}"
+        # validate-harness.mjs (the guide's validator, feat-014) expects a description string.
+        description = item.get("description", "")
+        assert description.strip(), f"{feat_id} needs a non-empty 'description'"
 
         if item["status"] == "in_progress":
             in_progress_count += 1
@@ -109,6 +113,7 @@ def test_required_harness_files_exist() -> None:
         ".claude/agents/reviewer.md",
         ".github/workflows/pr-gates.yml",
         "scripts/ci/pr_gates.py",
+        "init.sh",
     ]
     for rel_path in required:
         assert (REPO_ROOT / rel_path).is_file(), f"Missing harness file: {rel_path}"
