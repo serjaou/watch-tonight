@@ -38,7 +38,7 @@ flowchart LR
 | Embed | `jobs` → `application` | Turn each profile into a vector for search. |
 | SearchMovies | `application` | The one online use case. API and MCP call it and return the same response model (US4). |
 | API, MCP server | `api`, `mcp_server` | Thin adapters: parse input, call the use case, map results and errors. |
-| Web UI | `web/` | Thin client of the API; mobile-friendly (≈375 px). Framework open (React leaning). |
+| Web UI | `web/` | Thin React client of the API (Q10); mobile-friendly (≈375 px). Tooling (bundler, tests) is decided in the UI slice. |
 
 ## 2. Layers and ports
 
@@ -51,7 +51,7 @@ Ports are `Protocol`s in `domain` (draft names):
 | `MovieSource` | TMDB client (httpx + retries) | Metadata and watch providers |
 | `MovieRepository` | MongoDB | Read/write movies, record job runs |
 | `CandidateSearch` | Atlas `$vectorSearch` | Filtered vector search |
-| `LanguageModel` | Gemini **(feat-011)** | Query intent, re-rank + pitches, emotional profiles (structured output) |
+| `LanguageModel` | Provider and model chosen in **(feat-011)** | Query intent, re-rank + pitches, emotional profiles (structured output) |
 | `Embedder` | Model choice and runtime **(feat-010)** | Profile and query vectors (same model for both) |
 
 Keeping each external service behind a port lets a provider be swapped (e.g. when a free tier runs out) without touching `application`, and lets unit tests use in-memory fakes.
@@ -59,18 +59,25 @@ Keeping each external service behind a port lets a provider be swapped (e.g. whe
 ## 3. Query flow (online)
 
 1. **Validate** the request `{text, country, providers[], max_runtime?, avoid?, exclude_ids[]}`: P4 (text ≤ 500 chars, not empty), supported country, at least one provider. Failure → *Invalid input* state.
-2. **Understand:** the LLM turns the text into a typed intent (Pydantic model): wanted tone and themes, things to avoid, max intensity, extra constraints, and an English summary to embed. Language is English only at launch.
-3. **Retrieve:** embed the summary; `$vectorSearch` with a pre-filter **(feat-009)**: `streamable` contains one of `{country}:{provider}`, `runtime ≤ max_runtime`, `_id ∉ exclude_ids`, and the avoid/intensity constraints if they can be expressed as filters (Q11). Take the top 30–50 candidates.
-4. **Check candidates (deterministic, in `application`):** drop every candidate that breaks P1 (availability re-checked) or P3 (runtime by value; avoid and intensity by comparing the intent with the profile on a shared, closed vocabulary (Q11), never by asking an LLM). If fewer than 5 remain, the response will be *Partial*, with the product.md §4 note.
+2. **Understand:** the LLM is the middle man between the user and the data (Q11). It turns the text, in any language (Q9), into a typed intent (Pydantic model):
+   - wanted tone and themes;
+   - structured filters drawn only from a **closed vocabulary** shared with the profile schema (content warnings from a fixed list, intensity on a fixed scale), so every filter matches a real field;
+   - an English summary to embed.
+
+   UI constraints (`max_runtime`, `avoid`) are merged in as given. If this call fails, the response is *Service unavailable*: without an intent there is nothing reliable to search with (Q8).
+3. **Retrieve:** embed the summary; `$vectorSearch` with a pre-filter **(feat-009)**: `streamable` contains one of `{country}:{provider}`, `runtime ≤ max_runtime`, `_id ∉ exclude_ids`, plus the intent's avoid/intensity filters if Atlas supports them as pre-filters. Take the top 30–50 candidates.
+4. **Check candidates (deterministic, in `application`):** drop every candidate that breaks P1 (availability re-checked) or P3 (runtime by value; avoid and intensity by comparing the intent's filters with the profile fields, never by asking an LLM). If fewer than 5 remain, the response will be *Partial*, with the product.md §4 note.
 5. **Re-rank and pitch:** the LLM picks up to 5 of the remaining candidates and writes a pitch for each that follows P2 and ADR 0001 (≤ 350 chars). Because it only sees valid candidates, the flow stays at 2 LLM calls per query.
-6. **Check the LLM's output (deterministic):** every picked ID is one of the step-4 candidates (no invented titles), pitch length (P2), response schema valid. On failure, retry the call **(feat-011)**. If it still fails, what to return is open (Q8); never *Partial*, because its note ("add a service or relax a constraint") would mislead.
-7. **Respond:** `state` (*Success* or *Partial*) and, for *Partial*, its `note`. Each result has title, year, runtime, services, pitch, TMDB link and its own `availability_updated_at` (P6; a refresh can be half done). Also attribution (P5) and a `trace` (stage timings, tokens, estimated cost).
+6. **Check the LLM's output (deterministic):** every picked ID is one of the step-4 candidates (no invented titles), pitch length (P2), response schema valid. On failure, retry the call **(feat-011)**. If it still fails (or the LLM is down at this step), return the top 5 step-4 candidates by search score without pitches: the *Results without pitches* state (Q8). Never *Partial*, because its note ("add a service or relax a constraint") would mislead.
+7. **Respond:** `state` (*Success*, *Partial* or *Results without pitches*) and its `note` when there is one. Each result has title, year, runtime, poster URL, services, pitch (when available), TMDB link and its own `availability_updated_at` (P6; a refresh can be half done). Also attribution (P5) and a `trace` (stage timings, tokens, estimated cost).
 
 US3 needs no accounts: the client sends the IDs it has already shown as `exclude_ids`.
 
 ## 4. Offline pipeline
 
-- **Corpus:** popular movies with a flat-rate provider in ES, US or BO; 5–20k, bounded by TMDB rate limits **(feat-008)**, the Atlas free tier **(feat-009)**, embedding time **(feat-010)** and LLM quotas for enrichment **(feat-011)**.
+- **Corpus:** popular movies with a flat-rate provider in ES, US or BO; 5–20k, bounded by TMDB rate limits **(feat-008)**, the Atlas free tier **(feat-009)**, embedding time **(feat-010)** and LLM cost for enrichment **(feat-011)**.
+- **Profile quality drives recommendation quality.** The richer and more accurate the movie data and its emotional profile, the better the results. So the profile schema (including the closed vocabulary of step 2), the enrichment prompt and a profile-quality eval on a sample the owner rates get their own feature when the backlog is sliced (feat-012).
+- **Movie data is ingested once.** Metadata (title, overview, keywords, credits, poster path) is treated as unchanging; only availability changes. It is fetched again only on purpose, e.g. to add a new field to the schema.
 - **Idempotency:**
   - each movie stores a `source_hash` of the inputs used to build its profile, plus the profile's `prompt_version`;
   - enrichment and embedding re-run only when the hash, the prompt version or the embedding model changed;
@@ -85,6 +92,7 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
   "_id": 603, "title": "The Matrix", "year": 1999, "runtime": 136,
   "genres": ["Action", "Science Fiction"], "keywords": ["simulated reality"],
   "overview": "…", "credits": {"directors": ["…"], "cast": ["…"]},
+  "poster_path": "/abc123.jpg",               // TMDB image path; URL built at display time (feat-008)
   "review_snippets": ["…"],                   // only if TMDB terms allow it (feat-008)
   "streamable": ["ES:8", "US:8"],             // "country:provider", flat-rate only (P1)
   "availability_updated_at": "2026-11-09T03:00:00Z",
@@ -109,8 +117,11 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
   - quality evals: retrieval precision@5 on a golden set of 30–50 owner-labelled queries, and pitch quality judged by an LLM calibrated against the owner's labels.
 - **Tests:** unit tests on `domain` and `application` with fake ports; integration tests on `infra` against the `mongodb-atlas-local` container **(feat-009)**, marked `integration`; acceptance tests per spec.
 - **Hosting:** API, UI and the daily job on a free tier **(feat-010)**: memory limits decide the embedding runtime.
+- **Cost:** zero by default (product.md §1). Images are linked from TMDB, never stored. The `trace` records the estimated cost of every query, and any paid service or recurring cost needs the owner's approval.
 
-## 7. Open questions
+## 7. Questions
+
+### Open
 
 | # | Question | Answered by | Changes |
 |---|---|---|---|
@@ -119,10 +130,15 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
 | Q3 | Atlas free tier: storage, vector index limits, pre-filter on an array field + range + `$nin` | feat-009 | Corpus size, `streamable` design, query step 3 |
 | Q4 | Does `mongodb-atlas-local` run `$vectorSearch` on both machines (Mac ARM, Windows x86)? | feat-009 | Integration tests |
 | Q5 | Embedding model and where it runs at query time; which free host fits | feat-010 | `Embedder`, container image, hosting |
-| Q6 | Runtime LLM: free-tier limits, data use, structured output, latency, framework (Pydantic AI vs SDK), fallback provider | feat-011 | `LanguageModel`, enrichment feasibility, latency budget, privacy note, *Service unavailable* |
+| Q6 | Runtime LLM: provider and model (Gemini free tier vs a low-cost OpenAI model), cost per query and per 1,000 profiles, data use, structured output (incl. non-English input), latency, framework (Pydantic AI vs SDK), fallback provider | feat-011 | `LanguageModel`, enrichment cost, latency budget, privacy note |
 | Q7 | p95 latency target (product.md: to confirm, guess < 10 s) | Measured in the first end-to-end slice (feat-012 plans it) | Number of LLM calls, caching |
-| Q8 | When the LLM is down, or its output is still invalid after a retry: return the valid results without pitches, only the valid picks, or an error? | Owner (product.md §4) | *Service unavailable* state, query step 6 |
-| Q9 | What happens with non-English input? | Owner (product.md §2) | Validation, query step 2 |
-| Q10 | Frontend framework | Owner, before the UI slice | `web/` |
-| Q11 | How are "avoid" and intensity constraints (P3) represented so they can be checked deterministically: a closed vocabulary of content warnings and an intensity scale shared by the profile and the intent? Applied as a pre-filter or after retrieval? | feat-009 (filter support), then owner in feat-012 | Profile schema, intent schema, query steps 3 and 4 |
 | Q12 | How often do ingest, enrich and embed re-run to add newly streamable movies? | feat-008 (rate of change), then feat-012 | Job schedule, LLM and embedding cost |
+
+### Decided (owner, 2026-11-13)
+
+| # | Question | Decision | Recorded in |
+|---|---|---|---|
+| Q8 | What to return when the LLM fails | The understanding call fails → *Service unavailable*. The re-rank call fails or its output stays invalid after a retry → the valid results without pitches. | product.md §4, query steps 2 and 6 |
+| Q9 | Non-English input | Any input language; UI, titles and pitches in English, and the UI says so. The LLM writes the intent in English. | product.md §2, query step 2 |
+| Q10 | Frontend framework | React. Tooling is decided in the UI slice. | §1 |
+| Q11 | How "avoid" and intensity constraints are checked | The LLM translates the free text into structured filters over a closed vocabulary shared with the profile schema; the data layer applies them deterministically (as Atlas pre-filters if supported, feat-009) and step 4 re-checks them. Defining the vocabulary is part of the profile feature (§4); the ADR comes with feat-012. | product.md P3, query steps 2–4 |

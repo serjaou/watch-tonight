@@ -27,6 +27,8 @@ Each answer: the finding, plus evidence (measurements, docs links).
    - *Changes:* the embed job's design (batching, resumability).
 5. **Changing models later.** Changing the model means re-embedding everything. Is recording `embedding_model` per document enough to migrate safely (e.g. embed into a new field, then switch)?
    - *Changes:* data model, embed job.
+6. **Multilingual.** Input can be in any language (product.md §2). Is a small multilingual model viable (quality on English profiles, size, latency)? It would let the API embed the raw text when the understanding call fails, instead of returning *Service unavailable* (architecture Q8).
+   - *Changes:* model choice, a possible fallback in query step 2.
 
 ## How
 - Throwaway scripts in `spikes/10-embedding/`. Measure options (a) and (b) locally; for (c) and question 3, read the docs and pricing pages and record links and dates.

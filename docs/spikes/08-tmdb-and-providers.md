@@ -28,6 +28,8 @@ Each answer: the finding, plus evidence (link to the terms, command and output, 
    - *Changes:* enrichment quality, minimum data to include a movie.
 7. **Rate of change.** How many flat-rate titles per country change from one day to the next (added or removed), and how many of the added ones are new to our corpus?
    - *Changes:* refresh schedule, and how often ingest must re-run to add new titles (architecture Q12).
+8. **Images.** May the UI show TMDB posters and provider logos by linking to TMDB's image servers (storing only `poster_path` / `logo_path`)? Which sizes exist, and what attribution or usage limits apply?
+   - *Changes:* the poster in each result (product.md §2), data model, UI.
 
 ## How
 - Throwaway script in `spikes/08-tmdb/` (never `src/`):
