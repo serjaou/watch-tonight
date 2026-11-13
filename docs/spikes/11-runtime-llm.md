@@ -23,7 +23,7 @@ Each answer: the finding, plus evidence (docs link and date, command and output,
    - the re-rank with pitches (≤ 350 chars, about the movie only)?
 
    Try 10 queries.
-   - *Changes:* guardrail design (retry or drop), prompt design.
+   - *Changes:* the retry in query step 6 (architecture.md), prompt design.
 4. **Latency.** p50/p95 for each of the two online calls.
    - *Changes:* p95 latency target (open question Q7), whether to merge the two calls.
 5. **Framework.** For two structured calls, what does Pydantic AI add over the plain Google SDK (retries, validation, testing with fakes, provider swap)?

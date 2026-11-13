@@ -21,7 +21,7 @@ Each answer: the finding, plus evidence (docs link, command and output, or measu
    - `profile.intensity ≤ N` and "`profile.content_warnings` contains none of a list" (P3 avoid constraints, architecture Q11)?
 
    How must those fields be indexed? Is there a limit on list sizes?
-   - *Changes:* the `streamable` design, query steps 3 and 5, US2 and US3 (`exclude_ids`).
+   - *Changes:* the `streamable` design, query steps 3 and 4, US2 and US3 (`exclude_ids`).
 3. **Local image.** Does the `mongodb/mongodb-atlas-local` Docker image run `$vectorSearch` with the same filters on the Mac (ARM) and on Windows (x86, Docker Desktop)? How long does a search index take to become queryable after creation?
    - *Changes:* integration tests (`poe test-all`), test setup and teardown.
 4. **Python driver.** Is PyMongo's async API the current recommendation (vs Motor)? Can search indexes be created and updated from code?
