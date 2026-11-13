@@ -1,21 +1,21 @@
 # Progress
 
 ## Now
-- **Active feature:** none. `feat-014` (Validate the harness with the guide's `validate-harness.mjs`) is done on branch `chore/validate-harness`; its PR waits for the owner's merge. `feat-013` is merged.
-- **State:** `feat-014` ran `walkinglabs/learn-harness-engineering` `validate-harness.mjs` (commit `a9342ff471f2c0e60be0c08b9f4a7c502df4e442`), raising the score from **60/100** to **92/100** (exit 0; instructions, state, verification and scope 5/5, lifecycle 3/5):
-  - added executable `init.sh` (`set -euo pipefail`, `uv sync`, `uv run poe check`) for macOS/Linux/Git Bash while keeping `uv run poe check` as the source of truth;
-  - added `description` to every item in `feature_list.json` (keeping `name` concise) and enforced non-empty `description` + `init.sh` presence in `tests/harness/test_harness.py` and `docs/conventions.md`;
-  - aligned `AGENTS.md` headings (`Startup Workflow`, `Definition of Done`, `End of Session`) and skill references (`.agents/skills/start/SKILL.md`, `.agents/skills/handoff/SKILL.md`);
-  - recorded the baseline, after-score, rerun instructions, and 2 accepted differences (no `session-handoff.md` template; `PROGRESS.md` field names) in `docs/harness-log.md`.
-- **Last check:** `uv run poe check` green, 2026-11-13 23:39 CET, Mac (ruff check + format check passed, pyright strict 0 errors, import-linter 2/2 kept, pytest 25 passed in 0.80s).
-- **Next step:** after the merge, `feat-006` (metrics: `docs/metrics.md` and a `/handoff` row per finished feature). It's a chore, so it's ready.
+- **Active feature:** none. `feat-006` (Metrics: `docs/metrics.md` and a `/handoff` row per finished feature) is done on branch `chore/metrics`; its PR waits for the owner's merge. `feat-014` is merged.
+- **State:** `feat-006` delivered:
+  - `docs/metrics.md`: defines online query metrics (`trace`), offline pipeline metrics (`ingestion_runs`), deterministic + quality eval metrics (`evals/` / `eval_runs`), a spike baseline summary table for `feat-008`…`011`, and the `/handoff` process & harness log backfilled for all 8 finished items (`feat-001`, `feat-000`, `feat-004`, `feat-007`, `feat-005`, `feat-013`, `feat-014`, `feat-006`);
+  - wired `/handoff` in `AGENTS.md`, `.agents/skills/handoff/SKILL.md`, and `docs/workflow.md` to record each completed feature's row (and spike baselines for spikes);
+  - enforced in `tests/harness/test_harness.py` (and documented in `docs/conventions.md`) that `docs/metrics.md` exists and every `done` feature in `feature_list.json` has a `/handoff` row in `docs/metrics.md`.
+- **Last check:** `uv run poe check` green, 2026-11-14 00:02 CET, Mac (ruff check + format check passed, pyright strict 0 errors, import-linter 2/2 kept, pytest 25 passed in 0.78s).
+- **Next step:** after the merge, `feat-008` (Spike: TMDB terms, rate limits and watch providers in `docs/spikes/08-tmdb-and-providers.md`). Its questions are ready; needs `TMDB_API_KEY` in local `.env`.
 - **Waiting on owner:**
-  1. Review and merge the `feat-014` PR.
-  2. Before the spikes (feat-008…011): a TMDB API key, a MongoDB Atlas account, and API keys for the LLM providers spike 11 compares (e.g. Gemini, OpenAI), all in your local `.env` (never committed; see `.env.example`).
-  3. Q13 (movies without a TMDB poster) once spike feat-008 reports how many lack one.
-- **Unverified:** CI on the `feat-014` PR (runs when the PR is opened), and `./init.sh` under Git Bash on Windows.
+  1. Review and merge the `feat-006` PR.
+  2. Before starting `feat-008` (and `feat-009`…`011`): put `TMDB_API_KEY` in your local `.env` (plus a MongoDB Atlas `MONGODB_URI` for `feat-009` and LLM API keys for `feat-011`; never committed, see `.env.example`).
+  3. Q13 (movies without a TMDB poster) once spike `feat-008` reports how many lack one.
+- **Unverified:** CI on the `feat-006` PR (runs when the PR is opened).
 
 ## Log (newest first, 1–3 lines each)
+- 2026-11-13 · Mac · Antigravity · feat-006: added `docs/metrics.md` (online, offline, eval, spike baseline and `/handoff` process metrics), backfilled all 8 completed tasks, wired `/handoff` and `AGENTS.md`, and enforced per-feature rows in `tests/harness/test_harness.py`. Reviewer: round 1, "No findings".
 - 2026-11-13 · Mac · Antigravity · feat-014: validated harness with `walkinglabs/learn-harness-engineering` `validate-harness.mjs` (60/100 → 92/100); added `init.sh`, `feature_list.json` `description` field + harness test, aligned `AGENTS.md` headings, and logged accepted differences in `docs/harness-log.md`. Reviewer: round 1, 2 findings fixed; round 2, "No findings".
 - 2026-11-13 · Windows · Claude Code · feat-013: recorded the owner's decisions on architecture Q8–Q11, posters, zero-cost budget and a provider-neutral LLM spike; reviewer subagent found 7 + 3 consistency gaps (UI vs text constraints, extraction eval, state precedence), all fixed.
 - 2026-11-13 · Windows · Claude Code · feat-005: wrote architecture v0 and the spike question files; reviewer subagent found 12 + 2 design gaps (P3 avoid check, Partial vs bad LLM output, per-result availability date, spike methods), all fixed; added runtime-LLM spike feat-011 (refinement is now feat-012).

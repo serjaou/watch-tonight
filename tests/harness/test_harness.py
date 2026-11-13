@@ -3,7 +3,8 @@
 Verifies:
 1. `AGENTS.md` stays concise (<= 150 lines).
 2. `feature_list.json` obeys structural invariants (at most 1 `in_progress`, valid types/statuses,
-   a non-empty `description`, `done` requires non-empty `evidence`, valid dependency references).
+   a non-empty `description`, `done` requires non-empty `evidence` and a row in `docs/metrics.md`,
+   valid dependency references).
 3. Required harness files (skills, reviewer, hooks, state docs) exist, every `.agents` skill has
    a `.claude` stub, and both tools wire the Stop hook to `stop_gate.py` (ADR 0003).
 4. `stop_gate.py` allows stopping when no code changed, blocks while checks fail, and gives up
@@ -58,6 +59,7 @@ def test_feature_list_invariants() -> None:
     data: FeatureListDoc = json.loads(path.read_text(encoding="utf-8"))
     features = data["features"]
     assert len(features) > 0
+    metrics_text = (REPO_ROOT / "docs" / "metrics.md").read_text(encoding="utf-8")
 
     ids: set[str] = set()
     in_progress_count = 0
@@ -77,6 +79,9 @@ def test_feature_list_invariants() -> None:
             in_progress_count += 1
         if item["status"] == "done":
             assert item["evidence"].strip(), f"{feat_id} is 'done' without evidence"
+            assert f"| `{feat_id}` |" in metrics_text, (
+                f"{feat_id} is 'done' without a /handoff row in docs/metrics.md"
+            )
         if item["type"] in {"feature", "spike"}:
             assert item["spec"], f"{feat_id} ({item['type']}) must reference a spec/spike path"
 
@@ -96,6 +101,7 @@ def test_required_harness_files_exist() -> None:
         "LEARNING.md",
         "feature_list.json",
         "docs/product.md",
+        "docs/metrics.md",
         "docs/workflow.md",
         "docs/harness-log.md",
         ".agents/hooks.json",

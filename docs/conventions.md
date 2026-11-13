@@ -29,7 +29,7 @@ Every task is a poethepoet task in `pyproject.toml` (`[tool.poe.tasks]`) and beh
 - `tests/unit/`: written with the code.
 - `tests/harness/`: checks the harness itself. It fails when:
   - `AGENTS.md` is longer than 150 lines;
-  - `feature_list.json` breaks an invariant: `type` not in `feature|spike|chore`, `status` not in `todo|in_progress|blocked|done`, an empty or missing `description`, more than one `in_progress`, `done` without `evidence`, a `feature` or `spike` without a `spec` path, a dependency on an unknown id;
-  - a required harness file is missing (skills, reviewer, hooks, state docs, `stop_gate.py`, `init.sh`), or a skill in `.agents/skills/` has no stub in `.claude/skills/`;
+  - `feature_list.json` breaks an invariant: `type` not in `feature|spike|chore`, `status` not in `todo|in_progress|blocked|done`, an empty or missing `description`, more than one `in_progress`, `done` without `evidence` or without a `/handoff` row in `docs/metrics.md`, a `feature` or `spike` without a `spec` path, a dependency on an unknown id;
+  - a required harness file is missing (skills, reviewer, hooks, state docs, `docs/metrics.md`, `stop_gate.py`, `init.sh`), or a skill in `.agents/skills/` has no stub in `.claude/skills/`;
   - `scripts/hooks/stop_gate.py` stops behaving as specified (it runs in a throwaway git repo, so the result never depends on this repo's state);
   - `scripts/ci/pr_gates.py` stops protecting `tests/acceptance/` and `evals/`.
