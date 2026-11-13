@@ -26,9 +26,12 @@ Each answer: the finding, plus evidence (link to the terms, command and output, 
    - *Changes:* countries at launch (product.md).
 6. **English data.** For a sample of popular movies, how many have an English overview, keywords and at least one review?
    - *Changes:* enrichment quality, minimum data to include a movie.
-7. **Freshness.** How often does TMDB's provider data change? Is a daily refresh enough to keep P1 true "as of the last refresh"?
-   - *Changes:* refresh schedule.
+7. **Rate of change.** How many flat-rate titles per country change from one day to the next (added or removed), and how many of the added ones are new to our corpus?
+   - *Changes:* refresh schedule, and how often ingest must re-run to add new titles (architecture Q12).
 
 ## How
-- Throwaway script in `spikes/08-tmdb/` (never `src/`): fetch ~500 popular movies with providers for ES, US and BO and print counts.
+- Throwaway script in `spikes/08-tmdb/` (never `src/`):
+  - fetch ~500 popular movies with providers for ES, US and BO (questions 4 and 6);
+  - read per-provider totals from `discover` (question 5);
+  - take two provider snapshots at least a day apart (question 7).
 - Needs a TMDB API key in `.env` (`TMDB_API_KEY`; the owner creates the account).
