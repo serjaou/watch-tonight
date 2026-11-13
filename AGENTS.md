@@ -15,6 +15,7 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 - docs/specs/: one spec per non-trivial feature
 - docs/spikes/: timeboxed investigations answering design unknowns (questions first, answers with evidence)
 - docs/decisions/: why things are the way they are (ADRs)
+- docs/metrics.md: product, eval, spike and process metrics; one `/handoff` row per finished item
 - docs/harness-log.md: past agent failures and how the harness changed
 - docs/workflow.md: the owner's guide to the workflow (human-facing; the rules are here)
 - .agents/: skills, reviewer subagent and Stop hook. Source of truth for both tools; `.claude/` only points here
@@ -52,7 +53,7 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 
 ## End of Session (`/handoff`: at the end of every task, and when the owner ends the session, even mid-task)
 1. Rewrite the "Now" section of PROGRESS.md. If no item after the active one is ready, add `Waiting on owner: refine feat-XXX` (refine one ahead). Add 1–3 lines to the top of "Log" (date · machine · tool).
-2. Update the feature's status and evidence in feature_list.json.
+2. Update the feature's status and evidence in feature_list.json, and add its row to docs/metrics.md when the task is complete.
 3. Ask: "What do I know now that the next session needs and is not in the repo?" Save it where it belongs (ADR, conventions, spec, PROGRESS.md, harness-log).
 4. Commit (WIP is fine) and push the feature branch, so the next session restarts from a clean tree. When the task is complete, open a PR to `main`. Report what is still unverified.
 
