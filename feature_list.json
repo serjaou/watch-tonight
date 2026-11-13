@@ -43,7 +43,7 @@
     {
       "id": "feat-005",
       "type": "chore",
-      "name": "Architecture v0 (docs/architecture.md, max 3 pages, open questions listed) and the question files for spikes feat-008, feat-009 and feat-010",
+      "name": "Architecture v0 (docs/architecture.md, max 3 pages, open questions listed) and the question files for spikes feat-008, feat-009, feat-010 and feat-012",
       "stories": [],
       "status": "todo",
       "dependencies": ["feat-001"],
@@ -91,12 +91,22 @@
       "evidence": ""
     },
     {
+      "id": "feat-012",
+      "type": "spike",
+      "name": "Spike: runtime LLM (Gemini free-tier limits and data use, structured output, latency, Pydantic AI vs plain SDK, fallback provider)",
+      "stories": ["US1"],
+      "status": "todo",
+      "dependencies": ["feat-005"],
+      "spec": "docs/spikes/12-runtime-llm.md",
+      "evidence": ""
+    },
+    {
       "id": "feat-011",
       "type": "chore",
       "name": "Architecture refinement with the spike results (ADRs) and slicing the MVP backlog: thin end-to-end slice first; slice mode and size rules in /spec",
       "stories": [],
       "status": "todo",
-      "dependencies": ["feat-008", "feat-009", "feat-010"],
+      "dependencies": ["feat-008", "feat-009", "feat-010", "feat-012"],
       "spec": null,
       "evidence": ""
     }
