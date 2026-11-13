@@ -21,11 +21,19 @@ Tracks Python, FastAPI, MongoDB, and agentic harness concepts encountered in `wa
 | `@pytest.mark.parametrize` | Testing | xUnit `[Theory]` + `[InlineData(...)]` | `Practised` | [tests/unit/test_prompt_validation.py](tests/unit/test_prompt_validation.py) |
 | `typing.Final` | Type System | `const` / `readonly` (enforced by static analyzer only, not at runtime) | `Can explain` | [src/watch_tonight/domain/prompt_validation.py](src/watch_tonight/domain/prompt_validation.py) |
 | `typing.TypedDict` | Type System | Compile-time-only shape annotation over a mutable `dict` (vs Pydantic / C# `record`) | `Can explain` | [tests/harness/test_harness.py](tests/harness/test_harness.py) |
-| `pathlib.Path` & `subprocess.run` | Stdlib | `FileInfo` / `Path` & `Process.Start` | `Practised` | [scripts/hooks/stop_gate.py](scripts/hooks/stop_gate.py) |
+| `pathlib.Path` & `subprocess.run` (`encoding="utf-8"`, `utf-8-sig`) | Stdlib | `FileInfo` / `Path` & `Process.Start` / `StreamReader` | `Can explain` | [scripts/hooks/stop_gate.py](scripts/hooks/stop_gate.py) |
+| `@pytest.fixture` & `tmp_path` | Testing | xUnit constructor DI (`IClassFixture<T>`) + temp directory | `Seen` | [tests/harness/test_harness.py](tests/harness/test_harness.py) |
+| `str.startswith(tuple)` & comprehensions | Language | `prefixes.Any(p => path.StartsWith(p))` / LINQ `.Where()` | `Seen` | [scripts/ci/pr_gates.py](scripts/ci/pr_gates.py) |
 
 ---
 
 ## 2. Learning Log (newest first)
+
+### 2026-11-13 · `HEAD~10..HEAD` (`feat-004` & `feat-007`) Cross-OS harness, pytest fixtures, and PR gates
+- **Concepts covered (`/defend`):**
+  1. **Cross-OS text encodings (`cp1252` vs `UTF-8`) and BOM (`utf-8-sig`):** Unlike .NET (which defaults to UTF-8 everywhere), Python's `subprocess.run(..., text=True)` and `sys.stdin` default to the OS locale encoding (`UTF-8` on macOS/Linux, `cp1252` on Windows). Passing `encoding="utf-8"` forces UTF-8 across OSes; reading raw bytes via `sys.stdin.buffer.read().decode("utf-8-sig")` also strips the UTF-8 BOM (`\ufeff`) that Windows PowerShell 5.1 prepends on pipes (which would otherwise crash `json.loads`).
+  2. **`@pytest.fixture` (`tmp_path` → `gate_repo`) and test isolation:** Whereas xUnit resolves test dependencies by **type** in the class constructor, `pytest` resolves fixtures by the **exact parameter name** (`tmp_path`, `gate_repo`); the `: Path` type annotation is only for `pyright`. Running `stop_gate.py` in a throwaway Git repo (`gate_repo`) prevents the test from depending on the real repo's `git status` (which passed locally when dirty on the Mac, but failed on a clean CI checkout).
+  3. **`str.startswith(tuple)` and path-prefix boundary (`"tests/acceptance/"`):** In Python, `str.startswith()` and `str.endswith()` natively accept a **`tuple` of strings** (`PROTECTED = ("tests/acceptance/", "evals/")`) as a shorthand for `any(path.startswith(p) for p in PROTECTED)`, but raise `TypeError` at runtime if given a `list` (`[...]`). Including the trailing `/` in `"tests/acceptance/"` ensures a sibling file like `"tests/acceptance_helpers.py"` is not falsely treated as inside the `tests/acceptance/` directory.
 
 ### 2026-11-12 · `feat-000` Harness dry run: mood prompt validator (Product Rule P4)
 - **Concepts defended:**

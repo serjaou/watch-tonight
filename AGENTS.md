@@ -21,8 +21,8 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 - LEARNING.md: what the owner has learned
 - docs/inception/: historical brief and harness proposal. Superseded; don't act on it
 
-## Session start protocol
-1. `git pull`, then `uv sync` and `uv run poe check`. If the check or the latest CI run of the branch fails, fixing it is the task. If a tool is missing, point the owner to "Machine setup" in README.md; don't install it yourself.
+## Startup Workflow
+1. `git pull`, then `./init.sh` (runs `uv sync` and `uv run poe check`; in PowerShell run those two by hand). If the check or the latest CI run of the branch fails, fixing it is the task. If a tool is missing, point the owner to "Machine setup" in README.md; don't install it yourself.
 2. Read the "Now" section of PROGRESS.md, then the active feature in feature_list.json and its spec/spike doc.
 3. Pick the session task (first rule that matches):
    a. An item is `in_progress` or `todo` and **ready** (see Definition of Ready) → build it.
@@ -47,16 +47,17 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 - Never edit tests/acceptance/ or evals/ unless the owner asks for it in this session. CI fails a PR that touches them until the owner adds the `tests-approved` label; never add it yourself.
 - Never commit to or push `main`, never commit secrets, never add a dependency without explaining why.
 - Never add a paid service or a recurring cost without the owner's approval (budget: zero cost by default, `docs/product.md` §1).
-- Done = acceptance tests pass (or spike questions answered in `docs/spikes/`) + `uv run poe check` passes + evidence recorded. Paste commands and outputs; don't just claim.
+- **Definition of Done:** acceptance tests pass (or spike questions answered in `docs/spikes/`) + `uv run poe check` passes + evidence recorded. Paste commands and outputs; don't just claim.
 - Stay in scope. Record ideas outside the feature as new "todo" entries in feature_list.json instead of doing them.
 
-## Session end protocol (`/handoff`: at the end of every task, and when the owner ends the session, even mid-task)
+## End of Session (`/handoff`: at the end of every task, and when the owner ends the session, even mid-task)
 1. Rewrite the "Now" section of PROGRESS.md. If no item after the active one is ready, add `Waiting on owner: refine feat-XXX` (refine one ahead). Add 1–3 lines to the top of "Log" (date · machine · tool).
 2. Update the feature's status and evidence in feature_list.json.
 3. Ask: "What do I know now that the next session needs and is not in the repo?" Save it where it belongs (ADR, conventions, spec, PROGRESS.md, harness-log).
-4. Commit (WIP is fine) and push the feature branch. When the task is complete, open a PR to `main`. Report what is still unverified.
+4. Commit (WIP is fine) and push the feature branch, so the next session restarts from a clean tree. When the task is complete, open a PR to `main`. Report what is still unverified.
 
 ## Commands
+- `./init.sh`: `uv sync` + `uv run poe check` in one step, for session start (macOS, Linux, Git Bash).
 - `uv run poe check`: lint, format check, types, architecture rules and fast tests (backend and, once it exists, web/). Must pass before stopping.
 - `uv run poe test-all`: also runs the integration tests (needs Docker).
 - `uv run poe fmt`: format. More commands (one test, single steps) in docs/conventions.md.
