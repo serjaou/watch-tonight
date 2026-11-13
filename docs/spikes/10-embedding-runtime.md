@@ -30,3 +30,4 @@ Each answer: the finding, plus evidence (measurements, docs links).
 
 ## How
 - Throwaway scripts in `spikes/10-embedding/`. Measure options (a) and (b) locally; for (c) and question 3, read the docs and pricing pages and record links and dates.
+- Question 1 needs TMDB data: reuse feat-008's sample if it exists, otherwise fetch ~200 movies with `TMDB_API_KEY` in `.env`.

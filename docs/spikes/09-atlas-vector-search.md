@@ -17,10 +17,11 @@ Each answer: the finding, plus evidence (docs link, command and output, or measu
 2. **Pre-filters.** Can one `$vectorSearch` pre-filter combine:
    - "array field `streamable` contains any of a list of strings";
    - `runtime ≤ N`;
-   - `_id` not in a list of up to ~50 IDs?
+   - `_id` not in a list of up to ~50 IDs;
+   - `profile.intensity ≤ N` and "`profile.content_warnings` contains none of a list" (P3 avoid constraints, architecture Q11)?
 
    How must those fields be indexed? Is there a limit on list sizes?
-   - *Changes:* the `streamable` design, query step 3, US3 (`exclude_ids`).
+   - *Changes:* the `streamable` design, query steps 3 and 5, US2 and US3 (`exclude_ids`).
 3. **Local image.** Does the `mongodb/mongodb-atlas-local` Docker image run `$vectorSearch` with the same filters on the Mac (ARM) and on Windows (x86, Docker Desktop)? How long does a search index take to become queryable after creation?
    - *Changes:* integration tests (`poe test-all`), test setup and teardown.
 4. **Python driver.** Is PyMongo's async API the current recommendation (vs Motor)? Can search indexes be created and updated from code?
@@ -29,5 +30,6 @@ Each answer: the finding, plus evidence (docs link, command and output, or measu
    - *Changes:* the p95 latency budget (open question Q7).
 
 ## How
-- Throwaway script in `spikes/09-atlas/`: load 1–2k synthetic documents (random 384-d vectors, realistic `streamable` and `runtime`) into atlas-local and into a free-tier cluster, then run the filtered queries.
+- Throwaway script in `spikes/09-atlas/`: load ~20k synthetic documents (random vectors; realistic `streamable`, `runtime`, `intensity` and `content_warnings`) into atlas-local and into a free-tier cluster, then run the filtered queries.
+- Measure storage at 384 dimensions and at one larger size (768 or 1024): feat-010 picks the model, so question 1 must hold for its vector size.
 - Needs a free MongoDB Atlas account (owner) and `MONGODB_URI` in `.env`.

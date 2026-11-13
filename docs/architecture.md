@@ -1,7 +1,7 @@
 # Architecture (v0, draft)
 
 **What this file is:** how watch-tonight is built. What it does and the rules it must keep are in `docs/product.md` (P1–P7); why each choice was made is in `docs/decisions/`.
-**Status:** v0 draft (feat-005), written before the spikes. Points marked **(feat-0NN)** are open until that spike answers them; feat-011 turns the answers into ADRs and updates this file.
+**Status:** v0 draft (feat-005), written before the spikes. Points marked **(feat-0NN)** are open until that spike answers them; feat-012 turns the answers into ADRs and updates this file.
 
 ---
 
@@ -33,7 +33,7 @@ flowchart LR
 | Component | Package | Responsibility |
 |---|---|---|
 | Ingest catalogue | `jobs` → `application` | Load the movie corpus from TMDB into `movies`. Re-running changes nothing unless the source changed. |
-| Refresh availability | `jobs` → `application` | Daily: rewrite `streamable` (flat-rate only, P1) and `availability_updated_at` for every movie. |
+| Refresh availability | `jobs` → `application` | Daily: rewrite `streamable` (flat-rate only, P1, **(feat-008)**) and `availability_updated_at` for every stored movie. |
 | Enrich | `jobs` → `application` | LLM writes each movie's emotional profile from its data, with the evidence it used. |
 | Embed | `jobs` → `application` | Turn each profile into a vector for search. |
 | SearchMovies | `application` | The one online use case. API and MCP call it and return the same response model (US4). |
@@ -42,7 +42,7 @@ flowchart LR
 
 ## 2. Layers and ports
 
-`domain` ← `application` ← `infra`, `api`, `mcp_server`, `jobs` (enforced by import-linter; see `docs/conventions.md`). In C# terms: `domain` is the Core project with the interfaces, `infra` holds the implementations, and `api/` is the composition root that wires them (FastAPI `Depends` ≈ ASP.NET Core DI).
+`domain` ← `application` ← `infra`, `api`, `mcp_server`, `jobs` (enforced by import-linter; see `docs/conventions.md`). In C# terms: `domain` is the Core project with the interfaces and `infra` holds the implementations. Each entry point (`api`, `mcp_server`, `jobs`) is a composition root that wires `infra` adapters into the use cases (FastAPI `Depends` ≈ ASP.NET Core DI). Shared wiring code, if any, lives in one module all three import, never in `api`, so the MCP server and the jobs don't depend on FastAPI.
 
 Ports are `Protocol`s in `domain` (draft names):
 
@@ -51,7 +51,7 @@ Ports are `Protocol`s in `domain` (draft names):
 | `MovieSource` | TMDB client (httpx + retries) | Metadata and watch providers |
 | `MovieRepository` | MongoDB | Read/write movies, record job runs |
 | `CandidateSearch` | Atlas `$vectorSearch` | Filtered vector search |
-| `LanguageModel` | Gemini **(feat-012)** | Query intent, re-rank + pitches, emotional profiles (structured output) |
+| `LanguageModel` | Gemini **(feat-011)** | Query intent, re-rank + pitches, emotional profiles (structured output) |
 | `Embedder` | Model choice and runtime **(feat-010)** | Profile and query vectors (same model for both) |
 
 Keeping each external service behind a port lets a provider be swapped (e.g. when a free tier runs out) without touching `application`, and lets unit tests use in-memory fakes.
@@ -60,28 +60,30 @@ Keeping each external service behind a port lets a provider be swapped (e.g. whe
 
 1. **Validate** the request `{text, country, providers[], max_runtime?, avoid?, exclude_ids[]}`: P4 (text ≤ 500 chars, not empty), supported country, at least one provider. Failure → *Invalid input* state.
 2. **Understand:** the LLM turns the text into a typed intent (Pydantic model): wanted tone and themes, things to avoid, max intensity, extra constraints, and an English summary to embed. Language is English only at launch.
-3. **Retrieve:** embed the summary; `$vectorSearch` with a pre-filter: `streamable` contains one of `{country}:{provider}`, `runtime ≤ max_runtime`, `_id ∉ exclude_ids`. Take the top 30–50 candidates.
-4. **Re-rank and pitch:** the LLM picks 5 candidates and writes a pitch for each: about the movie, never the user, facts only from the movie's data, ≤ 350 chars (P2).
+3. **Retrieve:** embed the summary; `$vectorSearch` with a pre-filter **(feat-009)**: `streamable` contains one of `{country}:{provider}`, `runtime ≤ max_runtime`, `_id ∉ exclude_ids`, and the avoid/intensity constraints if they can be expressed as filters (Q11). Take the top 30–50 candidates.
+4. **Re-rank and pitch:** the LLM picks 5 candidates and writes a pitch for each that follows P2 and ADR 0001 (≤ 350 chars).
 5. **Guardrails (deterministic, in `application`):**
    - every picked ID is one of the candidates (no invented titles);
    - availability re-checked (P1);
-   - constraints respected (P3);
+   - constraints respected (P3): runtime by value; avoid and intensity by comparing the intent with the profile on a shared, closed vocabulary (Q11), never by asking an LLM;
    - pitch length (P2);
    - response schema valid.
 
-   Picks that fail are dropped; if fewer than 5 remain, the response is *Partial* (product.md §4).
-6. **Respond:** results (title, year, runtime, services, pitch, TMDB link), attribution (P5), `availability_updated_at` (P6) and a `trace` (stage timings, tokens, estimated cost).
+   Two kinds of failure, handled differently:
+   - **A pick breaks P1 or P3:** drop it and backfill from the remaining candidates. If fewer than 5 candidates pass, the response is *Partial*, with the product.md §4 note.
+   - **The LLM's output is bad** (invented ID, pitch too long, invalid schema): retry or backfill **(feat-011)**. If it still fails, *Service unavailable*. Never *Partial*, because its note ("add a service or relax a constraint") would mislead.
+6. **Respond:** `state` (*Success* or *Partial*) and, for *Partial*, its `note`. Each result has title, year, runtime, services, pitch, TMDB link and its own `availability_updated_at` (P6; a refresh can be half done). Also attribution (P5) and a `trace` (stage timings, tokens, estimated cost).
 
 US3 needs no accounts: the client sends the IDs it has already shown as `exclude_ids`.
 
 ## 4. Offline pipeline
 
-- **Corpus:** popular movies with a flat-rate provider in ES, US or BO; 5–20k, bounded by the Atlas free tier **(feat-009)** and TMDB rate limits **(feat-008)**.
+- **Corpus:** popular movies with a flat-rate provider in ES, US or BO; 5–20k, bounded by TMDB rate limits **(feat-008)**, the Atlas free tier **(feat-009)**, embedding time **(feat-010)** and LLM quotas for enrichment **(feat-011)**.
 - **Idempotency:**
   - each movie stores a `source_hash` of the inputs used to build its profile, plus the profile's `prompt_version`;
   - enrichment and embedding re-run only when the hash, the prompt version or the embedding model changed;
   - every job run is recorded in `ingestion_runs` (counts, duration, errors).
-- **Refresh** touches only `streamable` and `availability_updated_at`, so it is cheap to run daily.
+- **Refresh** touches only `streamable` and `availability_updated_at` of stored movies, so it is cheap to run daily. Movies that become streamable later enter the corpus only when ingest, enrich and embed re-run; their schedule is open (Q12).
 
 ## 5. Data model (MongoDB sketch)
 
@@ -125,8 +127,10 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
 | Q3 | Atlas free tier: storage, vector index limits, pre-filter on an array field + range + `$nin` | feat-009 | Corpus size, `streamable` design, query step 3 |
 | Q4 | Does `mongodb-atlas-local` run `$vectorSearch` on both machines (Mac ARM, Windows x86)? | feat-009 | Integration tests |
 | Q5 | Embedding model and where it runs at query time; which free host fits | feat-010 | `Embedder`, container image, hosting |
-| Q6 | Runtime LLM: free-tier limits, structured output, latency, framework (Pydantic AI vs SDK) | feat-012 | `LanguageModel`, enrichment feasibility, latency budget |
-| Q7 | p95 latency target (product.md: to confirm, guess < 10 s) | Measured in the first end-to-end slice (feat-011 plans it) | Number of LLM calls, caching |
+| Q6 | Runtime LLM: free-tier limits, data use, structured output, latency, framework (Pydantic AI vs SDK), fallback provider | feat-011 | `LanguageModel`, enrichment feasibility, latency budget, privacy note, *Service unavailable* |
+| Q7 | p95 latency target (product.md: to confirm, guess < 10 s) | Measured in the first end-to-end slice (feat-012 plans it) | Number of LLM calls, caching |
 | Q8 | Fall back to results without pitches when the LLM is down? | Owner (product.md §4) | *Service unavailable* state |
 | Q9 | What happens with non-English input? | Owner (product.md §2) | Validation, query step 2 |
 | Q10 | Frontend framework | Owner, before the UI slice | `web/` |
+| Q11 | How are "avoid" and intensity constraints (P3) represented so they can be checked deterministically: a closed vocabulary of content warnings and an intensity scale shared by the profile and the intent? Applied as a pre-filter or after retrieval? | feat-009 (filter support), then owner in feat-012 | Profile schema, intent schema, query steps 3 and 5 |
+| Q12 | How often do ingest, enrich and embed re-run to add newly streamable movies? | feat-008 (rate of change), then feat-012 | Job schedule, LLM and embedding cost |
