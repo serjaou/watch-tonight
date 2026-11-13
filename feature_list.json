@@ -55,10 +55,10 @@
       "type": "chore",
       "name": "Record owner decisions of 2026-11-13: architecture Q8-Q11 (no-pitch fallback, any input language, React, LLM filters over a closed vocabulary), posters, zero-cost budget, provider-neutral LLM spike",
       "stories": [],
-      "status": "in_progress",
+      "status": "done",
       "dependencies": ["feat-005"],
       "spec": null,
-      "evidence": ""
+      "evidence": "Windows, 2026-11-13: decisions recorded in docs/product.md, docs/architecture.md (Decided table Q8-Q11, new Q13), docs/spikes/08, 10, 11 and AGENTS.md. uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed. Reviewer subagent: round 1, 7 findings fixed; round 2, 3 findings fixed (max 2 rounds, ADR 0004)."
     },
     {
       "id": "feat-006",

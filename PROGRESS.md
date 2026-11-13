@@ -1,19 +1,22 @@
 # Progress
 
 ## Now
-- **Active feature:** none. `feat-005` (Architecture v0 + spike question files) is done on branch `chore/architecture-v0`; its PR waits for the owner's merge.
-- **State:** `feat-005` delivered:
-  - `docs/architecture.md` v0: components, layers and ports, the 7-step query flow (P1/P3 checked on candidates before the LLM picks, so 2 LLM calls per query), offline pipeline, data model, cross-cutting concerns, and open questions Q1–Q12, each routed to a spike or an owner decision;
-  - spike question files `docs/spikes/08` (TMDB), `09` (Atlas), `10` (embedding runtime), `11` (runtime LLM);
-  - new spike `feat-011` (runtime LLM): it was on the inception Week 1 checklist but had no backlog item. Refinement + slicing is now `feat-012`, and ids still follow the order.
-- **Last check:** `uv run poe check` green, 2026-11-13 13:30, Windows (ruff, pyright strict 0 errors, import-linter 2/2 kept, pytest 25 passed).
+- **Active feature:** none. `feat-013` (owner decisions of 2026-11-13) is done on branch `chore/owner-decisions`; its PR waits for the owner's merge. `feat-005` is merged.
+- **State:** `feat-013` recorded the owner's decisions:
+  - product.md: zero-cost budget; any input language with English UI/titles/pitches; posters (verify); P3 split (UI constraints always applied, text constraints measured by an extraction eval); new *Results without pitches* state;
+  - architecture.md: the LLM turns free text into filters over a closed vocabulary and the data layer applies them deterministically; React; profile quality and "metadata ingested once" principles; Q8–Q11 decided; new open question Q13 (movies without a poster);
+  - spikes: 08 asks about TMDB image linking and missing posters; 10 about a multilingual model; 11 compares Gemini's free tier with a low-cost OpenAI model;
+  - AGENTS.md: no paid service or recurring cost without the owner's approval.
+- **Last check:** `uv run poe check` green, 2026-11-13, Windows (ruff, pyright strict 0 errors, import-linter 2/2 kept, pytest 25 passed).
 - **Next step:** after the merge, `feat-006` (metrics: `docs/metrics.md` and a `/handoff` row per finished feature). It's a chore, so it's ready.
 - **Waiting on owner:**
-  1. Review and merge the `feat-005` PR. Check `feat-011`'s place in the backlog, and the owner questions in architecture.md §7: Q8 (LLM down or invalid output), Q9 (non-English input), Q10 (frontend framework), and Q11 (how "avoid" constraints are represented; decided in feat-012).
-  2. Before the spikes (feat-008…011): create a TMDB API key, a MongoDB Atlas account and a Gemini API key, and put them in your local `.env` (never committed; see `.env.example`).
-- **Unverified:** CI on the `feat-005` PR (runs when the PR is opened).
+  1. Review and merge the `feat-013` PR.
+  2. Before the spikes (feat-008…011): a TMDB API key, a MongoDB Atlas account, and API keys for the LLM providers spike 11 compares (e.g. Gemini, OpenAI), all in your local `.env` (never committed; see `.env.example`).
+  3. Q13 (movies without a TMDB poster) once spike feat-008 reports how many lack one.
+- **Unverified:** CI on the `feat-013` PR (runs when the PR is opened).
 
 ## Log (newest first, 1–3 lines each)
+- 2026-11-13 · Windows · Claude Code · feat-013: recorded the owner's decisions on architecture Q8–Q11, posters, zero-cost budget and a provider-neutral LLM spike; reviewer subagent found 7 + 3 consistency gaps (UI vs text constraints, extraction eval, state precedence), all fixed.
 - 2026-11-13 · Windows · Claude Code · feat-005: wrote architecture v0 and the spike question files; reviewer subagent found 12 + 2 design gaps (P3 avoid check, Partial vs bad LLM output, per-result availability date, spike methods), all fixed; added runtime-LLM spike feat-011 (refinement is now feat-012).
 - 2026-11-12 · Mac · Antigravity · feat-007: verified `feat-004` harness changes on the Mac. Live `Stop` hook blocked on a real `F401` lint error and allowed when green; fixed `stop_gate.py` to clear `.harness/stop_gate_attempts` when changes are reverted; verified `TypeName: "reviewer"` uses `read_file` + `run_command` (`view_file`/write tools absent) and updated `/review`; completed autonomous `/review` ("No findings") + `/handoff`.
 - 2026-11-12 · Windows · Claude Code · feat-004: first Windows session. Installed uv; found red CI (git-state-dependent test), Windows encoding/BOM bugs in the Stop hook, a reviewer that missed committed work, and a pre-commit/project ruff mismatch, all fixed. Added Claude Code support (ADR 0003), autonomous task runs with owner gates (ADR 0004), PR gates CI, English-only launch, 350-character pitches, and backlog feat-005…feat-011.
