@@ -83,10 +83,10 @@
       "name": "Metrics",
       "description": "docs/metrics.md (product and process metrics) and a /handoff row per finished feature, so the spikes are already measured.",
       "stories": [],
-      "status": "todo",
+      "status": "done",
       "dependencies": ["feat-001"],
       "spec": null,
-      "evidence": ""
+      "evidence": "Mac, 2026-11-13: created docs/metrics.md (online trace metrics, offline ingestion_runs metrics, deterministic + quality eval metrics, spike baseline table for feat-008..011, and /handoff process log backfilled for all 8 done items); wired AGENTS.md, .agents/skills/handoff/SKILL.md, docs/workflow.md, docs/conventions.md, and tests/harness/test_harness.py (asserts docs/metrics.md exists and every 'done' feature has a row; verified failing sensor when a row is missing). uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed in 0.80s. Reviewer subagent: round 1, No findings."
     },
     {
       "id": "feat-008",
