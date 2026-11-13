@@ -6,6 +6,18 @@ Records every time an agent, hook, or handoff fails or reveals a gap, along with
 
 ---
 
+## 2026-11-13 · Mac · Antigravity (`feat-014`)
+- **Finding:** we built the harness from the walkinglabs/learn-harness-engineering guide, but had never run its validator on it. Baseline **60/100** (bottleneck: lifecycle, 0/5 checks). Each FAIL, sorted:
+  - *Real gaps (fixed):* no one-step verification entrypoint (`init.sh` with `set -e`); features had no `description` (the long `name`s held the details).
+  - *Naming differences (renamed, owner's choice):* "Session start protocol" → **Startup Workflow**, "Done =" → **Definition of Done**, "Session end protocol" → **End of Session**; the push step now says it leaves a clean tree for the next session.
+  - *Accepted differences (still FAIL):* no `session-handoff.md` template, since the `/handoff` skill and the "Now" section of `PROGRESS.md` do that job; no "Last Updated / Current Objective / Recommended Next Step" markers, since `PROGRESS.md` has **Last check**, **Active feature** and **Next step**.
+- **Layer:** state / verification.
+- **Root cause:** we followed the guide by hand and never measured the result. The validator also expects the guide's exact file names and headings.
+- **Harness change:** `init.sh` (`set -euo pipefail`, `uv sync`, `uv run poe check`; `poe check` stays the source of truth), a `description` on every feature (enforced in `tests/harness`), renamed AGENTS.md headings and skill references. Result: **92/100**, exit 0 (min score 70); instructions, state, verification and scope at 5/5, lifecycle 3/5.
+- **How to rerun:** not vendored (it needs Node, which the project doesn't otherwise use). From `https://raw.githubusercontent.com/walkinglabs/learn-harness-engineering/a9342ff471f2c0e60be0c08b9f4a7c502df4e442/`, download `skills/harness-creator/scripts/validate-harness.mjs` to `<dir>/validate-harness.mjs` and `skills/harness-creator/scripts/lib/harness-utils.mjs` to `<dir>/lib/harness-utils.mjs` (it is imported as `./lib/harness-utils.mjs`), then run `node <dir>/validate-harness.mjs --target <repo>` (Node v26.3.0 on the Mac).
+- **Caveat:** the validator looks for `progress.md` in lower case. It finds our `PROGRESS.md` only because macOS and Windows file systems ignore case; on Linux "Progress log exists" would FAIL. It matches keywords in headings, lists and bold lead-ins, so a good score means the guide's vocabulary is present, not that the harness works. The harness tests and real sessions show that.
+- **Lesson:** an external checker is worth running once against what you built from its guide. Sort its findings into real gaps and naming differences before changing anything, and don't chase 100 by adding keywords.
+
 ## 2026-11-12 · Mac · Antigravity (`feat-007`)
 - **Finding:** Two details surfaced when verifying `feat-004` in Antigravity on the Mac:
   1. After the live `Stop` hook blocked on a temporary lint error (`attempt 2/3`), reverting the watched file made `has_code_changes()` false, and `stop_gate.py` returned `allow` early without deleting `.harness/stop_gate_attempts` (leaving the counter at `2` for future turns).

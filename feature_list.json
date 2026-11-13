@@ -4,6 +4,7 @@
       "id": "feat-001",
       "type": "chore",
       "name": "Repo skeleton and core harness setup",
+      "description": "Python project skeleton (uv, ruff, pyright, import-linter and pytest behind poe), the src/watch_tonight layers, pre-commit, CI, and the core harness files (AGENTS.md, PROGRESS.md, feature_list.json, skills, Stop hook, harness tests).",
       "stories": [],
       "status": "done",
       "dependencies": [],
@@ -14,6 +15,7 @@
       "id": "feat-000",
       "type": "feature",
       "name": "Harness dry run: mood prompt validator (Product Rule P4)",
+      "description": "End-to-end dry run of the harness on a tiny real feature: /spec, the mood prompt validator (Product Rule P4), the Stop hook, the reviewer subagent, /defend and /handoff.",
       "stories": ["US1"],
       "status": "done",
       "dependencies": ["feat-001"],
@@ -23,7 +25,8 @@
     {
       "id": "feat-004",
       "type": "chore",
-      "name": "Harness review: first Windows session, Claude Code support, inception review",
+      "name": "Harness review: first Windows session and Claude Code support",
+      "description": "First session on Windows: fix what breaks on a fresh machine, add Claude Code support next to Antigravity (ADR 0003), review the inception docs, and set up autonomous task runs with owner gates (ADR 0004).",
       "stories": [],
       "status": "done",
       "dependencies": ["feat-001"],
@@ -33,7 +36,8 @@
     {
       "id": "feat-007",
       "type": "chore",
-      "name": "Antigravity on the Mac (needs the Mac): verify the harness changes of feat-004 (Stop hook still fires and blocks after the stop_gate.py changes; reviewer tool names read_file vs view_file; agent runs /review and /handoff on its own)",
+      "name": "Verify the feat-004 harness changes in Antigravity on the Mac",
+      "description": "Needs the Mac. Check that the Stop hook still fires and blocks after the stop_gate.py changes, the reviewer's tool names (read_file vs view_file), and that the agent runs /review and /handoff on its own.",
       "stories": [],
       "status": "done",
       "dependencies": ["feat-004"],
@@ -43,7 +47,8 @@
     {
       "id": "feat-005",
       "type": "chore",
-      "name": "Architecture v0 (docs/architecture.md, max 3 pages, open questions listed) and the question files for spikes feat-008, feat-009, feat-010 and feat-011",
+      "name": "Architecture v0 and spike question files",
+      "description": "docs/architecture.md (max 3 pages, open questions listed) and the question files for spikes feat-008, feat-009, feat-010 and feat-011.",
       "stories": [],
       "status": "done",
       "dependencies": ["feat-001"],
@@ -53,7 +58,8 @@
     {
       "id": "feat-013",
       "type": "chore",
-      "name": "Record owner decisions of 2026-11-13: architecture Q8-Q11 (no-pitch fallback, any input language, React, LLM filters over a closed vocabulary), posters, zero-cost budget, provider-neutral LLM spike",
+      "name": "Record the owner decisions of 2026-11-13",
+      "description": "Architecture Q8-Q11 (no-pitch fallback, any input language, React, LLM filters over a closed vocabulary), posters, zero-cost budget, provider-neutral LLM spike.",
       "stories": [],
       "status": "done",
       "dependencies": ["feat-005"],
@@ -61,9 +67,21 @@
       "evidence": "Windows, 2026-11-13: decisions recorded in docs/product.md, docs/architecture.md (Decided table Q8-Q11, new Q13), docs/spikes/08, 10, 11 and AGENTS.md. uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed. Reviewer subagent: round 1, 7 findings fixed; round 2, 3 findings fixed (max 2 rounds, ADR 0004)."
     },
     {
+      "id": "feat-014",
+      "type": "chore",
+      "name": "Validate the harness with the guide's validate-harness.mjs",
+      "description": "Run walkinglabs/learn-harness-engineering skills/harness-creator/scripts/validate-harness.mjs (the guide we followed to build the harness): record the baseline score, sort each FAIL into a real gap or a naming/convention difference, close the gaps the owner chose (init.sh, feature descriptions, AGENTS.md headings), and record the result and the accepted differences in docs/harness-log.md.",
+      "stories": [],
+      "status": "done",
+      "dependencies": ["feat-001"],
+      "spec": null,
+      "evidence": "Mac, 2026-11-13: node validate-harness.mjs (commit a9342ff471f2c0e60be0c08b9f4a7c502df4e442) baseline 60/100 -> 92/100 (exit 0; instructions 5/5, state 5/5, verification 5/5, scope 5/5, lifecycle 3/5; 2 accepted differences documented in docs/harness-log.md). ./init.sh -> exit 0; uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed in 0.80s. Reviewer subagent: round 1, 2 low-severity findings fixed; round 2, No findings."
+    },
+    {
       "id": "feat-006",
       "type": "chore",
-      "name": "Metrics: docs/metrics.md (product and process metrics) and a /handoff row per finished feature, so the spikes are already measured",
+      "name": "Metrics",
+      "description": "docs/metrics.md (product and process metrics) and a /handoff row per finished feature, so the spikes are already measured.",
       "stories": [],
       "status": "todo",
       "dependencies": ["feat-001"],
@@ -73,7 +91,8 @@
     {
       "id": "feat-008",
       "type": "spike",
-      "name": "Spike: TMDB terms, rate limits and watch-provider coverage for ES, US and BO",
+      "name": "Spike: TMDB terms, rate limits and watch providers",
+      "description": "Answer the questions in docs/spikes/08-tmdb-and-providers.md: TMDB terms, rate limits, image linking, missing posters and watch-provider coverage for ES, US and BO.",
       "stories": ["US1"],
       "status": "todo",
       "dependencies": ["feat-005"],
@@ -83,7 +102,8 @@
     {
       "id": "feat-009",
       "type": "spike",
-      "name": "Spike: Atlas free tier, vector-search pre-filters and the atlas-local image",
+      "name": "Spike: Atlas free tier and vector search",
+      "description": "Answer the questions in docs/spikes/09-atlas-vector-search.md about the Atlas free tier, vector-search pre-filters and the atlas-local image.",
       "stories": ["US1", "US2"],
       "status": "todo",
       "dependencies": ["feat-005"],
@@ -93,7 +113,8 @@
     {
       "id": "feat-010",
       "type": "spike",
-      "name": "Spike: query-time embedding runtime (model, container size and memory on free hosting tiers)",
+      "name": "Spike: query-time embedding runtime",
+      "description": "Answer the questions in docs/spikes/10-embedding-runtime.md: embedding model, container size and memory on free hosting tiers.",
       "stories": ["US1"],
       "status": "todo",
       "dependencies": ["feat-005"],
@@ -103,7 +124,8 @@
     {
       "id": "feat-011",
       "type": "spike",
-      "name": "Spike: runtime LLM (provider and model: Gemini free tier vs a low-cost OpenAI model; cost per query and per 1,000 profiles; data use; structured output incl. non-English input; latency; Pydantic AI vs plain SDK; fallback provider)",
+      "name": "Spike: runtime LLM",
+      "description": "Answer the questions in docs/spikes/11-runtime-llm.md: provider and model (Gemini free tier vs a low-cost OpenAI model); cost per query and per 1,000 profiles; data use; structured output incl. non-English input; latency; Pydantic AI vs plain SDK; fallback provider.",
       "stories": ["US1"],
       "status": "todo",
       "dependencies": ["feat-005"],
@@ -113,7 +135,8 @@
     {
       "id": "feat-012",
       "type": "chore",
-      "name": "Architecture refinement with the spike results (ADRs incl. Q11, open questions in docs/architecture.md §7) and slicing the MVP backlog: thin end-to-end slice first; profile design (schema, closed vocabulary, prompt, owner-rated sample) as its own feature; slice mode and size rules in /spec",
+      "name": "Architecture refinement and MVP backlog slicing",
+      "description": "Refine the architecture with the spike results (ADRs incl. Q11, open questions in docs/architecture.md §7) and slice the MVP backlog: thin end-to-end slice first; profile design (schema, closed vocabulary, prompt, owner-rated sample) as its own feature; slice mode and size rules in /spec.",
       "stories": [],
       "status": "todo",
       "dependencies": ["feat-008", "feat-009", "feat-010", "feat-011"],

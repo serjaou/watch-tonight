@@ -24,7 +24,7 @@ Each tool keeps its chat history on the machine where it ran. Everything the nex
 
 ## 2. The Session Cycle (30–90 min)
 
-1. **Start (`/start`):** pulls, runs `uv sync` + `uv run poe check`, checks the last CI run, reads `PROGRESS.md` and `feature_list.json`, and reports in ≤8 lines. If the next item is ready, it gets going; otherwise it waits for you.
+1. **Start (`/start`):** pulls, runs `uv sync` + `uv run poe check` (`./init.sh`), checks the last CI run, reads `PROGRESS.md` and `feature_list.json`, and reports in ≤8 lines. If the next item is ready, it gets going; otherwise it waits for you.
 2. **Work:** the agent runs one ready task end to end (section 3), or interviews you with `/spec` if nothing is ready.
 3. **Close:** the agent runs `/handoff` itself at the end of each task. If you stop mid-task or switch machines, type **`/handoff`** so the work is committed and pushed.
 

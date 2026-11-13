@@ -7,6 +7,7 @@ What agents and the owner need to know to change code here without breaking `uv 
 Every task is a poethepoet task in `pyproject.toml` (`[tool.poe.tasks]`) and behaves the same on macOS and Windows.
 
 - `uv run poe check` runs `lint` → `fmt-check` → `typecheck` (pyright) → `arch` (import-linter) → `test`, and stops at the first failure. Run one step with `uv run poe <step>`.
+- `./init.sh` (macOS, Linux, Git Bash) runs `uv sync` and `uv run poe check` with `set -euo pipefail`. It exists for session start and for the guide's validator (feat-014); `poe check` stays the source of truth.
 - One test: `uv run pytest tests/unit/test_prompt_validation.py::test_subclass_of_value_error`. By name: `uv run pytest -k overlong`.
 - Tests that need Docker or external services carry `@pytest.mark.integration`. `poe check` skips them; `poe test-all` runs them.
 - CI (`.github/workflows/ci.yml`) runs `uv sync --locked` and `uv run poe check`. A dependency change must include the updated `uv.lock`.
@@ -28,7 +29,7 @@ Every task is a poethepoet task in `pyproject.toml` (`[tool.poe.tasks]`) and beh
 - `tests/unit/`: written with the code.
 - `tests/harness/`: checks the harness itself. It fails when:
   - `AGENTS.md` is longer than 150 lines;
-  - `feature_list.json` breaks an invariant: `type` not in `feature|spike|chore`, `status` not in `todo|in_progress|blocked|done`, more than one `in_progress`, `done` without `evidence`, a `feature` or `spike` without a `spec` path, a dependency on an unknown id;
-  - a required harness file is missing (skills, reviewer, hooks, state docs, `stop_gate.py`), or a skill in `.agents/skills/` has no stub in `.claude/skills/`;
+  - `feature_list.json` breaks an invariant: `type` not in `feature|spike|chore`, `status` not in `todo|in_progress|blocked|done`, an empty or missing `description`, more than one `in_progress`, `done` without `evidence`, a `feature` or `spike` without a `spec` path, a dependency on an unknown id;
+  - a required harness file is missing (skills, reviewer, hooks, state docs, `stop_gate.py`, `init.sh`), or a skill in `.agents/skills/` has no stub in `.claude/skills/`;
   - `scripts/hooks/stop_gate.py` stops behaving as specified (it runs in a throwaway git repo, so the result never depends on this repo's state);
   - `scripts/ci/pr_gates.py` stops protecting `tests/acceptance/` and `evals/`.
