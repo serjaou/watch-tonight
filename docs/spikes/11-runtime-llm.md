@@ -1,5 +1,5 @@
 ---
-id: feat-012
+id: feat-011
 type: spike
 status: questions ready   # questions ready -> answered
 timebox: 2 sessions
@@ -32,5 +32,7 @@ Each answer: the finding, plus evidence (docs link and date, command and output,
    - *Changes:* the *Service unavailable* state, configuration.
 
 ## How
-- Throwaway scripts in `spikes/12-llm/` with 10 sample queries and 10 sample movies.
+- Throwaway scripts in `spikes/11-llm/` with 10 sample queries.
+- Build each re-rank prompt with 30–50 candidates (TMDB overviews or synthetic profiles), as in the real query flow, and record input and output tokens per call: candidates make up most of the prompt (questions 1 and 4).
+- For enrichment, profile ~20 sample movies and record tokens per movie.
 - Needs a Gemini API key in `.env` (`GEMINI_API_KEY`; owner).

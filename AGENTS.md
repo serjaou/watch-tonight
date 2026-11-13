@@ -11,7 +11,7 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 - feature_list.json: all features and their status. Source of truth for scope.
 - docs/product.md: problem, users, scope, out of scope, product rules P1–P7
 - docs/conventions.md: commands, code and test conventions, what the harness tests check
-- docs/architecture.md: components, layers and ports, query flow, data model, open questions (v0 draft until feat-011)
+- docs/architecture.md: components, layers and ports, query flow, data model, open questions (v0 draft until feat-012)
 - docs/specs/: one spec per non-trivial feature
 - docs/spikes/: timeboxed investigations answering design unknowns (questions first, answers with evidence)
 - docs/decisions/: why things are the way they are (ADRs)
