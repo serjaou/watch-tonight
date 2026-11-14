@@ -20,7 +20,7 @@ Run the **End of Session** steps in [AGENTS.md](../../../AGENTS.md), with these 
 3. Log line format (1 line per entry in `PROGRESS.md`): `YYYY-MM-DD · <Mac|Windows> · <Antigravity|Claude Code> · `<feat-id>`: <short summary> → [<feat-id>.md](docs/handoffs/<feat-id>.md)`.
 4. When the task is complete (not for a mid-task handoff):
    - create `docs/handoffs/<feat-id>.md` with the task metadata, summary/outcome, and full verification command + output evidence;
-   - set `evidence` in [feature_list.json](../../../feature_list.json) to a 1-line summary (`<= 160` chars) starting with `docs/handoffs/<feat-id>.md — ...`;
+   - move the feature entry from [feature_list.json](../../../feature_list.json) to the top of `docs/handoffs/done_features.json` with `status: "done"` and a 1-line `evidence` (`<= 160` chars) starting with `docs/handoffs/<feat-id>.md — ...`;
    - add an index row for `<feat-id>` at the top of the `/handoff` table in [docs/metrics.md](../../../docs/metrics.md) linking to `handoffs/<feat-id>.md` (and fill in its spike baseline row in §1.4 if it is a spike);
    - open a PR from the feature branch to `main`:
      - with the GitHub CLI if installed: `gh pr create --base main --fill`;

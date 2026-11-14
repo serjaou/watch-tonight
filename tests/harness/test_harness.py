@@ -1,11 +1,13 @@
 """Automated sensors for the agentic harness itself (L04, L08, L09).
 
 Verifies:
-1. `AGENTS.md` and the index files (`PROGRESS.md`, `LEARNING.md`, `docs/harness-log.md`,
-   `docs/metrics.md`) stay within their line budgets.
-2. `feature_list.json` obeys structural invariants (at most 1 `in_progress`, valid types/statuses,
-   a non-empty `description`, `done` requires a concise `evidence` referencing an existing
-   `docs/handoffs/<feat-id>.md` and a row in `docs/metrics.md`, valid dependency references).
+1. `AGENTS.md` and the hot/index files (`feature_list.json`, `PROGRESS.md`, `LEARNING.md`,
+   `docs/harness-log.md`, `docs/metrics.md`) stay within their line budgets.
+2. `feature_list.json` (active items only: `todo|in_progress|blocked`) and
+   `docs/handoffs/done_features.json` (`done` items only) obey structural invariants across both
+   files (unique IDs, at most 1 `in_progress`, valid types/statuses, non-empty `description`,
+   `done` requires a concise `evidence` referencing an existing `docs/handoffs/<feat-id>.md` and
+   a row in `docs/metrics.md`, valid dependency references).
 3. Detail files in `docs/handoffs/`, `docs/learning/`, and `docs/harness-log/` exist for every
    index link and have no unindexed orphans.
 4. Required harness files (skills, reviewer, hooks, state docs) exist, every `.agents` skill has
@@ -33,9 +35,11 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[2]
 VALID_TYPES = {"feature", "spike", "chore"}
 VALID_STATUSES = {"todo", "in_progress", "blocked", "done"}
+ACTIVE_STATUSES = {"todo", "in_progress", "blocked"}
 MAX_EVIDENCE_CHARS = 160
 INDEX_LINE_LIMITS: dict[str, int] = {
     "AGENTS.md": 150,
+    "feature_list.json": 120,
     "PROGRESS.md": 80,
     "LEARNING.md": 120,
     "docs/harness-log.md": 100,
@@ -68,18 +72,34 @@ def test_agents_md_line_limit() -> None:
 
 
 def test_feature_list_invariants() -> None:
-    path = REPO_ROOT / "feature_list.json"
-    data: FeatureListDoc = json.loads(path.read_text(encoding="utf-8"))
-    features = data["features"]
-    assert len(features) > 0
+    active_path = REPO_ROOT / "feature_list.json"
+    done_path = REPO_ROOT / "docs" / "handoffs" / "done_features.json"
+    active_data: FeatureListDoc = json.loads(active_path.read_text(encoding="utf-8"))
+    done_data: FeatureListDoc = json.loads(done_path.read_text(encoding="utf-8"))
+    active_features = active_data["features"]
+    done_features = done_data["features"]
+    assert len(active_features) > 0, "feature_list.json must have at least 1 active/upcoming item"
+    assert len(done_features) > 0, "docs/handoffs/done_features.json must have at least 1 done item"
     metrics_text = (REPO_ROOT / "docs" / "metrics.md").read_text(encoding="utf-8")
 
+    for item in active_features:
+        assert item["status"] in ACTIVE_STATUSES, (
+            f"{item['id']} has status '{item['status']}' in feature_list.json; "
+            "move 'done' items to docs/handoffs/done_features.json"
+        )
+    for item in done_features:
+        assert item["status"] == "done", (
+            f"{item['id']} has status '{item['status']}' in docs/handoffs/done_features.json; "
+            "only 'done' items belong there"
+        )
+
+    all_features = active_features + done_features
     ids: set[str] = set()
     in_progress_count = 0
 
-    for item in features:
+    for item in all_features:
         feat_id = item["id"]
-        assert feat_id not in ids, f"Duplicate feature id: {feat_id}"
+        assert feat_id not in ids, f"Duplicate feature id across active/done files: {feat_id}"
         ids.add(feat_id)
 
         assert item["type"] in VALID_TYPES, f"{feat_id} has invalid type {item['type']}"
@@ -113,7 +133,7 @@ def test_feature_list_invariants() -> None:
         f"At most 1 feature may be in_progress (found {in_progress_count})"
     )
 
-    for item in features:
+    for item in all_features:
         for dep in item["dependencies"]:
             assert dep in ids, f"{item['id']} depends on unknown id {dep}"
 
@@ -137,6 +157,15 @@ def test_index_and_detail_files_are_synced() -> None:
             f"unindexed files={sorted(actual_names - linked_names)}"
         )
 
+    done_path = REPO_ROOT / "docs" / "handoffs" / "done_features.json"
+    done_data: FeatureListDoc = json.loads(done_path.read_text(encoding="utf-8"))
+    done_handoff_files = {f"{item['id']}.md" for item in done_data["features"]}
+    actual_handoffs = {p.name for p in (REPO_ROOT / "docs" / "handoffs").glob("*.md")}
+    assert done_handoff_files == actual_handoffs, (
+        f"Mismatch between docs/handoffs/done_features.json and docs/handoffs/*.md: "
+        f"{sorted(done_handoff_files ^ actual_handoffs)}"
+    )
+
 
 def test_required_harness_files_exist() -> None:
     required = [
@@ -144,6 +173,7 @@ def test_required_harness_files_exist() -> None:
         "PROGRESS.md",
         "LEARNING.md",
         "feature_list.json",
+        "docs/handoffs/done_features.json",
         "docs/product.md",
         "docs/metrics.md",
         "docs/workflow.md",

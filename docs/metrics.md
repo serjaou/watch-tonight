@@ -54,7 +54,7 @@ Each spike records its full measurements in `docs/spikes/NN-slug.md` and updates
 ## 2. Process & Harness Metrics (`/handoff` Index)
 
 Tracks whether the harness catches issues before they reach the owner and how each task went (ADR 0004). Full outcome notes and command outputs for each finished task live in `docs/handoffs/<feat-id>.md`.
-- **Rule:** when a task reaches `status: "done"` at `/handoff`, create `docs/handoffs/<feat-id>.md` and add a compact index row at the top of the table below (newest first). `tests/harness/test_harness.py` checks that every `done` item in `feature_list.json` has both a row here and its `docs/handoffs/<feat-id>.md` detail file.
+- **Rule:** when a task reaches `status: "done"` at `/handoff`, create `docs/handoffs/<feat-id>.md`, move the item from `feature_list.json` to `docs/handoffs/done_features.json`, and add a compact index row at the top of the table below (newest first). `tests/harness/test_harness.py` checks that every `done` item in `docs/handoffs/done_features.json` has both a row here and its `docs/handoffs/<feat-id>.md` detail file.
 - **Columns:** **Stop-gate blocks** (times `stop_gate.py` blocked a turn), **Reviewer (rounds / findings)** (e.g. `2 (12 + 2)` or `1 (0)`), **Escaped / owner fixes** (issues found after `/handoff` or in PR review).
 
 | ID | Type | Date | Machine · Tool | Stop-gate blocks | Reviewer (rounds / findings) | Escaped / owner fixes | Handoff Details |
