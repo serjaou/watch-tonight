@@ -15,11 +15,11 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 - docs/specs/: one spec per non-trivial feature
 - docs/spikes/: timeboxed investigations answering design unknowns (questions first, answers with evidence)
 - docs/decisions/: why things are the way they are (ADRs)
-- docs/metrics.md: product, eval, spike and process metrics; one `/handoff` row per finished item
-- docs/harness-log.md: past agent failures and how the harness changed
+- docs/metrics.md: product, eval, spike and process metrics index; full task handoffs in `docs/handoffs/<feat-id>.md`
+- docs/harness-log.md: index of past agent/harness failures; full incident notes in `docs/harness-log/`
 - docs/workflow.md: the owner's guide to the workflow (human-facing; the rules are here)
 - .agents/: skills, reviewer subagent and Stop hook. Source of truth for both tools; `.claude/` only points here
-- LEARNING.md: what the owner has learned
+- LEARNING.md: concept map and index of learning sessions; full session notes in `docs/learning/`
 - docs/inception/: historical brief and harness proposal. Superseded; don't act on it
 
 ## Startup Workflow
@@ -52,9 +52,9 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 - Stay in scope. Record ideas outside the feature as new "todo" entries in feature_list.json instead of doing them.
 
 ## End of Session (`/handoff`: at the end of every task, and when the owner ends the session, even mid-task)
-1. Rewrite the "Now" section of PROGRESS.md. If no item after the active one is ready, add `Waiting on owner: refine feat-XXX` (refine one ahead). Add 1–3 lines to the top of "Log" (date · machine · tool).
-2. Update the feature's status and evidence in feature_list.json, and add its row to docs/metrics.md when the task is complete.
-3. Ask: "What do I know now that the next session needs and is not in the repo?" Save it where it belongs (ADR, conventions, spec, PROGRESS.md, harness-log).
+1. Rewrite the "Now" section of PROGRESS.md. If no item after the active one is ready, add `Waiting on owner: refine feat-XXX` (refine one ahead). Add a 1-line entry to the top of "Log" linking to `docs/handoffs/<feat-id>.md` when complete.
+2. When the task is complete, write `docs/handoffs/<feat-id>.md` (summary, outcome, full command + output evidence), set a 1-line `evidence` summary referencing `docs/handoffs/<feat-id>.md` in feature_list.json, and add its index row to docs/metrics.md.
+3. Ask: "What do I know now that the next session needs and is not in the repo?" Save it where it belongs (ADR, conventions, spec, PROGRESS.md, `docs/harness-log/` + index row in `docs/harness-log.md`).
 4. Commit (WIP is fine) and push the feature branch, so the next session restarts from a clean tree. When the task is complete, open a PR to `main`. Report what is still unverified.
 
 ## Commands
