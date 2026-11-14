@@ -1,13 +1,16 @@
 """Automated sensors for the agentic harness itself (L04, L08, L09).
 
 Verifies:
-1. `AGENTS.md` stays concise (<= 150 lines).
+1. `AGENTS.md` and the index files (`PROGRESS.md`, `LEARNING.md`, `docs/harness-log.md`,
+   `docs/metrics.md`) stay within their line budgets.
 2. `feature_list.json` obeys structural invariants (at most 1 `in_progress`, valid types/statuses,
-   a non-empty `description`, `done` requires non-empty `evidence` and a row in `docs/metrics.md`,
-   valid dependency references).
-3. Required harness files (skills, reviewer, hooks, state docs) exist, every `.agents` skill has
+   a non-empty `description`, `done` requires a concise `evidence` referencing an existing
+   `docs/handoffs/<feat-id>.md` and a row in `docs/metrics.md`, valid dependency references).
+3. Detail files in `docs/handoffs/`, `docs/learning/`, and `docs/harness-log/` exist for every
+   index link and have no unindexed orphans.
+4. Required harness files (skills, reviewer, hooks, state docs) exist, every `.agents` skill has
    a `.claude` stub, and both tools wire the Stop hook to `stop_gate.py` (ADR 0003).
-4. `stop_gate.py` allows stopping when no code changed, blocks while checks fail, and gives up
+5. `stop_gate.py` allows stopping when no code changed, blocks while checks fail, and gives up
    after `MAX_ATTEMPTS`, in both tools' reply formats. It runs in a throwaway git repo so the
    result never depends on this repo's git state (a clean checkout in CI must behave like a
    dirty laptop).
@@ -17,6 +20,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -29,6 +33,14 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[2]
 VALID_TYPES = {"feature", "spike", "chore"}
 VALID_STATUSES = {"todo", "in_progress", "blocked", "done"}
+MAX_EVIDENCE_CHARS = 160
+INDEX_LINE_LIMITS: dict[str, int] = {
+    "AGENTS.md": 150,
+    "PROGRESS.md": 80,
+    "LEARNING.md": 120,
+    "docs/harness-log.md": 100,
+    "docs/metrics.md": 150,
+}
 
 
 class FeatureItem(TypedDict):
@@ -48,10 +60,11 @@ class FeatureListDoc(TypedDict):
 
 
 def test_agents_md_line_limit() -> None:
-    agents_md = REPO_ROOT / "AGENTS.md"
-    assert agents_md.is_file(), "AGENTS.md must exist at repository root"
-    lines = agents_md.read_text(encoding="utf-8").splitlines()
-    assert len(lines) <= 150, f"AGENTS.md has {len(lines)} lines (limit is 150)"
+    for rel_path, max_lines in INDEX_LINE_LIMITS.items():
+        path = REPO_ROOT / rel_path
+        assert path.is_file(), f"{rel_path} must exist"
+        lines = path.read_text(encoding="utf-8").splitlines()
+        assert len(lines) <= max_lines, f"{rel_path} has {len(lines)} lines (limit is {max_lines})"
 
 
 def test_feature_list_invariants() -> None:
@@ -78,9 +91,20 @@ def test_feature_list_invariants() -> None:
         if item["status"] == "in_progress":
             in_progress_count += 1
         if item["status"] == "done":
-            assert item["evidence"].strip(), f"{feat_id} is 'done' without evidence"
+            evidence = item["evidence"].strip()
+            assert evidence, f"{feat_id} is 'done' without evidence"
+            assert len(evidence) <= MAX_EVIDENCE_CHARS, (
+                f"{feat_id} evidence has {len(evidence)} chars (limit is {MAX_EVIDENCE_CHARS}); "
+                f"put full output in docs/handoffs/{feat_id}.md"
+            )
+            handoff_rel = f"docs/handoffs/{feat_id}.md"
+            assert handoff_rel in evidence, f"{feat_id} evidence must reference {handoff_rel}"
+            assert (REPO_ROOT / handoff_rel).is_file(), f"{feat_id} is 'done' without {handoff_rel}"
             assert f"| `{feat_id}` |" in metrics_text, (
                 f"{feat_id} is 'done' without a /handoff row in docs/metrics.md"
+            )
+            assert f"handoffs/{feat_id}.md" in metrics_text, (
+                f"{feat_id} row in docs/metrics.md must link to handoffs/{feat_id}.md"
             )
         if item["type"] in {"feature", "spike"}:
             assert item["spec"], f"{feat_id} ({item['type']}) must reference a spec/spike path"
@@ -92,6 +116,26 @@ def test_feature_list_invariants() -> None:
     for item in features:
         for dep in item["dependencies"]:
             assert dep in ids, f"{item['id']} depends on unknown id {dep}"
+
+
+def test_index_and_detail_files_are_synced() -> None:
+    checks = [
+        ("PROGRESS.md", "docs/handoffs", r"docs/handoffs/([a-z0-9-]+\.md)"),
+        ("docs/metrics.md", "docs/handoffs", r"handoffs/([a-z0-9-]+\.md)"),
+        ("LEARNING.md", "docs/learning", r"docs/learning/([a-z0-9-]+\.md)"),
+        ("docs/harness-log.md", "docs/harness-log", r"harness-log/([a-z0-9-]+\.md)"),
+    ]
+    for index_rel, folder_rel, pattern in checks:
+        index_text = (REPO_ROOT / index_rel).read_text(encoding="utf-8")
+        folder = REPO_ROOT / folder_rel
+        assert folder.is_dir(), f"Missing detail folder: {folder_rel}"
+        linked_names = set(re.findall(pattern, index_text))
+        actual_names = {p.name for p in folder.glob("*.md")}
+        assert linked_names == actual_names, (
+            f"Mismatch between {index_rel} and {folder_rel}: "
+            f"missing files={sorted(linked_names - actual_names)}, "
+            f"unindexed files={sorted(actual_names - linked_names)}"
+        )
 
 
 def test_required_harness_files_exist() -> None:

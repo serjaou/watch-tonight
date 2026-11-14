@@ -9,7 +9,7 @@
       "status": "done",
       "dependencies": [],
       "spec": null,
-      "evidence": "uv run poe check -> ruff check: All checks passed!; ruff format --check: 10 files already formatted; pyright: 0 errors, 0 warnings; lint-imports: 2 kept, 0 broken; pytest: 5 passed (including tests/harness/test_harness.py)"
+      "evidence": "docs/handoffs/feat-001.md — uv run poe check green (ruff, pyright 0, lint-imports 2/2, pytest 5 passed)"
     },
     {
       "id": "feat-000",
@@ -20,7 +20,7 @@
       "status": "done",
       "dependencies": ["feat-001"],
       "spec": "docs/specs/00-dry-run.md",
-      "evidence": "uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 13 passed in 0.19s; reviewer subagent: No findings; /defend: 3/3 questions completed and logged in LEARNING.md"
+      "evidence": "docs/handoffs/feat-000.md — uv run poe check green (pytest 13 passed); reviewer: 1 (0); /defend logged"
     },
     {
       "id": "feat-004",
@@ -31,7 +31,7 @@
       "status": "done",
       "dependencies": ["feat-001"],
       "spec": null,
-      "evidence": "Windows, 2026-11-12: uv run poe check -> ruff: All checks passed!; pyright strict: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed. pre-commit run --all-files -> gitleaks, ruff check, ruff format: Passed. Real Claude Code Stop hook (uv run --no-sync python scripts/hooks/stop_gate.py with a Stop payload): decision block on a real F401 lint error, no output when green. CI on GitHub and Antigravity on the Mac: see PROGRESS.md / feat-007."
+      "evidence": "docs/handoffs/feat-004.md — uv run poe check green (pytest 25 passed); pre-commit & Windows Stop hook verified"
     },
     {
       "id": "feat-007",
@@ -42,7 +42,7 @@
       "status": "done",
       "dependencies": ["feat-004"],
       "spec": null,
-      "evidence": "Mac, 2026-11-12: live Antigravity Stop hook (.agents/hooks.json -> python3 ../scripts/hooks/stop_gate.py) fired on turn completion and blocked on a temporary F401 lint error in tests/test_smoke.py with decision: continue (attempt 2/3), then returned decision: allow when clean; fixed stop_gate.py to unlink .harness/stop_gate_attempts when has_code_changes() is False; verified Reviewer subagent (TypeName: reviewer from .agents/agents/reviewer.md) has tools [run_command, manage_task, read_file, send_message] (read_file present, view_file and write tools absent); uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed; /review subagent: No findings; /handoff run autonomously."
+      "evidence": "docs/handoffs/feat-007.md — live Mac Stop hook & native reviewer verified; uv run poe check green (25 passed)"
     },
     {
       "id": "feat-005",
@@ -53,7 +53,7 @@
       "status": "done",
       "dependencies": ["feat-001"],
       "spec": null,
-      "evidence": "Windows, 2026-11-13: docs/architecture.md (128 lines: components, layers and ports, 7-step query flow, offline pipeline, data model, cross-cutting, open questions Q1-Q12) and docs/spikes/08, 09, 10, 11 with explicit questions, each tied to the design decision it changes. uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed. Reviewer subagent: round 1, 12 findings fixed; round 2, 2 findings fixed (max 2 rounds, ADR 0004)."
+      "evidence": "docs/handoffs/feat-005.md — docs/architecture.md & spikes 08..11 written; poe check green; reviewer: 2 (12 + 2)"
     },
     {
       "id": "feat-013",
@@ -64,7 +64,7 @@
       "status": "done",
       "dependencies": ["feat-005"],
       "spec": null,
-      "evidence": "Windows, 2026-11-13: decisions recorded in docs/product.md, docs/architecture.md (Decided table Q8-Q11, new Q13), docs/spikes/08, 10, 11 and AGENTS.md. uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed. Reviewer subagent: round 1, 7 findings fixed; round 2, 3 findings fixed (max 2 rounds, ADR 0004)."
+      "evidence": "docs/handoffs/feat-013.md — Q8-Q11, posters & budget recorded; uv run poe check green; reviewer: 2 (7 + 3)"
     },
     {
       "id": "feat-014",
@@ -75,7 +75,7 @@
       "status": "done",
       "dependencies": ["feat-001"],
       "spec": null,
-      "evidence": "Mac, 2026-11-13: node validate-harness.mjs (commit a9342ff471f2c0e60be0c08b9f4a7c502df4e442) baseline 60/100 -> 92/100 (exit 0; instructions 5/5, state 5/5, verification 5/5, scope 5/5, lifecycle 3/5; 2 accepted differences documented in docs/harness-log.md). ./init.sh -> exit 0; uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed in 0.80s. Reviewer subagent: round 1, 2 low-severity findings fixed; round 2, No findings."
+      "evidence": "docs/handoffs/feat-014.md — validate-harness.mjs 60/100 -> 92/100; ./init.sh & poe check green; reviewer: 2 (2 + 0)"
     },
     {
       "id": "feat-006",
@@ -86,7 +86,18 @@
       "status": "done",
       "dependencies": ["feat-001"],
       "spec": null,
-      "evidence": "Mac, 2026-11-13: created docs/metrics.md (online trace metrics, offline ingestion_runs metrics, deterministic + quality eval metrics, spike baseline table for feat-008..011, and /handoff process log backfilled for all 8 done items); wired AGENTS.md, .agents/skills/handoff/SKILL.md, docs/workflow.md, docs/conventions.md, and tests/harness/test_harness.py (asserts docs/metrics.md exists and every 'done' feature has a row; verified failing sensor when a row is missing). uv run poe check -> ruff: All checks passed!; pyright: 0 errors; lint-imports: 2 kept, 0 broken; pytest: 25 passed in 0.80s. Reviewer subagent: round 1, No findings."
+      "evidence": "docs/handoffs/feat-006.md — docs/metrics.md + test_harness.py sensor added; poe check green; reviewer: 1 (0)"
+    },
+    {
+      "id": "feat-015",
+      "type": "chore",
+      "name": "Split growing state and log docs into index files plus per-entry detail files",
+      "description": "Keep feature_list.json, PROGRESS.md, LEARNING.md, docs/harness-log.md, and docs/metrics.md as slim index files linking to per-entry detail files in docs/handoffs/, docs/learning/, and docs/harness-log/, with size and link checks in tests/harness/test_harness.py.",
+      "stories": [],
+      "status": "done",
+      "dependencies": ["feat-006"],
+      "spec": null,
+      "evidence": "docs/handoffs/feat-015.md — split 5 state/log docs into index + detail files; poe check green (26 passed); reviewer: 1 (0)"
     },
     {
       "id": "feat-008",

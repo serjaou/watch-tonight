@@ -12,14 +12,14 @@ Each tool keeps its chat history on the machine where it ran. Everything the nex
 
 | Memory Type | File | Who Updates It |
 |---|---|---|
-| **Short-term session state** (branch, progress, blockers) | [PROGRESS.md](../PROGRESS.md) | Agent at `/handoff` (end of every task or session) |
-| **Backlog, status & verification evidence** | [feature_list.json](../feature_list.json) | Agent updates status/evidence; you own scope & order |
+| **Short-term session state** (branch, progress, blockers) | [PROGRESS.md](../PROGRESS.md) (index) + `docs/handoffs/<feat-id>.md` | Agent at `/handoff` (end of every task or session) |
+| **Backlog, status & verification evidence** | [feature_list.json](../feature_list.json) (slim index pointing to `docs/handoffs/<feat-id>.md`) | Agent updates status/evidence; you own scope & order |
 | **Feature requirements & acceptance tests** | `docs/specs/NN-slug.md` | Agent interviews you via `/spec`; only you set `status: approved` |
 | **Timeboxed investigation answers** | `docs/spikes/NN-slug.md` | Agent records findings during a spike |
 | **Architectural decisions ("why")** | `docs/decisions/NNNN-title.md` | Written when a non-obvious design choice is made |
-| **Your Python & AI learning progress** | [LEARNING.md](../LEARNING.md) | Tutor via `/tutor` and `/defend` (when you run them) |
-| **Product, spike & process metrics** | [docs/metrics.md](metrics.md) | Agent adds a `/handoff` row per finished task; you can record review notes |
-| **Agent failures & harness improvements** | [docs/harness-log.md](harness-log.md) | Logged whenever a gate, handoff, or actor fails |
+| **Your Python & AI learning progress** | [LEARNING.md](../LEARNING.md) (index) + `docs/learning/<date>-<slug>.md` | Tutor via `/tutor` and `/defend` (when you run them) |
+| **Product, spike & process metrics** | [docs/metrics.md](metrics.md) (index) + `docs/handoffs/<feat-id>.md` | Agent adds a `/handoff` row per finished task; you can record review notes |
+| **Agent failures & harness improvements** | [docs/harness-log.md](harness-log.md) (index) + `docs/harness-log/<date>-<slug>.md` | Logged whenever a gate, handoff, or actor fails |
 
 ---
 
@@ -45,7 +45,7 @@ YOU                         AGENT (autonomous)                                  
 | **1. Define (`/spec`)** | You + agent | The agent interviews you (only questions that change the design or the acceptance tests, most important first) and drafts `docs/specs/NN-slug.md` with acceptance tests. If an unknown blocks the design, it proposes a `spike` first. **You set `status: approved`**: that's the goal and the stop condition. |
 | **2. Build** | Agent | Writes code and unit tests. The **Stop hook** (`stop_gate.py`) won't let it finish a turn that changed code while `uv run poe check` fails (after 3 attempts it stops and asks you). |
 | **3. Review (`/review`)** | Agent | The read-only **reviewer subagent** compares the branch with the spec; the agent fixes the findings (max 2 rounds) and reports any it didn't fix. |
-| **4. Close (`/handoff`)** | Agent | Updates `PROGRESS.md`, `feature_list.json` (with command + output `evidence`) and `docs/metrics.md`, commits, pushes the branch and opens a PR (or gives you the link). Then it stops. |
+| **4. Close (`/handoff`)** | Agent | Writes `docs/handoffs/<feat-id>.md` and updates the slim index files (`PROGRESS.md`, `feature_list.json` & `docs/metrics.md`), commits, pushes the branch and opens a PR (or gives you the link). Then it stops. |
 | **5. Merge** | You | Review the PR, wait for green CI, merge. The next task starts from the updated `main`. |
 
 **The agent also stops and asks you** when the spec looks wrong, an unknown changes the design, or a review finding changes the scope.

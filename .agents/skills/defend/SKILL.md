@@ -18,6 +18,7 @@ Optional: the owner runs it when they want to check they can defend a set of cha
 3. **Ask one question at a time** and wait for the owner's answer before the next. Never give the answer first.
 4. After the owner answers:
    - Validate or deepen each answer with a **C# / .NET comparison** and point out any subtle Python pitfalls.
+   - Create `docs/learning/<YYYY-MM-DD>-<slug>.md` summarizing the concepts, C# comparison, pitfalls, and the 3 questions defended.
    - Update [LEARNING.md](../../../LEARNING.md):
      - Add/promote the covered concepts in the **Concept Map** (`Practised` → `Can explain`).
-     - Prepend a new entry in the **Learning Log** (`YYYY-MM-DD · <target> <name>`) summarizing the concepts, C# comparison, pitfalls, and the 3 questions defended.
+     - Prepend a 1-line index row in **Learning Log Index** linking to `docs/learning/<YYYY-MM-DD>-<slug>.md`.
