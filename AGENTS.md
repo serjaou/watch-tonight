@@ -8,7 +8,7 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 
 ## Map (read on demand, not all at once)
 - PROGRESS.md: current state and next step. Read first.
-- feature_list.json: all features and their status. Source of truth for scope.
+- feature_list.json: active/upcoming features (`todo|in_progress|blocked`). Source of truth for scope; completed items live in `docs/handoffs/done_features.json`.
 - docs/product.md: problem, users, scope, out of scope, product rules P1–P7
 - docs/conventions.md: commands, code and test conventions, what the harness tests check
 - docs/architecture.md: components, layers and ports, query flow, data model, open questions (v0 draft until feat-012)
@@ -53,7 +53,7 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 
 ## End of Session (`/handoff`: at the end of every task, and when the owner ends the session, even mid-task)
 1. Rewrite the "Now" section of PROGRESS.md. If no item after the active one is ready, add `Waiting on owner: refine feat-XXX` (refine one ahead). Add a 1-line entry to the top of "Log" linking to `docs/handoffs/<feat-id>.md` when complete.
-2. When the task is complete, write `docs/handoffs/<feat-id>.md` (summary, outcome, full command + output evidence), set a 1-line `evidence` summary referencing `docs/handoffs/<feat-id>.md` in feature_list.json, and add its index row to docs/metrics.md.
+2. When the task is complete, write `docs/handoffs/<feat-id>.md` (summary, outcome, full command + output evidence), move the feature from `feature_list.json` to the top of `docs/handoffs/done_features.json` with `status: "done"` and a 1-line `evidence` summary referencing `docs/handoffs/<feat-id>.md`, and add its index row to `docs/metrics.md`.
 3. Ask: "What do I know now that the next session needs and is not in the repo?" Save it where it belongs (ADR, conventions, spec, PROGRESS.md, `docs/harness-log/` + index row in `docs/harness-log.md`).
 4. Commit (WIP is fine) and push the feature branch, so the next session restarts from a clean tree. When the task is complete, open a PR to `main`. Report what is still unverified.
 

@@ -3,9 +3,10 @@
 ## Now
 - **Active feature:** none on this branch. `feat-015` (Split growing state and log docs into index files plus per-entry detail files) is `done` on branch `chore/split-index-files`; its PR waits for the owner's merge. (`feat-008` Session 1 WIP is saved on `origin/spike/tmdb-and-providers` waiting ≥24h after `2026-11-14T14:48:37Z` for Snapshot 2.)
 - **State:** `feat-015` delivered:
-  - converted `feature_list.json`, `PROGRESS.md`, `LEARNING.md`, `docs/harness-log.md`, and `docs/metrics.md` into slim index files linked to per-entry detail files in `docs/handoffs/` (`9` files), `docs/learning/` (`3` files), and `docs/harness-log/` (`9` files);
+  - split `feature_list.json` (hot: only `todo|in_progress|blocked` items, `57` lines) and `docs/handoffs/done_features.json` (cold: all `done` items);
+  - converted `PROGRESS.md`, `LEARNING.md`, `docs/harness-log.md`, and `docs/metrics.md` into slim index files linked to per-entry detail files in `docs/handoffs/` (`9` files), `docs/learning/` (`3` files), and `docs/harness-log/` (`9` files);
   - wired `AGENTS.md`, `.agents/skills/handoff/SKILL.md`, `.agents/skills/defend/SKILL.md`, `docs/workflow.md`, and `docs/conventions.md`;
-  - added line-limit budgets, `evidence <= 160` chars check, and 1-to-1 index-to-detail sync checks in `tests/harness/test_harness.py`.
+  - added line-limit budgets (`feature_list.json <= 120`, etc.), active/done partition checks, `evidence <= 160` chars check, and 1-to-1 index-to-detail sync checks in `tests/harness/test_harness.py`.
 - **Last check:** `uv run poe check` green, 2026-11-14 17:01 CET, Mac (ruff check + format check passed, pyright strict 0 errors, import-linter 2/2 kept, pytest 26 passed in 0.78s).
 - **Next step:** After merging `feat-015`, switch back to `spike/tmdb-and-providers` (merge `main` into it) on or after `2026-11-15 15:49 CET` to run Snapshot 2 and finish `feat-008` Q7 (or reorder `feat-009` ahead in `feature_list.json` to run the Atlas spike first).
 - **Waiting on owner:**
