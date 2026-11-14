@@ -8,15 +8,16 @@
 - **Escaped / owner fixes:** `0`
 
 ## Summary & Outcome
-- Converted the 5 growing state and log files (`feature_list.json`, `PROGRESS.md`, `LEARNING.md`, `docs/harness-log.md`, and `docs/metrics.md`) into slim, bounded index files that link to per-entry detail files:
+- Implemented a **Hot / Cold JSON split** for the backlog (`feature_list.json` holds only active/upcoming `todo|in_progress|blocked` items — 57 lines — while completed `done` items move to `docs/handoffs/done_features.json`), and converted `PROGRESS.md`, `LEARNING.md`, `docs/harness-log.md`, and `docs/metrics.md` into slim, bounded index files that link to per-entry detail files:
   - `docs/handoffs/<feat-id>.md` (backfilled for `feat-001`, `feat-000`, `feat-004`, `feat-007`, `feat-005`, `feat-013`, `feat-014`, `feat-006`, plus `feat-015`);
   - `docs/learning/<YYYY-MM-DD>-<slug>.md` (backfilled for `2026-11-12-feat-001.md`, `2026-11-12-feat-000.md`, `2026-11-13-feat-004-007.md`);
   - `docs/harness-log/<YYYY-MM-DD>-<slug>.md` (backfilled for all 9 harness incidents across `feat-001`, `feat-004`, `feat-007`, and `feat-014`).
-- Updated `AGENTS.md`, `.agents/skills/handoff/SKILL.md`, `.agents/skills/defend/SKILL.md`, `docs/workflow.md`, and `docs/conventions.md` to maintain the index + detail pattern automatically.
+- Updated `AGENTS.md`, `.agents/skills/handoff/SKILL.md`, `.agents/skills/defend/SKILL.md`, `docs/workflow.md`, and `docs/conventions.md` to maintain the hot/cold split and index + detail pattern automatically.
 - Added automated sensors in `tests/harness/test_harness.py`:
-  - enforces line limits on all index files (`AGENTS.md <= 150`, `PROGRESS.md <= 80`, `LEARNING.md <= 120`, `docs/harness-log.md <= 100`, `docs/metrics.md <= 150`);
+  - enforces line limits on all hot/index files (`AGENTS.md <= 150`, `feature_list.json <= 120`, `PROGRESS.md <= 80`, `LEARNING.md <= 120`, `docs/harness-log.md <= 100`, `docs/metrics.md <= 150`);
+  - enforces that `feature_list.json` contains no `done` items, `docs/handoffs/done_features.json` contains only `done` items, and dependency/uniqueness invariants hold across both files combined;
   - enforces `len(evidence) <= 160` and `docs/handoffs/<feat-id>.md` existence + link for every `done` feature;
-  - enforces 1-to-1 link synchronization (no broken links, no unindexed orphan files) between `PROGRESS.md`/`docs/metrics.md` ↔ `docs/handoffs/`, `LEARNING.md` ↔ `docs/learning/`, and `docs/harness-log.md` ↔ `docs/harness-log/` (verified failing sensor with a temporary `docs/handoffs/orphan.md`).
+  - enforces 1-to-1 link synchronization (no broken links, no unindexed orphan files) between `PROGRESS.md`/`docs/metrics.md`/`done_features.json` ↔ `docs/handoffs/`, `LEARNING.md` ↔ `docs/learning/`, and `docs/harness-log.md` ↔ `docs/harness-log/` (verified failing sensor with a temporary `docs/handoffs/orphan.md`).
 
 ## Verification Evidence
 ```text
