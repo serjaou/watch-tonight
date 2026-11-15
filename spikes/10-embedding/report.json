@@ -1,0 +1,2442 @@
+{
+  "spike": "feat-010",
+  "generated_at": "2026-11-15T16:31:50.954320+00:00",
+  "environment": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "processor": "arm",
+    "python_version": "3.13.11",
+    "cpu_count": 8
+  },
+  "dataset": {
+    "movie_count": 200,
+    "avg_profile_chars": 512.6,
+    "sample_profile_text": "Hope (2026). Genres: Science Fiction, Mystery, Action. Tagline: Is this how it ends? Overview: In the remote South Korean village of Hope Harbor, police chief Bum-seok and officer Sung-ae are called to investigate a mysterious creature wreaking havoc on the community. But all is not as it seems, and perceptions can be misleading. What begins as ignorance plants the seed of disaster, escalating through human conflict into a tragedy of cosmic proportions. Keywords: supernatural, horse, shootout, police officer, duringcreditsstinger, hunted, police shootout, remote village, aliens, 20th century, horror, fight for survival, chasing, unknown entity, dinosaurs."
+  },
+  "runtimes": {
+    "fastembed_bge_small_en_v1_5": {
+      "runtime": "fastembed (ONNX Runtime CPU)",
+      "model_name": "BAAI/bge-small-en-v1.5",
+      "dimensions": 384,
+      "site_packages_mb": 148.16,
+      "model_weights_disk_mb": 64.07,
+      "estimated_added_image_mb": 212.2,
+      "rss_before_import_mb": 28.61,
+      "rss_after_import_mb": 87.53,
+      "rss_after_model_load_mb": 279.06,
+      "rss_peak_batch_mb": 720.09,
+      "import_time_s": 0.405,
+      "cold_start_from_disk_s": 0.174,
+      "single_query_latency_ms": {
+        "p50": 5.04,
+        "p95": 5.88,
+        "mean": 5.07,
+        "min": 4.45,
+        "max": 6.45
+      },
+      "batch_200_movies_s": 6.85,
+      "batch_1000_movies_s": 35.29,
+      "throughput_docs_per_sec": 28.33,
+      "estimated_20k_profiles_s": 706.0,
+      "estimated_20k_profiles_min": 11.77,
+      "english_queries": {
+        "Q01_cozy_animation": {
+          "label": "Cozy / Warm Family Animation",
+          "query": "warm, comforting animated family adventure with heart, humor, and low stress after a long week",
+          "top_5": [
+            {
+              "tmdb_id": 1187326,
+              "title": "Tad and The Magic Lamp",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Comedy",
+                "Family"
+              ],
+              "score": 0.6153
+            },
+            {
+              "tmdb_id": 1327819,
+              "title": "Hoppers",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Adventure",
+                "Comedy",
+                "Family",
+                "Science Fiction"
+              ],
+              "score": 0.5956
+            },
+            {
+              "tmdb_id": 1117898,
+              "title": "The Cat in the Hat",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Fantasy",
+                "Adventure",
+                "Family",
+                "Comedy"
+              ],
+              "score": 0.593
+            },
+            {
+              "tmdb_id": 1664264,
+              "title": "A Very Arctic Christmas",
+              "year": 2026,
+              "genres": [
+                "TV Movie",
+                "Comedy",
+                "Romance"
+              ],
+              "score": 0.592
+            },
+            {
+              "tmdb_id": 1084244,
+              "title": "Toy Story 5",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Family",
+                "Comedy",
+                "Adventure"
+              ],
+              "score": 0.5887
+            }
+          ]
+        },
+        "Q02_cerebral_scifi": {
+          "label": "Cerebral Space / Time Sci-Fi",
+          "query": "mind-bending sci-fi mystery about space exploration, time dilation, and existential survival",
+          "top_5": [
+            {
+              "tmdb_id": 157336,
+              "title": "Interstellar",
+              "year": 2014,
+              "genres": [
+                "Adventure",
+                "Drama",
+                "Science Fiction"
+              ],
+              "score": 0.6282
+            },
+            {
+              "tmdb_id": 858035,
+              "title": "Klara and the Sun",
+              "year": 2026,
+              "genres": [
+                "Science Fiction",
+                "Drama"
+              ],
+              "score": 0.5942
+            },
+            {
+              "tmdb_id": 27205,
+              "title": "Inception",
+              "year": 2010,
+              "genres": [
+                "Action",
+                "Science Fiction",
+                "Crime"
+              ],
+              "score": 0.5907
+            },
+            {
+              "tmdb_id": 1101383,
+              "title": "The End of Oak Street",
+              "year": 2026,
+              "genres": [
+                "Science Fiction",
+                "Mystery",
+                "Thriller"
+              ],
+              "score": 0.5899
+            },
+            {
+              "tmdb_id": 1083381,
+              "title": "Backrooms",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Mystery",
+                "Science Fiction"
+              ],
+              "score": 0.5864
+            }
+          ]
+        },
+        "Q03_gritty_crime": {
+          "label": "Gritty Mafia / Crime Thriller",
+          "query": "dark, tense crime drama about mafia loyalty, organized crime corruption, and moral decay",
+          "top_5": [
+            {
+              "tmdb_id": 807,
+              "title": "Se7en",
+              "year": 1995,
+              "genres": [
+                "Crime",
+                "Mystery",
+                "Thriller"
+              ],
+              "score": 0.6539
+            },
+            {
+              "tmdb_id": 1402181,
+              "title": "Scene",
+              "year": 2026,
+              "genres": [
+                "Comedy",
+                "Crime",
+                "Action"
+              ],
+              "score": 0.6443
+            },
+            {
+              "tmdb_id": 238,
+              "title": "The Godfather",
+              "year": 1972,
+              "genres": [
+                "Drama",
+                "Crime"
+              ],
+              "score": 0.631
+            },
+            {
+              "tmdb_id": 1290418,
+              "title": "The Cycle",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller",
+                "Mystery"
+              ],
+              "score": 0.6223
+            },
+            {
+              "tmdb_id": 680,
+              "title": "Pulp Fiction",
+              "year": 1994,
+              "genres": [
+                "Thriller",
+                "Crime",
+                "Comedy"
+              ],
+              "score": 0.6216
+            }
+          ]
+        },
+        "Q04_atmospheric_horror": {
+          "label": "Atmospheric / Supernatural Horror",
+          "query": "scary supernatural horror or monster thriller with unsettling dread, claustrophobia, and survival terror",
+          "top_5": [
+            {
+              "tmdb_id": 1244523,
+              "title": "Beware Boi\u00fana",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller",
+                "Action"
+              ],
+              "score": 0.6782
+            },
+            {
+              "tmdb_id": 1284046,
+              "title": "Onslaught",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Thriller",
+                "Horror"
+              ],
+              "score": 0.6661
+            },
+            {
+              "tmdb_id": 1629051,
+              "title": "Never After Dark",
+              "year": 2026,
+              "genres": [
+                "Horror"
+              ],
+              "score": 0.6628
+            },
+            {
+              "tmdb_id": 1083381,
+              "title": "Backrooms",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Mystery",
+                "Science Fiction"
+              ],
+              "score": 0.6509
+            },
+            {
+              "tmdb_id": 1423191,
+              "title": "Resident Evil",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Science Fiction",
+                "Adventure"
+              ],
+              "score": 0.6481
+            }
+          ]
+        },
+        "Q05_high_octane_action": {
+          "label": "Relentless Revenge / Martial Arts Action",
+          "query": "relentless high-adrenaline action thriller with martial arts, gunplay, or a one-man-army revenge mission",
+          "top_5": [
+            {
+              "tmdb_id": 1284046,
+              "title": "Onslaught",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Thriller",
+                "Horror"
+              ],
+              "score": 0.6786
+            },
+            {
+              "tmdb_id": 1419406,
+              "title": "The Shadow's Edge",
+              "year": 2025,
+              "genres": [
+                "Action",
+                "Crime",
+                "Drama",
+                "Thriller"
+              ],
+              "score": 0.6728
+            },
+            {
+              "tmdb_id": 1616687,
+              "title": "Never Surrender",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Crime",
+                "Thriller"
+              ],
+              "score": 0.6722
+            },
+            {
+              "tmdb_id": 1265609,
+              "title": "War Machine",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Science Fiction",
+                "Thriller"
+              ],
+              "score": 0.6576
+            },
+            {
+              "tmdb_id": 1607127,
+              "title": "One Last Shot",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Thriller"
+              ],
+              "score": 0.6511
+            }
+          ]
+        },
+        "Q06_romantic_drama": {
+          "label": "Bittersweet Romantic Drama",
+          "query": "intimate, emotional romantic drama about love, longing, heartbreak, and unforgettable chemistry",
+          "top_5": [
+            {
+              "tmdb_id": 1483525,
+              "title": "Possible Love",
+              "year": 2026,
+              "genres": [
+                "Drama"
+              ],
+              "score": 0.641
+            },
+            {
+              "tmdb_id": 1523145,
+              "title": "Your Heart Will Be Broken",
+              "year": 2026,
+              "genres": [
+                "Romance"
+              ],
+              "score": 0.6309
+            },
+            {
+              "tmdb_id": 1422041,
+              "title": "La Bola Negra",
+              "year": 2026,
+              "genres": [
+                "Drama",
+                "War"
+              ],
+              "score": 0.6125
+            },
+            {
+              "tmdb_id": 1381078,
+              "title": "Love of Your Life",
+              "year": 2026,
+              "genres": [
+                "Romance",
+                "Drama"
+              ],
+              "score": 0.611
+            },
+            {
+              "tmdb_id": 1503762,
+              "title": "Sense and Sensibility",
+              "year": 2026,
+              "genres": [
+                "Drama",
+                "Romance"
+              ],
+              "score": 0.6109
+            }
+          ]
+        },
+        "Q07_epic_fantasy": {
+          "label": "Epic Mythological / Medieval Fantasy",
+          "query": "epic mythological fantasy quest with ancient magic, fellowship, and massive battles between good and evil",
+          "top_5": [
+            {
+              "tmdb_id": 656908,
+              "title": "Ramayana: Rise of a Legend",
+              "year": 2026,
+              "genres": [
+                "Fantasy",
+                "Action",
+                "Adventure"
+              ],
+              "score": 0.6766
+            },
+            {
+              "tmdb_id": 122,
+              "title": "The Lord of the Rings: The Return of the King",
+              "year": 2003,
+              "genres": [
+                "Adventure",
+                "Fantasy",
+                "Action"
+              ],
+              "score": 0.6688
+            },
+            {
+              "tmdb_id": 1368337,
+              "title": "The Odyssey",
+              "year": 2026,
+              "genres": [
+                "Adventure",
+                "Action",
+                "Fantasy"
+              ],
+              "score": 0.6576
+            },
+            {
+              "tmdb_id": 121,
+              "title": "The Lord of the Rings: The Two Towers",
+              "year": 2002,
+              "genres": [
+                "Adventure",
+                "Fantasy",
+                "Action"
+              ],
+              "score": 0.623
+            },
+            {
+              "tmdb_id": 693134,
+              "title": "Dune: Part Two",
+              "year": 2024,
+              "genres": [
+                "Science Fiction",
+                "Adventure"
+              ],
+              "score": 0.6138
+            }
+          ]
+        },
+        "Q08_dark_satire": {
+          "label": "Sharp Dark Comedy / Social Satire",
+          "query": "sharp, chaotic dark comedy or social satire about wealth, greed, absurdity, and things spiralling out of control",
+          "top_5": [
+            {
+              "tmdb_id": 1248832,
+              "title": "Digger",
+              "year": 2026,
+              "genres": [
+                "Comedy",
+                "Drama"
+              ],
+              "score": 0.6656
+            },
+            {
+              "tmdb_id": 496243,
+              "title": "Parasite",
+              "year": 2019,
+              "genres": [
+                "Comedy",
+                "Thriller",
+                "Drama"
+              ],
+              "score": 0.6442
+            },
+            {
+              "tmdb_id": 13,
+              "title": "Forrest Gump",
+              "year": 1994,
+              "genres": [
+                "Comedy",
+                "Drama",
+                "Romance"
+              ],
+              "score": 0.6045
+            },
+            {
+              "tmdb_id": 1483525,
+              "title": "Possible Love",
+              "year": 2026,
+              "genres": [
+                "Drama"
+              ],
+              "score": 0.6022
+            },
+            {
+              "tmdb_id": 680,
+              "title": "Pulp Fiction",
+              "year": 1994,
+              "genres": [
+                "Thriller",
+                "Crime",
+                "Comedy"
+              ],
+              "score": 0.6002
+            }
+          ]
+        },
+        "Q09_psych_suspense": {
+          "label": "Twisty Psychological Suspense",
+          "query": "twisty psychological thriller with paranoia, hidden identities, mind games, and a dark obsession",
+          "top_5": [
+            {
+              "tmdb_id": 27205,
+              "title": "Inception",
+              "year": 2010,
+              "genres": [
+                "Action",
+                "Science Fiction",
+                "Crime"
+              ],
+              "score": 0.6153
+            },
+            {
+              "tmdb_id": 1339713,
+              "title": "Obsession",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller"
+              ],
+              "score": 0.6123
+            },
+            {
+              "tmdb_id": 1629051,
+              "title": "Never After Dark",
+              "year": 2026,
+              "genres": [
+                "Horror"
+              ],
+              "score": 0.6104
+            },
+            {
+              "tmdb_id": 1083381,
+              "title": "Backrooms",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Mystery",
+                "Science Fiction"
+              ],
+              "score": 0.6047
+            },
+            {
+              "tmdb_id": 1275779,
+              "title": "Disclosure Day",
+              "year": 2026,
+              "genres": [
+                "Science Fiction",
+                "Thriller"
+              ],
+              "score": 0.6032
+            }
+          ]
+        },
+        "Q10_feelgood_comedy": {
+          "label": "Lighthearted Feel-Good / Nostalgic Adventure",
+          "query": "fun, lighthearted laugh-out-loud comedy or nostalgic adventure that doesn't take itself seriously",
+          "top_5": [
+            {
+              "tmdb_id": 1567605,
+              "title": "Ebenezer",
+              "year": 2026,
+              "genres": [
+                "Fantasy",
+                "Comedy"
+              ],
+              "score": 0.5723
+            },
+            {
+              "tmdb_id": 105,
+              "title": "Back to the Future",
+              "year": 1985,
+              "genres": [
+                "Adventure",
+                "Comedy",
+                "Science Fiction"
+              ],
+              "score": 0.5709
+            },
+            {
+              "tmdb_id": 1518204,
+              "title": "Allen",
+              "year": 2026,
+              "genres": [
+                "Science Fiction",
+                "Adventure",
+                "Comedy"
+              ],
+              "score": 0.5707
+            },
+            {
+              "tmdb_id": 1187326,
+              "title": "Tad and The Magic Lamp",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Comedy",
+                "Family"
+              ],
+              "score": 0.5699
+            },
+            {
+              "tmdb_id": 891621,
+              "title": "Wild Horse Nine",
+              "year": 2026,
+              "genres": [
+                "Comedy",
+                "Crime",
+                "Thriller"
+              ],
+              "score": 0.5675
+            }
+          ]
+        }
+      },
+      "multilingual_queries": {
+        "ML01_es_scifi": {
+          "lang": "es",
+          "paired_en_id": "Q02_cerebral_scifi",
+          "query": "una pel\u00edcula de ciencia ficci\u00f3n espacial que te vuele la cabeza sobre viajes en el tiempo, agujeros negros y supervivencia",
+          "overlap_at_5_with_en": 0,
+          "top_5": [
+            {
+              "tmdb_id": 1422041,
+              "title": "La Bola Negra",
+              "year": 2026,
+              "genres": [
+                "Drama",
+                "War"
+              ],
+              "score": 0.6367
+            },
+            {
+              "tmdb_id": 1244523,
+              "title": "Beware Boi\u00fana",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller",
+                "Action"
+              ],
+              "score": 0.632
+            },
+            {
+              "tmdb_id": 1377237,
+              "title": "Runner",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Comedy",
+                "Thriller"
+              ],
+              "score": 0.6314
+            },
+            {
+              "tmdb_id": 1327819,
+              "title": "Hoppers",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Adventure",
+                "Comedy",
+                "Family",
+                "Science Fiction"
+              ],
+              "score": 0.6277
+            },
+            {
+              "tmdb_id": 494656,
+              "title": "The Legend of the Black Charro",
+              "year": 2018,
+              "genres": [
+                "Animation",
+                "Fantasy",
+                "Action",
+                "Family"
+              ],
+              "score": 0.6271
+            }
+          ]
+        },
+        "ML02_es_cozy": {
+          "lang": "es",
+          "paired_en_id": "Q01_cozy_animation",
+          "query": "algo c\u00e1lido, tierno y divertido de animaci\u00f3n familiar con humor para relajarse sin nada de estr\u00e9s",
+          "overlap_at_5_with_en": 0,
+          "top_5": [
+            {
+              "tmdb_id": 354912,
+              "title": "Coco",
+              "year": 2017,
+              "genres": [
+                "Family",
+                "Animation",
+                "Music",
+                "Adventure"
+              ],
+              "score": 0.6091
+            },
+            {
+              "tmdb_id": 1422041,
+              "title": "La Bola Negra",
+              "year": 2026,
+              "genres": [
+                "Drama",
+                "War"
+              ],
+              "score": 0.5841
+            },
+            {
+              "tmdb_id": 1402181,
+              "title": "Scene",
+              "year": 2026,
+              "genres": [
+                "Comedy",
+                "Crime",
+                "Action"
+              ],
+              "score": 0.5836
+            },
+            {
+              "tmdb_id": 1567605,
+              "title": "Ebenezer",
+              "year": 2026,
+              "genres": [
+                "Fantasy",
+                "Comedy"
+              ],
+              "score": 0.5687
+            },
+            {
+              "tmdb_id": 494656,
+              "title": "The Legend of the Black Charro",
+              "year": 2018,
+              "genres": [
+                "Animation",
+                "Fantasy",
+                "Action",
+                "Family"
+              ],
+              "score": 0.5645
+            }
+          ]
+        },
+        "ML03_fr_crime": {
+          "lang": "fr",
+          "paired_en_id": "Q03_gritty_crime",
+          "query": "un drame criminel sombre et tendu sur la mafia, la loyaut\u00e9, le crime organis\u00e9 et la corruption morale",
+          "overlap_at_5_with_en": 3,
+          "top_5": [
+            {
+              "tmdb_id": 680,
+              "title": "Pulp Fiction",
+              "year": 1994,
+              "genres": [
+                "Thriller",
+                "Crime",
+                "Comedy"
+              ],
+              "score": 0.6352
+            },
+            {
+              "tmdb_id": 238,
+              "title": "The Godfather",
+              "year": 1972,
+              "genres": [
+                "Drama",
+                "Crime"
+              ],
+              "score": 0.629
+            },
+            {
+              "tmdb_id": 2034,
+              "title": "Training Day",
+              "year": 2001,
+              "genres": [
+                "Action",
+                "Crime",
+                "Drama"
+              ],
+              "score": 0.622
+            },
+            {
+              "tmdb_id": 240,
+              "title": "The Godfather Part II",
+              "year": 1974,
+              "genres": [
+                "Drama",
+                "Crime"
+              ],
+              "score": 0.6208
+            },
+            {
+              "tmdb_id": 1402181,
+              "title": "Scene",
+              "year": 2026,
+              "genres": [
+                "Comedy",
+                "Crime",
+                "Action"
+              ],
+              "score": 0.6189
+            }
+          ]
+        },
+        "ML04_pt_fantasy": {
+          "lang": "pt",
+          "paired_en_id": "Q07_epic_fantasy",
+          "query": "uma aventura \u00e9pica de fantasia medieval com magia antiga, irmandade e grandes batalhas entre o bem e o mal",
+          "overlap_at_5_with_en": 3,
+          "top_5": [
+            {
+              "tmdb_id": 656908,
+              "title": "Ramayana: Rise of a Legend",
+              "year": 2026,
+              "genres": [
+                "Fantasy",
+                "Action",
+                "Adventure"
+              ],
+              "score": 0.6342
+            },
+            {
+              "tmdb_id": 1368337,
+              "title": "The Odyssey",
+              "year": 2026,
+              "genres": [
+                "Adventure",
+                "Action",
+                "Fantasy"
+              ],
+              "score": 0.6174
+            },
+            {
+              "tmdb_id": 122,
+              "title": "The Lord of the Rings: The Return of the King",
+              "year": 2003,
+              "genres": [
+                "Adventure",
+                "Fantasy",
+                "Action"
+              ],
+              "score": 0.614
+            },
+            {
+              "tmdb_id": 822653,
+              "title": "Puella Magi Madoka Magica the Movie -Walpurgisnacht: Rising-",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Drama",
+                "Mystery",
+                "Fantasy"
+              ],
+              "score": 0.612
+            },
+            {
+              "tmdb_id": 494656,
+              "title": "The Legend of the Black Charro",
+              "year": 2018,
+              "genres": [
+                "Animation",
+                "Fantasy",
+                "Action",
+                "Family"
+              ],
+              "score": 0.6046
+            }
+          ]
+        }
+      }
+    },
+    "sentence_transformers_bge_small_en_v1_5": {
+      "runtime": "sentence-transformers (PyTorch CPU)",
+      "model_name": "BAAI/bge-small-en-v1.5",
+      "dimensions": 384,
+      "site_packages_mb": 860.15,
+      "model_weights_disk_mb": 128.27,
+      "estimated_added_image_mb": 988.4,
+      "rss_before_import_mb": 28.42,
+      "rss_after_import_mb": 400.0,
+      "rss_after_model_load_mb": 509.42,
+      "rss_peak_batch_mb": 658.72,
+      "import_time_s": 3.822,
+      "cold_start_from_disk_s": 0.323,
+      "single_query_latency_ms": {
+        "p50": 10.38,
+        "p95": 11.58,
+        "mean": 10.58,
+        "min": 9.95,
+        "max": 12.23
+      },
+      "batch_200_movies_s": 2.49,
+      "batch_1000_movies_s": 10.08,
+      "throughput_docs_per_sec": 99.25,
+      "estimated_20k_profiles_s": 201.5,
+      "estimated_20k_profiles_min": 3.36,
+      "english_queries": {
+        "Q01_cozy_animation": {
+          "label": "Cozy / Warm Family Animation",
+          "query": "warm, comforting animated family adventure with heart, humor, and low stress after a long week",
+          "top_5": [
+            {
+              "tmdb_id": 1187326,
+              "title": "Tad and The Magic Lamp",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Comedy",
+                "Family"
+              ],
+              "score": 0.6154
+            },
+            {
+              "tmdb_id": 1327819,
+              "title": "Hoppers",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Adventure",
+                "Comedy",
+                "Family",
+                "Science Fiction"
+              ],
+              "score": 0.5958
+            },
+            {
+              "tmdb_id": 1117898,
+              "title": "The Cat in the Hat",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Fantasy",
+                "Adventure",
+                "Family",
+                "Comedy"
+              ],
+              "score": 0.5934
+            },
+            {
+              "tmdb_id": 1664264,
+              "title": "A Very Arctic Christmas",
+              "year": 2026,
+              "genres": [
+                "TV Movie",
+                "Comedy",
+                "Romance"
+              ],
+              "score": 0.5922
+            },
+            {
+              "tmdb_id": 1084244,
+              "title": "Toy Story 5",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Family",
+                "Comedy",
+                "Adventure"
+              ],
+              "score": 0.5889
+            }
+          ]
+        },
+        "Q02_cerebral_scifi": {
+          "label": "Cerebral Space / Time Sci-Fi",
+          "query": "mind-bending sci-fi mystery about space exploration, time dilation, and existential survival",
+          "top_5": [
+            {
+              "tmdb_id": 157336,
+              "title": "Interstellar",
+              "year": 2014,
+              "genres": [
+                "Adventure",
+                "Drama",
+                "Science Fiction"
+              ],
+              "score": 0.6285
+            },
+            {
+              "tmdb_id": 858035,
+              "title": "Klara and the Sun",
+              "year": 2026,
+              "genres": [
+                "Science Fiction",
+                "Drama"
+              ],
+              "score": 0.5945
+            },
+            {
+              "tmdb_id": 27205,
+              "title": "Inception",
+              "year": 2010,
+              "genres": [
+                "Action",
+                "Science Fiction",
+                "Crime"
+              ],
+              "score": 0.5909
+            },
+            {
+              "tmdb_id": 1101383,
+              "title": "The End of Oak Street",
+              "year": 2026,
+              "genres": [
+                "Science Fiction",
+                "Mystery",
+                "Thriller"
+              ],
+              "score": 0.5903
+            },
+            {
+              "tmdb_id": 1083381,
+              "title": "Backrooms",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Mystery",
+                "Science Fiction"
+              ],
+              "score": 0.5866
+            }
+          ]
+        },
+        "Q03_gritty_crime": {
+          "label": "Gritty Mafia / Crime Thriller",
+          "query": "dark, tense crime drama about mafia loyalty, organized crime corruption, and moral decay",
+          "top_5": [
+            {
+              "tmdb_id": 807,
+              "title": "Se7en",
+              "year": 1995,
+              "genres": [
+                "Crime",
+                "Mystery",
+                "Thriller"
+              ],
+              "score": 0.6543
+            },
+            {
+              "tmdb_id": 1402181,
+              "title": "Scene",
+              "year": 2026,
+              "genres": [
+                "Comedy",
+                "Crime",
+                "Action"
+              ],
+              "score": 0.6446
+            },
+            {
+              "tmdb_id": 238,
+              "title": "The Godfather",
+              "year": 1972,
+              "genres": [
+                "Drama",
+                "Crime"
+              ],
+              "score": 0.6313
+            },
+            {
+              "tmdb_id": 1290418,
+              "title": "The Cycle",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller",
+                "Mystery"
+              ],
+              "score": 0.6227
+            },
+            {
+              "tmdb_id": 1571955,
+              "title": "Collision Course",
+              "year": 2026,
+              "genres": [
+                "Thriller",
+                "Drama",
+                "Crime"
+              ],
+              "score": 0.6219
+            }
+          ]
+        },
+        "Q04_atmospheric_horror": {
+          "label": "Atmospheric / Supernatural Horror",
+          "query": "scary supernatural horror or monster thriller with unsettling dread, claustrophobia, and survival terror",
+          "top_5": [
+            {
+              "tmdb_id": 1244523,
+              "title": "Beware Boi\u00fana",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller",
+                "Action"
+              ],
+              "score": 0.6785
+            },
+            {
+              "tmdb_id": 1284046,
+              "title": "Onslaught",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Thriller",
+                "Horror"
+              ],
+              "score": 0.6665
+            },
+            {
+              "tmdb_id": 1629051,
+              "title": "Never After Dark",
+              "year": 2026,
+              "genres": [
+                "Horror"
+              ],
+              "score": 0.6631
+            },
+            {
+              "tmdb_id": 1083381,
+              "title": "Backrooms",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Mystery",
+                "Science Fiction"
+              ],
+              "score": 0.6513
+            },
+            {
+              "tmdb_id": 1423191,
+              "title": "Resident Evil",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Science Fiction",
+                "Adventure"
+              ],
+              "score": 0.6486
+            }
+          ]
+        },
+        "Q05_high_octane_action": {
+          "label": "Relentless Revenge / Martial Arts Action",
+          "query": "relentless high-adrenaline action thriller with martial arts, gunplay, or a one-man-army revenge mission",
+          "top_5": [
+            {
+              "tmdb_id": 1284046,
+              "title": "Onslaught",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Thriller",
+                "Horror"
+              ],
+              "score": 0.6789
+            },
+            {
+              "tmdb_id": 1419406,
+              "title": "The Shadow's Edge",
+              "year": 2025,
+              "genres": [
+                "Action",
+                "Crime",
+                "Drama",
+                "Thriller"
+              ],
+              "score": 0.6729
+            },
+            {
+              "tmdb_id": 1616687,
+              "title": "Never Surrender",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Crime",
+                "Thriller"
+              ],
+              "score": 0.6723
+            },
+            {
+              "tmdb_id": 1265609,
+              "title": "War Machine",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Science Fiction",
+                "Thriller"
+              ],
+              "score": 0.6579
+            },
+            {
+              "tmdb_id": 1607127,
+              "title": "One Last Shot",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Thriller"
+              ],
+              "score": 0.6514
+            }
+          ]
+        },
+        "Q06_romantic_drama": {
+          "label": "Bittersweet Romantic Drama",
+          "query": "intimate, emotional romantic drama about love, longing, heartbreak, and unforgettable chemistry",
+          "top_5": [
+            {
+              "tmdb_id": 1483525,
+              "title": "Possible Love",
+              "year": 2026,
+              "genres": [
+                "Drama"
+              ],
+              "score": 0.6414
+            },
+            {
+              "tmdb_id": 1523145,
+              "title": "Your Heart Will Be Broken",
+              "year": 2026,
+              "genres": [
+                "Romance"
+              ],
+              "score": 0.6313
+            },
+            {
+              "tmdb_id": 1422041,
+              "title": "La Bola Negra",
+              "year": 2026,
+              "genres": [
+                "Drama",
+                "War"
+              ],
+              "score": 0.6129
+            },
+            {
+              "tmdb_id": 1381078,
+              "title": "Love of Your Life",
+              "year": 2026,
+              "genres": [
+                "Romance",
+                "Drama"
+              ],
+              "score": 0.6114
+            },
+            {
+              "tmdb_id": 1503762,
+              "title": "Sense and Sensibility",
+              "year": 2026,
+              "genres": [
+                "Drama",
+                "Romance"
+              ],
+              "score": 0.6113
+            }
+          ]
+        },
+        "Q07_epic_fantasy": {
+          "label": "Epic Mythological / Medieval Fantasy",
+          "query": "epic mythological fantasy quest with ancient magic, fellowship, and massive battles between good and evil",
+          "top_5": [
+            {
+              "tmdb_id": 656908,
+              "title": "Ramayana: Rise of a Legend",
+              "year": 2026,
+              "genres": [
+                "Fantasy",
+                "Action",
+                "Adventure"
+              ],
+              "score": 0.6769
+            },
+            {
+              "tmdb_id": 122,
+              "title": "The Lord of the Rings: The Return of the King",
+              "year": 2003,
+              "genres": [
+                "Adventure",
+                "Fantasy",
+                "Action"
+              ],
+              "score": 0.669
+            },
+            {
+              "tmdb_id": 1368337,
+              "title": "The Odyssey",
+              "year": 2026,
+              "genres": [
+                "Adventure",
+                "Action",
+                "Fantasy"
+              ],
+              "score": 0.6579
+            },
+            {
+              "tmdb_id": 121,
+              "title": "The Lord of the Rings: The Two Towers",
+              "year": 2002,
+              "genres": [
+                "Adventure",
+                "Fantasy",
+                "Action"
+              ],
+              "score": 0.6232
+            },
+            {
+              "tmdb_id": 693134,
+              "title": "Dune: Part Two",
+              "year": 2024,
+              "genres": [
+                "Science Fiction",
+                "Adventure"
+              ],
+              "score": 0.6141
+            }
+          ]
+        },
+        "Q08_dark_satire": {
+          "label": "Sharp Dark Comedy / Social Satire",
+          "query": "sharp, chaotic dark comedy or social satire about wealth, greed, absurdity, and things spiralling out of control",
+          "top_5": [
+            {
+              "tmdb_id": 1248832,
+              "title": "Digger",
+              "year": 2026,
+              "genres": [
+                "Comedy",
+                "Drama"
+              ],
+              "score": 0.666
+            },
+            {
+              "tmdb_id": 496243,
+              "title": "Parasite",
+              "year": 2019,
+              "genres": [
+                "Comedy",
+                "Thriller",
+                "Drama"
+              ],
+              "score": 0.6447
+            },
+            {
+              "tmdb_id": 13,
+              "title": "Forrest Gump",
+              "year": 1994,
+              "genres": [
+                "Comedy",
+                "Drama",
+                "Romance"
+              ],
+              "score": 0.6048
+            },
+            {
+              "tmdb_id": 1483525,
+              "title": "Possible Love",
+              "year": 2026,
+              "genres": [
+                "Drama"
+              ],
+              "score": 0.6024
+            },
+            {
+              "tmdb_id": 680,
+              "title": "Pulp Fiction",
+              "year": 1994,
+              "genres": [
+                "Thriller",
+                "Crime",
+                "Comedy"
+              ],
+              "score": 0.6007
+            }
+          ]
+        },
+        "Q09_psych_suspense": {
+          "label": "Twisty Psychological Suspense",
+          "query": "twisty psychological thriller with paranoia, hidden identities, mind games, and a dark obsession",
+          "top_5": [
+            {
+              "tmdb_id": 27205,
+              "title": "Inception",
+              "year": 2010,
+              "genres": [
+                "Action",
+                "Science Fiction",
+                "Crime"
+              ],
+              "score": 0.6156
+            },
+            {
+              "tmdb_id": 1339713,
+              "title": "Obsession",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller"
+              ],
+              "score": 0.6124
+            },
+            {
+              "tmdb_id": 1629051,
+              "title": "Never After Dark",
+              "year": 2026,
+              "genres": [
+                "Horror"
+              ],
+              "score": 0.6108
+            },
+            {
+              "tmdb_id": 1083381,
+              "title": "Backrooms",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Mystery",
+                "Science Fiction"
+              ],
+              "score": 0.605
+            },
+            {
+              "tmdb_id": 1275779,
+              "title": "Disclosure Day",
+              "year": 2026,
+              "genres": [
+                "Science Fiction",
+                "Thriller"
+              ],
+              "score": 0.6034
+            }
+          ]
+        },
+        "Q10_feelgood_comedy": {
+          "label": "Lighthearted Feel-Good / Nostalgic Adventure",
+          "query": "fun, lighthearted laugh-out-loud comedy or nostalgic adventure that doesn't take itself seriously",
+          "top_5": [
+            {
+              "tmdb_id": 1567605,
+              "title": "Ebenezer",
+              "year": 2026,
+              "genres": [
+                "Fantasy",
+                "Comedy"
+              ],
+              "score": 0.5728
+            },
+            {
+              "tmdb_id": 105,
+              "title": "Back to the Future",
+              "year": 1985,
+              "genres": [
+                "Adventure",
+                "Comedy",
+                "Science Fiction"
+              ],
+              "score": 0.5713
+            },
+            {
+              "tmdb_id": 1518204,
+              "title": "Allen",
+              "year": 2026,
+              "genres": [
+                "Science Fiction",
+                "Adventure",
+                "Comedy"
+              ],
+              "score": 0.5711
+            },
+            {
+              "tmdb_id": 1187326,
+              "title": "Tad and The Magic Lamp",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Comedy",
+                "Family"
+              ],
+              "score": 0.5702
+            },
+            {
+              "tmdb_id": 891621,
+              "title": "Wild Horse Nine",
+              "year": 2026,
+              "genres": [
+                "Comedy",
+                "Crime",
+                "Thriller"
+              ],
+              "score": 0.5679
+            }
+          ]
+        }
+      }
+    },
+    "onnx_vs_pytorch_parity": {
+      "cosine_similarity_first_20_movies": {
+        "min": 0.999998,
+        "mean": 0.999999,
+        "max": 0.999999
+      },
+      "top_5_overlap_across_10_queries": {
+        "mean_overlap_out_of_5": 4.9,
+        "per_query_overlap": {
+          "Q01_cozy_animation": 5,
+          "Q02_cerebral_scifi": 5,
+          "Q03_gritty_crime": 4,
+          "Q04_atmospheric_horror": 5,
+          "Q05_high_octane_action": 5,
+          "Q06_romantic_drama": 5,
+          "Q07_epic_fantasy": 5,
+          "Q08_dark_satire": 5,
+          "Q09_psych_suspense": 5,
+          "Q10_feelgood_comedy": 5
+        }
+      }
+    },
+    "fastembed_paraphrase_multilingual_minilm_l12_v2": {
+      "runtime": "fastembed (ONNX Runtime CPU)",
+      "model_name": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "dimensions": 384,
+      "site_packages_mb": 148.16,
+      "model_weights_disk_mb": 240.46,
+      "estimated_added_image_mb": 388.6,
+      "rss_before_import_mb": 28.27,
+      "rss_after_import_mb": 87.52,
+      "rss_after_model_load_mb": 546.66,
+      "rss_peak_batch_mb": 868.66,
+      "import_time_s": 0.321,
+      "cold_start_from_disk_s": 0.535,
+      "single_query_latency_ms": {
+        "p50": 5.78,
+        "p95": 7.07,
+        "mean": 5.94,
+        "min": 5.18,
+        "max": 7.43
+      },
+      "batch_200_movies_s": 4.63,
+      "batch_1000_movies_s": 23.72,
+      "throughput_docs_per_sec": 42.17,
+      "estimated_20k_profiles_s": 474.3,
+      "estimated_20k_profiles_min": 7.91,
+      "english_queries": {
+        "Q01_cozy_animation": {
+          "label": "Cozy / Warm Family Animation",
+          "query": "warm, comforting animated family adventure with heart, humor, and low stress after a long week",
+          "top_5": [
+            {
+              "tmdb_id": 1084244,
+              "title": "Toy Story 5",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Family",
+                "Comedy",
+                "Adventure"
+              ],
+              "score": 0.5055
+            },
+            {
+              "tmdb_id": 1514026,
+              "title": "Buddy",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Comedy",
+                "Fantasy"
+              ],
+              "score": 0.4827
+            },
+            {
+              "tmdb_id": 1148365,
+              "title": "Matchbox the Movie",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Comedy",
+                "Adventure"
+              ],
+              "score": 0.4622
+            },
+            {
+              "tmdb_id": 1117898,
+              "title": "The Cat in the Hat",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Fantasy",
+                "Adventure",
+                "Family",
+                "Comedy"
+              ],
+              "score": 0.4427
+            },
+            {
+              "tmdb_id": 791523,
+              "title": "Wildwood",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Fantasy",
+                "Adventure"
+              ],
+              "score": 0.4391
+            }
+          ]
+        },
+        "Q02_cerebral_scifi": {
+          "label": "Cerebral Space / Time Sci-Fi",
+          "query": "mind-bending sci-fi mystery about space exploration, time dilation, and existential survival",
+          "top_5": [
+            {
+              "tmdb_id": 157336,
+              "title": "Interstellar",
+              "year": 2014,
+              "genres": [
+                "Adventure",
+                "Drama",
+                "Science Fiction"
+              ],
+              "score": 0.5704
+            },
+            {
+              "tmdb_id": 438631,
+              "title": "Dune",
+              "year": 2021,
+              "genres": [
+                "Science Fiction",
+                "Adventure"
+              ],
+              "score": 0.5215
+            },
+            {
+              "tmdb_id": 687163,
+              "title": "Project Hail Mary",
+              "year": 2026,
+              "genres": [
+                "Science Fiction",
+                "Adventure"
+              ],
+              "score": 0.5051
+            },
+            {
+              "tmdb_id": 603,
+              "title": "The Matrix",
+              "year": 1999,
+              "genres": [
+                "Action",
+                "Science Fiction"
+              ],
+              "score": 0.4994
+            },
+            {
+              "tmdb_id": 693134,
+              "title": "Dune: Part Two",
+              "year": 2024,
+              "genres": [
+                "Science Fiction",
+                "Adventure"
+              ],
+              "score": 0.4652
+            }
+          ]
+        },
+        "Q03_gritty_crime": {
+          "label": "Gritty Mafia / Crime Thriller",
+          "query": "dark, tense crime drama about mafia loyalty, organized crime corruption, and moral decay",
+          "top_5": [
+            {
+              "tmdb_id": 1453407,
+              "title": "Gajab Raat",
+              "year": 2026,
+              "genres": [
+                "Thriller",
+                "Crime"
+              ],
+              "score": 0.6187
+            },
+            {
+              "tmdb_id": 1234139,
+              "title": "Jailer 2",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Comedy",
+                "Drama"
+              ],
+              "score": 0.6064
+            },
+            {
+              "tmdb_id": 1571955,
+              "title": "Collision Course",
+              "year": 2026,
+              "genres": [
+                "Thriller",
+                "Drama",
+                "Crime"
+              ],
+              "score": 0.5833
+            },
+            {
+              "tmdb_id": 680,
+              "title": "Pulp Fiction",
+              "year": 1994,
+              "genres": [
+                "Thriller",
+                "Crime",
+                "Comedy"
+              ],
+              "score": 0.5826
+            },
+            {
+              "tmdb_id": 238,
+              "title": "The Godfather",
+              "year": 1972,
+              "genres": [
+                "Drama",
+                "Crime"
+              ],
+              "score": 0.5794
+            }
+          ]
+        },
+        "Q04_atmospheric_horror": {
+          "label": "Atmospheric / Supernatural Horror",
+          "query": "scary supernatural horror or monster thriller with unsettling dread, claustrophobia, and survival terror",
+          "top_5": [
+            {
+              "tmdb_id": 1339713,
+              "title": "Obsession",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller"
+              ],
+              "score": 0.6928
+            },
+            {
+              "tmdb_id": 1629051,
+              "title": "Never After Dark",
+              "year": 2026,
+              "genres": [
+                "Horror"
+              ],
+              "score": 0.6388
+            },
+            {
+              "tmdb_id": 1291595,
+              "title": "Insidious: Out of the Further",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller"
+              ],
+              "score": 0.6386
+            },
+            {
+              "tmdb_id": 1244523,
+              "title": "Beware Boi\u00fana",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller",
+                "Action"
+              ],
+              "score": 0.621
+            },
+            {
+              "tmdb_id": 1432306,
+              "title": "Sleepwalker",
+              "year": 2026,
+              "genres": [
+                "Thriller",
+                "Horror"
+              ],
+              "score": 0.6065
+            }
+          ]
+        },
+        "Q05_high_octane_action": {
+          "label": "Relentless Revenge / Martial Arts Action",
+          "query": "relentless high-adrenaline action thriller with martial arts, gunplay, or a one-man-army revenge mission",
+          "top_5": [
+            {
+              "tmdb_id": 550,
+              "title": "Fight Club",
+              "year": 1999,
+              "genres": [
+                "Drama",
+                "Thriller"
+              ],
+              "score": 0.6422
+            },
+            {
+              "tmdb_id": 1153576,
+              "title": "Street Fighter",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Fantasy"
+              ],
+              "score": 0.5821
+            },
+            {
+              "tmdb_id": 1284046,
+              "title": "Onslaught",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Thriller",
+                "Horror"
+              ],
+              "score": 0.552
+            },
+            {
+              "tmdb_id": 24428,
+              "title": "The Avengers",
+              "year": 2012,
+              "genres": [
+                "Science Fiction",
+                "Action",
+                "Adventure"
+              ],
+              "score": 0.5343
+            },
+            {
+              "tmdb_id": 1288445,
+              "title": "Mutiny",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Thriller"
+              ],
+              "score": 0.5252
+            }
+          ]
+        },
+        "Q06_romantic_drama": {
+          "label": "Bittersweet Romantic Drama",
+          "query": "intimate, emotional romantic drama about love, longing, heartbreak, and unforgettable chemistry",
+          "top_5": [
+            {
+              "tmdb_id": 1339713,
+              "title": "Obsession",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller"
+              ],
+              "score": 0.6405
+            },
+            {
+              "tmdb_id": 1483525,
+              "title": "Possible Love",
+              "year": 2026,
+              "genres": [
+                "Drama"
+              ],
+              "score": 0.6132
+            },
+            {
+              "tmdb_id": 1422041,
+              "title": "La Bola Negra",
+              "year": 2026,
+              "genres": [
+                "Drama",
+                "War"
+              ],
+              "score": 0.5704
+            },
+            {
+              "tmdb_id": 1381078,
+              "title": "Love of Your Life",
+              "year": 2026,
+              "genres": [
+                "Romance",
+                "Drama"
+              ],
+              "score": 0.57
+            },
+            {
+              "tmdb_id": 27,
+              "title": "9 Songs",
+              "year": 2004,
+              "genres": [
+                "Drama",
+                "Music",
+                "Romance"
+              ],
+              "score": 0.5481
+            }
+          ]
+        },
+        "Q07_epic_fantasy": {
+          "label": "Epic Mythological / Medieval Fantasy",
+          "query": "epic mythological fantasy quest with ancient magic, fellowship, and massive battles between good and evil",
+          "top_5": [
+            {
+              "tmdb_id": 656908,
+              "title": "Ramayana: Rise of a Legend",
+              "year": 2026,
+              "genres": [
+                "Fantasy",
+                "Action",
+                "Adventure"
+              ],
+              "score": 0.6425
+            },
+            {
+              "tmdb_id": 1302904,
+              "title": "Practical Magic 2",
+              "year": 2026,
+              "genres": [
+                "Romance",
+                "Fantasy",
+                "Comedy"
+              ],
+              "score": 0.6037
+            },
+            {
+              "tmdb_id": 1228710,
+              "title": "The Mandalorian and Grogu",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Adventure",
+                "Science Fiction"
+              ],
+              "score": 0.5944
+            },
+            {
+              "tmdb_id": 1368337,
+              "title": "The Odyssey",
+              "year": 2026,
+              "genres": [
+                "Adventure",
+                "Action",
+                "Fantasy"
+              ],
+              "score": 0.5806
+            },
+            {
+              "tmdb_id": 822653,
+              "title": "Puella Magi Madoka Magica the Movie -Walpurgisnacht: Rising-",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Drama",
+                "Mystery",
+                "Fantasy"
+              ],
+              "score": 0.5599
+            }
+          ]
+        },
+        "Q08_dark_satire": {
+          "label": "Sharp Dark Comedy / Social Satire",
+          "query": "sharp, chaotic dark comedy or social satire about wealth, greed, absurdity, and things spiralling out of control",
+          "top_5": [
+            {
+              "tmdb_id": 1248832,
+              "title": "Digger",
+              "year": 2026,
+              "genres": [
+                "Comedy",
+                "Drama"
+              ],
+              "score": 0.5945
+            },
+            {
+              "tmdb_id": 680,
+              "title": "Pulp Fiction",
+              "year": 1994,
+              "genres": [
+                "Thriller",
+                "Crime",
+                "Comedy"
+              ],
+              "score": 0.5928
+            },
+            {
+              "tmdb_id": 550,
+              "title": "Fight Club",
+              "year": 1999,
+              "genres": [
+                "Drama",
+                "Thriller"
+              ],
+              "score": 0.581
+            },
+            {
+              "tmdb_id": 496243,
+              "title": "Parasite",
+              "year": 2019,
+              "genres": [
+                "Comedy",
+                "Thriller",
+                "Drama"
+              ],
+              "score": 0.5771
+            },
+            {
+              "tmdb_id": 11308,
+              "title": "The Hotel New Hampshire",
+              "year": 1984,
+              "genres": [
+                "Comedy",
+                "Drama"
+              ],
+              "score": 0.5213
+            }
+          ]
+        },
+        "Q09_psych_suspense": {
+          "label": "Twisty Psychological Suspense",
+          "query": "twisty psychological thriller with paranoia, hidden identities, mind games, and a dark obsession",
+          "top_5": [
+            {
+              "tmdb_id": 1339713,
+              "title": "Obsession",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller"
+              ],
+              "score": 0.729
+            },
+            {
+              "tmdb_id": 550,
+              "title": "Fight Club",
+              "year": 1999,
+              "genres": [
+                "Drama",
+                "Thriller"
+              ],
+              "score": 0.6677
+            },
+            {
+              "tmdb_id": 1291595,
+              "title": "Insidious: Out of the Further",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Thriller"
+              ],
+              "score": 0.5932
+            },
+            {
+              "tmdb_id": 1283515,
+              "title": "Verity",
+              "year": 2026,
+              "genres": [
+                "Mystery",
+                "Thriller"
+              ],
+              "score": 0.5911
+            },
+            {
+              "tmdb_id": 27205,
+              "title": "Inception",
+              "year": 2010,
+              "genres": [
+                "Action",
+                "Science Fiction",
+                "Crime"
+              ],
+              "score": 0.5911
+            }
+          ]
+        },
+        "Q10_feelgood_comedy": {
+          "label": "Lighthearted Feel-Good / Nostalgic Adventure",
+          "query": "fun, lighthearted laugh-out-loud comedy or nostalgic adventure that doesn't take itself seriously",
+          "top_5": [
+            {
+              "tmdb_id": 1514026,
+              "title": "Buddy",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Comedy",
+                "Fantasy"
+              ],
+              "score": 0.4733
+            },
+            {
+              "tmdb_id": 11308,
+              "title": "The Hotel New Hampshire",
+              "year": 1984,
+              "genres": [
+                "Comedy",
+                "Drama"
+              ],
+              "score": 0.4723
+            },
+            {
+              "tmdb_id": 1196668,
+              "title": "Blue Sky Jo",
+              "year": 2024,
+              "genres": [
+                "Drama",
+                "Comedy"
+              ],
+              "score": 0.4615
+            },
+            {
+              "tmdb_id": 550,
+              "title": "Fight Club",
+              "year": 1999,
+              "genres": [
+                "Drama",
+                "Thriller"
+              ],
+              "score": 0.445
+            },
+            {
+              "tmdb_id": 1393056,
+              "title": "Mickey's Slayhouse",
+              "year": 2025,
+              "genres": [
+                "Horror"
+              ],
+              "score": 0.4276
+            }
+          ]
+        }
+      },
+      "multilingual_queries": {
+        "ML01_es_scifi": {
+          "lang": "es",
+          "paired_en_id": "Q02_cerebral_scifi",
+          "query": "una pel\u00edcula de ciencia ficci\u00f3n espacial que te vuele la cabeza sobre viajes en el tiempo, agujeros negros y supervivencia",
+          "overlap_at_5_with_en": 3,
+          "top_5": [
+            {
+              "tmdb_id": 693134,
+              "title": "Dune: Part Two",
+              "year": 2024,
+              "genres": [
+                "Science Fiction",
+                "Adventure"
+              ],
+              "score": 0.5543
+            },
+            {
+              "tmdb_id": 157336,
+              "title": "Interstellar",
+              "year": 2014,
+              "genres": [
+                "Adventure",
+                "Drama",
+                "Science Fiction"
+              ],
+              "score": 0.5508
+            },
+            {
+              "tmdb_id": 438631,
+              "title": "Dune",
+              "year": 2021,
+              "genres": [
+                "Science Fiction",
+                "Adventure"
+              ],
+              "score": 0.5276
+            },
+            {
+              "tmdb_id": 1294189,
+              "title": "The Mongoose",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Thriller"
+              ],
+              "score": 0.5181
+            },
+            {
+              "tmdb_id": 1228710,
+              "title": "The Mandalorian and Grogu",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Adventure",
+                "Science Fiction"
+              ],
+              "score": 0.5091
+            }
+          ]
+        },
+        "ML02_es_cozy": {
+          "lang": "es",
+          "paired_en_id": "Q01_cozy_animation",
+          "query": "algo c\u00e1lido, tierno y divertido de animaci\u00f3n familiar con humor para relajarse sin nada de estr\u00e9s",
+          "overlap_at_5_with_en": 2,
+          "top_5": [
+            {
+              "tmdb_id": 1514026,
+              "title": "Buddy",
+              "year": 2026,
+              "genres": [
+                "Horror",
+                "Comedy",
+                "Fantasy"
+              ],
+              "score": 0.4942
+            },
+            {
+              "tmdb_id": 1084244,
+              "title": "Toy Story 5",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Family",
+                "Comedy",
+                "Adventure"
+              ],
+              "score": 0.4738
+            },
+            {
+              "tmdb_id": 1327819,
+              "title": "Hoppers",
+              "year": 2026,
+              "genres": [
+                "Animation",
+                "Adventure",
+                "Comedy",
+                "Family",
+                "Science Fiction"
+              ],
+              "score": 0.4011
+            },
+            {
+              "tmdb_id": 14836,
+              "title": "Coraline",
+              "year": 2009,
+              "genres": [
+                "Animation",
+                "Family",
+                "Fantasy",
+                "Horror"
+              ],
+              "score": 0.3982
+            },
+            {
+              "tmdb_id": 1196668,
+              "title": "Blue Sky Jo",
+              "year": 2024,
+              "genres": [
+                "Drama",
+                "Comedy"
+              ],
+              "score": 0.397
+            }
+          ]
+        },
+        "ML03_fr_crime": {
+          "lang": "fr",
+          "paired_en_id": "Q03_gritty_crime",
+          "query": "un drame criminel sombre et tendu sur la mafia, la loyaut\u00e9, le crime organis\u00e9 et la corruption morale",
+          "overlap_at_5_with_en": 4,
+          "top_5": [
+            {
+              "tmdb_id": 1453407,
+              "title": "Gajab Raat",
+              "year": 2026,
+              "genres": [
+                "Thriller",
+                "Crime"
+              ],
+              "score": 0.612
+            },
+            {
+              "tmdb_id": 1234139,
+              "title": "Jailer 2",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Comedy",
+                "Drama"
+              ],
+              "score": 0.5908
+            },
+            {
+              "tmdb_id": 1571955,
+              "title": "Collision Course",
+              "year": 2026,
+              "genres": [
+                "Thriller",
+                "Drama",
+                "Crime"
+              ],
+              "score": 0.5787
+            },
+            {
+              "tmdb_id": 238,
+              "title": "The Godfather",
+              "year": 1972,
+              "genres": [
+                "Drama",
+                "Crime"
+              ],
+              "score": 0.5569
+            },
+            {
+              "tmdb_id": 550,
+              "title": "Fight Club",
+              "year": 1999,
+              "genres": [
+                "Drama",
+                "Thriller"
+              ],
+              "score": 0.5563
+            }
+          ]
+        },
+        "ML04_pt_fantasy": {
+          "lang": "pt",
+          "paired_en_id": "Q07_epic_fantasy",
+          "query": "uma aventura \u00e9pica de fantasia medieval com magia antiga, irmandade e grandes batalhas entre o bem e o mal",
+          "overlap_at_5_with_en": 4,
+          "top_5": [
+            {
+              "tmdb_id": 122,
+              "title": "The Lord of the Rings: The Return of the King",
+              "year": 2003,
+              "genres": [
+                "Adventure",
+                "Fantasy",
+                "Action"
+              ],
+              "score": 0.5788
+            },
+            {
+              "tmdb_id": 1228710,
+              "title": "The Mandalorian and Grogu",
+              "year": 2026,
+              "genres": [
+                "Action",
+                "Adventure",
+                "Science Fiction"
+              ],
+              "score": 0.5666
+            },
+            {
+              "tmdb_id": 1302904,
+              "title": "Practical Magic 2",
+              "year": 2026,
+              "genres": [
+                "Romance",
+                "Fantasy",
+                "Comedy"
+              ],
+              "score": 0.5578
+            },
+            {
+              "tmdb_id": 656908,
+              "title": "Ramayana: Rise of a Legend",
+              "year": 2026,
+              "genres": [
+                "Fantasy",
+                "Action",
+                "Adventure"
+              ],
+              "score": 0.556
+            },
+            {
+              "tmdb_id": 1368337,
+              "title": "The Odyssey",
+              "year": 2026,
+              "genres": [
+                "Adventure",
+                "Action",
+                "Fantasy"
+              ],
+              "score": 0.546
+            }
+          ]
+        }
+      }
+    },
+    "hosted_options_c": {
+      "gemini_embedding_001": {
+        "runtime": "Hosted Gemini Embedding API (REST / google-genai)",
+        "model_name": "gemini-embedding-001 (Matryoshka MRL 384-d / 768-d / 3072-d)",
+        "dimensions_supported": [
+          384,
+          768,
+          1536,
+          3072
+        ],
+        "context_window_tokens": 2048,
+        "added_container_image_mb": 0.0,
+        "added_rss_mb": 0.0,
+        "cold_start_s": 0.0,
+        "documented_free_tier_limits": {
+          "rpm": 100,
+          "tpm": 30000,
+          "rpd": 1000,
+          "batch_20k_feasibility_on_free_tier": "1,000 RPD free limit means 20,000 profiles require either batching (batchEmbedContents up to 100 texts/call, still subject to 30,000 TPM ~= 150 profiles/min -> ~133 min) or Paid Tier 1 ($0.15 / 1M tokens ~= $0.60 for 20k profiles at ~200 tokens/profile)."
+        },
+        "paid_pricing_usd_per_1m_tokens": 0.15,
+        "docs_url": "https://ai.google.dev/gemini-api/docs/embeddings",
+        "pricing_url": "https://ai.google.dev/gemini-api/docs/pricing",
+        "checked_date": "2026-11-15"
+      },
+      "atlas_automated_embedding": {
+        "runtime": "MongoDB Atlas Automated Embedding (Voyage AI autoEmbed)",
+        "models_supported": [
+          "voyage-3",
+          "voyage-3-lite",
+          "voyage-3-large"
+        ],
+        "m0_free_tier_supported": true,
+        "added_container_image_mb": 0.0,
+        "added_rss_mb": 0.0,
+        "docs_url": "https://www.mongodb.com/docs/atlas/atlas-vector-search/automated-embedding/",
+        "checked_date": "2026-11-15"
+      }
+    }
+  }
+}

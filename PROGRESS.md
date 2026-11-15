@@ -1,14 +1,15 @@
 # Progress
 
 ## Now
-- **Active feature:** `feat-008` (Spike: TMDB terms, rate limits and watch providers in `docs/spikes/08-tmdb-and-providers.md`), branch `spike/tmdb-and-providers` (`done`, waiting for owner PR merge).
-- **State:** `feat-008` completed across 2 sessions (`status: answered` in `docs/spikes/08-tmdb-and-providers.md`): answered Q1–Q8, Q12, and Q13 (`25.2 req/s`, `0` `429`s, ES/US/BO flat-rate coverage, `0.0%` missing `poster_path`, and 24.5h provider churn across Popular 500: ES `2.2%`, US `2.6%`, BO `0.6%`; `1–3` brand-new flat-rate releases/day per country).
-- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-15 16:23 CET, Mac.
-- **Next step:** After the owner merges the `feat-008` PR to `main`, start `feat-010` (*Spike: query-time embedding runtime* in `docs/spikes/10-embedding-runtime.md`).
-- **Waiting on owner:** Merge the `feat-008` PR to `main`. Before `feat-011`: put LLM API keys in local `.env`.
-- **Unverified:** CI on the `feat-008` PR.
+- **Active feature:** `feat-010` (Spike: query-time embedding runtime in `docs/spikes/10-embedding-runtime.md`), branch `spike/embedding-runtime` (`done`, waiting for owner PR merge).
+- **State:** `feat-010` completed (`status: answered` in `docs/spikes/10-embedding-runtime.md`): answered Q1–Q6 choosing `BAAI/bge-small-en-v1.5` (`384-d`) via `fastembed` (ONNX Runtime CPU) (`p50=5.04ms`, `p95=5.88ms`, `279.1 MB` query-time RSS, `+212.2 MB` added image size, `0.58s` cold start, `11.77 min` for 20k profiles on CPU, `0.999999` cosine parity with PyTorch).
+- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-15 17:39 CET, Mac.
+- **Next step:** After the owner merges the `feat-010` PR to `main` and puts LLM API keys (`GEMINI_API_KEY` and/or `OPENAI_API_KEY`) in `.env`, start `feat-011` (*Spike: runtime LLM* in `docs/spikes/11-runtime-llm.md`).
+- **Waiting on owner:** Merge the `feat-010` PR to `main`; put LLM API keys in local `.env` before starting `feat-011`.
+- **Unverified:** CI on the `feat-010` PR.
 
 ## Log (newest first, 1 line each; full details in `docs/handoffs/`)
+- 2026-11-15 · Mac · Antigravity · `feat-010`: answered embedding runtime spike Q1–Q6 (`fastembed` `bge-small-en-v1.5` 384-d: `p50=5.04ms`, `279MB` RSS, `212MB` disk) → [feat-010.md](docs/handoffs/feat-010.md)
 - 2026-11-15 · Mac · Antigravity · `feat-008`: answered TMDB terms, rate limits (25.2 req/s), ES/US/BO coverage, and 24.5h provider churn → [feat-008.md](docs/handoffs/feat-008.md)
 - 2026-11-15 · Mac · Antigravity · `feat-009`: answered Atlas M0 + `atlas-local` vector search spike Q1–Q5 (`p50=60.5ms`/`p95=120.8ms`, 5-way pre-filter, 20k storage) → [feat-009.md](docs/handoffs/feat-009.md)
 - 2026-11-14 · Mac · Antigravity · `feat-015`: split state/log docs into slim index files + per-entry files in `docs/{handoffs,learning,harness-log}/` → [feat-015.md](docs/handoffs/feat-015.md)

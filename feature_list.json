@@ -1,17 +1,6 @@
 {
   "features": [
     {
-      "id": "feat-010",
-      "type": "spike",
-      "name": "Spike: query-time embedding runtime",
-      "description": "Answer the questions in docs/spikes/10-embedding-runtime.md: embedding model, container size and memory on free hosting tiers.",
-      "stories": ["US1"],
-      "status": "todo",
-      "dependencies": ["feat-005"],
-      "spec": "docs/spikes/10-embedding-runtime.md",
-      "evidence": ""
-    },
-    {
       "id": "feat-011",
       "type": "spike",
       "name": "Spike: runtime LLM",
