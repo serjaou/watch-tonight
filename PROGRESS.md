@@ -1,24 +1,15 @@
 # Progress
 
 ## Now
-- **Active feature:** none on this branch. `feat-009` (Spike: Atlas free tier and vector search) is `done` on branch `spike/atlas-vector-search`; its PR waits for the owner's merge. (`feat-008` Session 1 WIP is saved on `origin/spike/tmdb-and-providers` waiting ≥24h after `2026-11-14T14:48:37Z` — until `2026-11-15 15:49 CET` — for Snapshot 2.)
-- **State:** `feat-009` delivered:
-  - `spikes/09-atlas/probe_atlas.py` and `spikes/09-atlas/report.json` (probed both live Atlas M0 `MongoDB 8.0.37` and local `mongodb/mongodb-atlas-local:latest` `MongoDB 9.0.4` on Mac ARM Colima via `pymongo 4.20.0` `AsyncMongoClient`);
-  - answered all 5 questions in `docs/spikes/09-atlas-vector-search.md` (`status: answered`) and `docs/metrics.md` §1.4:
-    - **Q1:** M0 512 MiB limit, max 3 search/vector indexes, max 8,192 dims; 20k synthetic movies fit at 384-d (`120.85 MiB` logical / `108.76 MiB` disk = `~27.6%` w/ HNSW), 768-d (`216.05 MiB` = `~54.2%` w/ HNSW), and 1024-d (`279.72 MiB` = `~70.5%` w/ HNSW); `Binary.from_vector(..., FLOAT32)` cuts vector BSON by `68.2%` (`17.4%–36.5%` of M0);
-    - **Q2:** all 5 pre-filters (`streamable` `$in`, `runtime` `$lte`, `_id` `$nin`, `profile.intensity` `$lte`, `profile.content_warnings` `$nin`) combine in one `$vectorSearch` (`40/40` valid, `0` violations; `_id` `$nin` verified up to `5,000` IDs);
-    - **Q3:** `mongodb/mongodb-atlas-local` (`linux/arm64` + `linux/amd64`) matched Atlas M0 bit-for-bit; index ready in `4.64 s` (50-doc fixture) / `9.23 s` (20k docs locally) vs `50.83 s` (20k docs on M0); documented Colima in `README.md`;
-    - **Q4:** `pymongo.AsyncMongoClient` replaces deprecated `Motor` and supports programmatic `SearchIndexModel` create/list/update/drop;
-    - **Q5:** 50-query filtered `$vectorSearch` over 20k docs on M0: `p50 = 60.50 ms`, `p95 = 120.78 ms` (`atlas-local`: `p50 = 15.35 ms`, `p95 = 20.98 ms`).
-- **Last check:** `uv run poe check` green, 2026-11-15 11:36 CET, Mac (ruff check + format check passed, pyright strict 0 errors, import-linter 2/2 kept, pytest 26 passed in 0.78s); reviewer round 1: "No findings".
-- **Next step:** After merging `feat-009`, either start `feat-010` (Spike: query-time embedding runtime in `docs/spikes/10-embedding-runtime.md`, ready now) or switch to `spike/tmdb-and-providers` (merge `main` into it) on or after `2026-11-15 15:49 CET` to capture Snapshot 2 and finish `feat-008` Q7.
-- **Waiting on owner:**
-  1. Review and merge the `feat-009` PR (`spike/atlas-vector-search` → `main`).
-  2. Wait until `2026-11-15 15:49 CET` (≥24h after Snapshot 1) to run Session 2 of `feat-008` on `spike/tmdb-and-providers` (or reorder `feat-010` ahead in `feature_list.json`).
-  3. Before `feat-011`: put LLM API keys in local `.env`.
-- **Unverified:** CI on the `feat-009` PR; optional Windows `x86_64` run of `probe_atlas.py --target local` (OCI `linux/amd64` manifest verified).
+- **Active feature:** `feat-008` (Spike: TMDB terms, rate limits and watch providers in `docs/spikes/08-tmdb-and-providers.md`), branch `spike/tmdb-and-providers` (`done`, waiting for owner PR merge).
+- **State:** `feat-008` completed across 2 sessions (`status: answered` in `docs/spikes/08-tmdb-and-providers.md`): answered Q1–Q8, Q12, and Q13 (`25.2 req/s`, `0` `429`s, ES/US/BO flat-rate coverage, `0.0%` missing `poster_path`, and 24.5h provider churn across Popular 500: ES `2.2%`, US `2.6%`, BO `0.6%`; `1–3` brand-new flat-rate releases/day per country).
+- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-15 16:23 CET, Mac.
+- **Next step:** After the owner merges the `feat-008` PR to `main`, start `feat-010` (*Spike: query-time embedding runtime* in `docs/spikes/10-embedding-runtime.md`).
+- **Waiting on owner:** Merge the `feat-008` PR to `main`. Before `feat-011`: put LLM API keys in local `.env`.
+- **Unverified:** CI on the `feat-008` PR.
 
 ## Log (newest first, 1 line each; full details in `docs/handoffs/`)
+- 2026-11-15 · Mac · Antigravity · `feat-008`: answered TMDB terms, rate limits (25.2 req/s), ES/US/BO coverage, and 24.5h provider churn → [feat-008.md](docs/handoffs/feat-008.md)
 - 2026-11-15 · Mac · Antigravity · `feat-009`: answered Atlas M0 + `atlas-local` vector search spike Q1–Q5 (`p50=60.5ms`/`p95=120.8ms`, 5-way pre-filter, 20k storage) → [feat-009.md](docs/handoffs/feat-009.md)
 - 2026-11-14 · Mac · Antigravity · `feat-015`: split state/log docs into slim index files + per-entry files in `docs/{handoffs,learning,harness-log}/` → [feat-015.md](docs/handoffs/feat-015.md)
 - 2026-11-13 · Mac · Antigravity · `feat-006`: added `docs/metrics.md` and `/handoff` process tracking → [feat-006.md](docs/handoffs/feat-006.md)
