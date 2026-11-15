@@ -136,9 +136,8 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
 | Q6 | Runtime LLM: provider and model (Gemini free tier vs a low-cost OpenAI model), cost per query and per 1,000 profiles, data use, structured output (incl. non-English input), latency, framework (Pydantic AI vs SDK), fallback provider | feat-011 | `LanguageModel`, enrichment cost, latency budget, privacy note |
 | Q7 | p95 latency target (product.md: to confirm, guess < 10 s) | Measured in the first end-to-end slice (feat-012 plans it) | Number of LLM calls, caching |
 | Q12 | How often do ingest, enrich and embed re-run to add newly streamable movies? | feat-008 (rate of change), then feat-012 | Job schedule, LLM and embedding cost |
-| Q13 | Movies without a TMDB poster: show a placeholder, or leave them out of the corpus? | Owner, with feat-008's numbers (how many lack one) | Corpus, UI, US1 acceptance |
 
-### Decided (owner, 2026-11-13)
+### Decided (owner, 2026-11-13 / 2026-11-14)
 
 | # | Question | Decision | Recorded in |
 |---|---|---|---|
@@ -146,3 +145,4 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
 | Q9 | Non-English input | Any input language; UI, titles and pitches in English, and the UI says so. The LLM writes the intent in English. | product.md §2, query step 2 |
 | Q10 | Frontend framework | React. Tooling is decided in the UI slice. | §1 |
 | Q11 | How "avoid" and intensity constraints are checked | The LLM translates the free text into structured filters over a closed vocabulary shared with the profile schema; the data layer applies them deterministically (as Atlas pre-filters if supported, feat-009) and step 4 re-checks them. Defining the vocabulary is part of the profile feature (§4); the ADR comes with feat-012. | product.md P3, query steps 2–4 |
+| Q13 | Movies without a TMDB poster | Leave movies without a `poster_path` out of the corpus at ingest time (`0/500` popular and `0/480` deep-sampled flat-rate movies lacked one in `feat-008`; no UI placeholder needed). | docs/spikes/08-tmdb-and-providers.md Q6, §4 |
