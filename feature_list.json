@@ -1,17 +1,6 @@
 {
   "features": [
     {
-      "id": "feat-008",
-      "type": "spike",
-      "name": "Spike: TMDB terms, rate limits and watch providers",
-      "description": "Answer the questions in docs/spikes/08-tmdb-and-providers.md: TMDB terms, rate limits, image linking, missing posters and watch-provider coverage for ES, US and BO.",
-      "stories": ["US1"],
-      "status": "todo",
-      "dependencies": ["feat-005"],
-      "spec": "docs/spikes/08-tmdb-and-providers.md",
-      "evidence": ""
-    },
-    {
       "id": "feat-010",
       "type": "spike",
       "name": "Spike: query-time embedding runtime",

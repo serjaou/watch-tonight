@@ -1,6 +1,17 @@
 {
   "features": [
     {
+      "id": "feat-008",
+      "type": "spike",
+      "name": "Spike: TMDB terms, rate limits and watch providers",
+      "description": "Answer the questions in docs/spikes/08-tmdb-and-providers.md: TMDB terms, rate limits, image linking, missing posters and watch-provider coverage for ES, US and BO.",
+      "stories": ["US1"],
+      "status": "done",
+      "dependencies": ["feat-005"],
+      "spec": "docs/spikes/08-tmdb-and-providers.md",
+      "evidence": "docs/handoffs/feat-008.md — Q1-Q8 & Q12-Q13 answered (25.2 req/s, 24.5h churn); poe check green; reviewer: 1 (0)"
+    },
+    {
       "id": "feat-009",
       "type": "spike",
       "name": "Spike: Atlas free tier and vector search",
