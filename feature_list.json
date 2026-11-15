@@ -34,13 +34,24 @@
       "evidence": ""
     },
     {
+      "id": "feat-016",
+      "type": "spike",
+      "name": "Spike: Movie corpus selection, external signals, profile schema and hybrid ranking",
+      "description": "Answer the questions in docs/spikes/16-recommendation-signals-and-ranking.md: age-aware corpus selection (the 1984 problem), external signals (IMDb ratings TSV vs transient TMDB reviews), v1 movie & emotional profile schema, and hybrid ranking formula (vector similarity + Bayesian quality + era/popularity weighted by query specificity).",
+      "stories": ["US1", "US2"],
+      "status": "todo",
+      "dependencies": ["feat-008", "feat-009", "feat-010", "feat-011"],
+      "spec": "docs/spikes/16-recommendation-signals-and-ranking.md",
+      "evidence": ""
+    },
+    {
       "id": "feat-012",
       "type": "chore",
       "name": "Architecture refinement and MVP backlog slicing",
       "description": "Refine the architecture with the spike results (ADRs incl. Q11, open questions in docs/architecture.md §7) and slice the MVP backlog: thin end-to-end slice first; profile design (schema, closed vocabulary, prompt, owner-rated sample) as its own feature; slice mode and size rules in /spec.",
       "stories": [],
       "status": "todo",
-      "dependencies": ["feat-008", "feat-009", "feat-010", "feat-011"],
+      "dependencies": ["feat-008", "feat-009", "feat-010", "feat-011", "feat-016"],
       "spec": null,
       "evidence": ""
     }
