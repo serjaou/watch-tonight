@@ -1,6 +1,17 @@
 {
   "features": [
     {
+      "id": "feat-010",
+      "type": "spike",
+      "name": "Spike: query-time embedding runtime",
+      "description": "Answer the questions in docs/spikes/10-embedding-runtime.md: embedding model, container size and memory on free hosting tiers.",
+      "stories": ["US1"],
+      "status": "done",
+      "dependencies": ["feat-005"],
+      "spec": "docs/spikes/10-embedding-runtime.md",
+      "evidence": "docs/handoffs/feat-010.md — Q1-Q6 answered (fastembed bge-small-en-v1.5 384d: p50=5.04ms, 279MB RSS, 212MB disk); poe check green; reviewer: 1 (0)"
+    },
+    {
       "id": "feat-008",
       "type": "spike",
       "name": "Spike: TMDB terms, rate limits and watch providers",
