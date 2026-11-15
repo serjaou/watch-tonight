@@ -20,7 +20,7 @@ Before we lock the MongoDB schema and slice the MVP in `feat-012`, we want **80�
 - **Streamable flat-rate in ES, US, and BO (`feat-008`):** Across subscription services in Spain (`ES`), the United States (`US`), and Bolivia (`BO`), there are roughly **25,000–35,000 unique movies** available on flat-rate subscriptions (`flatrate`), of which **~10,000–20,000** have meaningful audience engagement.
 - **Atlas M0 storage ceiling (`feat-009`):** Our empirical probe (`spikes/09-atlas/report.json`) proved that **20,000 full movie documents + vectors + HNSW vector index** fit comfortably inside MongoDB Atlas M0's free `512 MiB` limit at every candidate dimension (`~27.6%` at 384-d, `~54.2%` at 768-d, `~70.5%` at 1024-d with float64 arrays, or **`17.4%–36.5%`** using `bson.binary.Binary.from_vector(..., FLOAT32)`).
 
-### 1.2 How ingestion works (`feat-008`, `docs/architecture.md` §4)
+### 1.2 How ingestion works & what to do with unstreamable movies (`feat-008`, `docs/architecture.md` §4)
 1. **Candidate discovery:** Query TMDB `/discover/movie` (`watch_region=ES|US|BO`, `with_watch_monetization_types=flatrate`) to collect candidate TMDB movie IDs that are streamable in at least one launch country.
    - *Finding from `feat-008` Q4:* `/discover/movie` has a hard 500-page (`10,000`-result) pagination cap per query and cannot be filtered per provider reliably due to cross-provider monetization bleed. Therefore, `/discover/movie` is used **only** to gather candidate movie IDs (sliced by popularity/vote count/release window if >10k), never to assign `streamable` provider tags.
 2. **Per-movie bundle fetch (`1` HTTP call per movie):**
@@ -28,6 +28,15 @@ Before we lock the MongoDB schema and slice the MVP in `feat-012`, we want **80�
    - Measured throughput in `feat-008` Q3: **25.2 req/s** (`10` concurrent workers, `0` HTTP `429`s), meaning **20,000 movies take ~14 minutes** to fetch.
 3. **Daily availability refresh:**
    - Queries `/movie/{id}/watch/providers` per stored movie and extracts `results[country]["flatrate"]` (for `ES`, `US`, `BO` in one call) to rewrite `streamable: ["ES:8", "US:337", ...]` and `availability_updated_at` (P1, P6).
+4. **Should we pre-ingest movies that are NOT currently streamable? (Lifecycle & retention trade-off):**
+   - **Why pre-ingesting *all* unstreamable movies is a bad idea:**
+     - **We only detect availability changes once a day anyway** (during the daily refresh job, never mid-query). When a new movie becomes streamable on Netflix/Prime/Disney+, running `/discover/movie?...&with_watch_monetization_types=flatrate` at the start of the daily job finds those newly streamable IDs in ~30 seconds, and ingesting + enriching + embedding the **~10–50 movies that became newly streamable that day** takes **under 1 minute**.
+     - **Storage & HNSW index budget (`feat-009`):** Every movie stored with a vector in `movies` consumes Atlas M0's `512 MiB` quota and bloats the HNSW vector graph (`mongot` indexes every vector in the collection even if `streamable: []` filters it out at query time).
+     - **Enrichment & refresh cost:** Paying LLM tokens to enrich 30,000 unstreamable movies that may never hit flat-rate in ES/US/BO wastes enrichment budget and slows down daily refresh.
+   - **What we *should* do instead (The "Keep on Churn + Optional High-Priority Buffer" policy):**
+     1. **Never delete a stored movie when it leaves streaming (`streamable: []`):** Once a movie has been ingested, enriched, and embedded, if it rotates off Netflix/Prime later, we **keep the document in MongoDB with `streamable: []`**. Its LLM profile and vector are already paid for, so if it returns to streaming 2 months later, the daily refresh simply updates `streamable: ["ES:8"]` and it is searchable again in 0 seconds with zero LLM cost!
+     2. **Daily delta ingest of newly streamable titles:** Run candidate discovery along with the daily refresh (or every few days, informed by `feat-008` Q7 churn numbers) and immediately run `Ingest → Enrich → Embed` on the small delta of newly streamable movies that pass our quality gate.
+     3. *(Optional evaluated in Q1 below):* Pre-ingest a small buffer (~500–1,000) of **brand-new theatrical releases** (`popularity` top tier from the last 6 months not yet on flat-rate), since those are the #1 movies likely to land on streaming next and the most valuable if we later add the "rent/buy opt-in" feature (`docs/product.md` §8).
 
 ### 1.3 What TMDB provides in that single per-movie call (`feat-008` Q6)
 From our 500-movie popular probe + 480-movie deep flat-rate probe (`spikes/08-tmdb/report.json`), a single `/movie/{id}?append_to_response=...` response provides:
@@ -79,12 +88,18 @@ If Step 3 simply takes the top 30–50 movies by raw vector cosine similarity (`
      (where $R$ is the movie's rating, $v$ is its vote count, $C$ is the corpus mean rating, and $m$ is the prior weight, e.g. $m = 500$ votes) gives a single calibrated `0–10` quality prior.
   3. **Era / Recency decay & Trending boost (`popularity`):** Test a gentle age discount on non-classic older titles alongside a logarithmic boost from `popularity` (current cultural momentum), deactivated when the user asks for older/classic cinema.
 
-### Gap B: User Prompt Specificity (Broad/Vague vs. Hyper-Specific Queries)
+### Gap B: User Prompt Specificity & The "Mirror Schema" Between LLM Step 2 and Movie Data
 - **Problem:**
   - **Broad prompt:** *"I feel tired, give me something easy to watch"* → 3,000 movies in the corpus match "easy to watch". Small differences in cosine similarity (`0.78` vs `0.75`) are mostly embedding noise. Here, **quality (`WR`), crowd appeal (`vote_count`), and trending (`popularity`)** must drive candidate ranking.
   - **Specific prompt:** *"A slow-burn sci-fi mystery where a small crew is trapped on a spaceship or station and paranoia sets in"* → Only ~15–30 movies truly fit. Here, **semantic similarity (`vectorSearchScore`)** must dominate so a `6.9`-rated exact match (*Sunshine* or *Moon*) beats a `8.5`-rated unrelated drama.
-- **What we need to design & test:**
-  - Add `specificity` (`"broad" | "medium" | "specific"`) and optional soft intent signals (`era_preference`, `mainstream_vs_indie`) to Step 2's `QueryIntent` schema, and use `specificity` to dynamically weight `semantic_score` vs. `quality_score` vs. `popularity_score` in Step 4!
+- **Core Architectural Principle — The 3-Channel Mirror Schema (`Understand` $\leftrightarrow$ `movies`):**
+  For the online LLM (Step 2 `Understand`) to translate a free-text prompt into a high-precision retrieval + ranking call, **every parameter Step 2 outputs must map 1-to-1 onto a field stored on the movie document**:
+
+  | Channel | What Step 2 (`Understand` LLM) extracts from the user prompt | What `movies` / `movies.profile` stores offline to match it | How it is applied |
+  |---|---|---|---|
+  | **1. Hard Atlas `$vectorSearch` Pre-Filters** | • `max_runtime` (`int \| null`)<br>• `max_intensity` (`1..5 \| null`)<br>• `avoid_warnings` (`list[ContentWarning]`)<br>• `year_min` / `year_max` (`int \| null`, e.g. *"80s movie"* → `1980..1989`, *"recent"* → `2020..2026`) | • `streamable` (`["ES:8", ...]`)\<br>• `runtime` (`int`)<br>• ` year` (`int`, indexed as `filter`!)<br>• `profile.intensity` (`1..5`)<br>• `profile.content_warnings` (`list[str]`) | Pushed directly into `$vectorSearch.filter` (`$and`) so Atlas only scores candidates that obey all hard constraints. |
+  | **2. Symmetric Embedding Template** | • `target_tone` (`list[Tone]`)<br>• `target_pacing` (`Pacing \| null`)<br>• `target_effort` (`ViewingEffort \| null`)<br>• `target_ending` (`EndingFeel \| null`)<br>• `target_themes` (`list[str]`)<br>• `semantic_description` (`str`, 2–3 sentences in movie-profile style) | • `profile.tone`<br>• `profile.pacing`<br>• `profile.viewing_effort`<br>• `profile.ending_feel`<br>• `profile.themes`<br>• `profile.summary` | Both the movie offline and the query online are formatted into the **exact same structured text template** before embedding: `Tone: ... \| Pacing: ... \| Effort: ... \| Ending: ... \| Themes: ... \| Summary: ...`. This aligns the query vector and movie vector in the same semantic subspace. |
+  | **3. Deterministic Hybrid Ranking Controls (Step 4)** | • `specificity`: `"broad" \| "medium" \| "specific"`<br>• `era_mode`: `"modern_default" \| "classic_or_any_era"` (disables recency decay when the user asks for *"classics"*, *"old school"*, or a past decade!)<br>• `acclaim_preference`: `"crowd_pleaser" \| "critically_acclaimed" \| "hidden_gem" \| "any"` | • `quality_score` (Bayesian `WR` combining IMDb + TMDB / RT)<br>• `imdb_rating`, `imdb_votes`<br>• `rt_tomatometer` *(if available)*<br>• `tmdb_popularity`<br>• `year`<br>• `collection_id` (`belongs_to_collection`) | Step 4 re-scores the top $K$ (`100`) vector candidates deterministically using `specificity` and `era_mode`, deduplicates franchises (`collection_id`), and passes the top `25–30` with their structured fields + scores to Step 5 (`Re-rank & pitch`). |
 
 ### Gap C: External Enrichment Sources (Value vs. Complexity/Cost)
 What external data beyond TMDB's basic metadata can make our quality priors and emotional profiles significantly better while keeping our **$0 budget** (`docs/product.md` §1) and legal terms?
@@ -95,8 +110,10 @@ What external data beyond TMDB's basic metadata can make our quality priors and 
 2. **Transient TMDB `reviews` & `keywords` during offline LLM enrichment:**
    - Already fetched in the same single TMDB HTTP call (`append_to_response=keywords,reviews`).
    - Testing whether passing truncated review excerpts transiently to the offline enrichment prompt (without storing raw reviews in MongoDB, and using an LLM API tier that does not train on inputs) improves the accuracy of `tone`, `pacing`, `viewing_effort`, and `ending_feel`.
-3. **Wikidata / Wikipedia plot & reception or OMDb (Rotten Tomatoes / Metacritic):**
-   - Evaluate whether OMDb (1,000/day free cap → bottleneck for 20k movies) or Wikipedia reception summaries add enough signal over `TMDB + IMDb TSV` to justify any extra complexity, or if `TMDB + IMDb TSV` already hits the 90% sweet spot.
+3. **Wikidata / OMDb (Rotten Tomatoes / Metacritic) / Wikipedia reception:**
+   - **Wikidata SPARQL / dump (`$0`, public domain CC0):** Wikidata stores Rotten Tomatoes IDs, Metacritic scores, Academy Award / festival wins, and links to English Wikipedia articles keyed by `imdb_id` (`P345`) or TMDB ID (`P4947`).
+   - **OMDb API (`imdb_id` → Rotten Tomatoes `%`, Metacritic score, `Awards` string):** Free key allows 1,000 calls/day (or $1/month Patron key allows 100,000 calls/day — within our "small spend is fine when it clearly improves quality with owner approval" rule in `docs/product.md` §1).
+   - We will test in Question 2 whether adding **Rotten Tomatoes / Metacritic / Awards** (via Wikidata or OMDb) on top of **IMDb `title.ratings.tsv.gz` + TMDB** materially improves ranking (especially for separating "critically acclaimed indie" from "popular crowd-pleaser").
 
 ### Gap D: Richer Emotional Profile Schema & Diversity in the Final 5
 - **Profile dimensions that matter for mood selection:**
@@ -113,21 +130,26 @@ What external data beyond TMDB's basic metadata can make our quality priors and 
 
 Each answer must include the finding, empirical evidence from `spikes/16-recommendation/`, and what it changes in `docs/architecture.md`.
 
-1. **Corpus selection & "the 1984 problem".**
+1. **Corpus selection, "the 1984 problem", and unstreamable movie retention.**
    - Across TMDB's flat-rate streamable catalog for ES, US, and BO, how many movies survive different quality/engagement gates (e.g. `vote_count` + age-adjusted minimum votes/rating)?
    - What corpus admission rule gives us the best 10k–20k movie pool where older movies (pre-2000) are iconic/well-regarded classics while recent releases (last 1–3 years) aren't unfairly filtered out by lower cumulative vote counts?
-   - *Changes:* Ingest job filtering rules, target corpus size (`docs/architecture.md` §4).
+   - **Unstreamable retention & buffer policy:** Confirm the storage/refresh impact of keeping previously enriched movies when they rotate off streaming (`streamable: []`) vs. pre-ingesting a small buffer (~500–1,000) of recent high-popularity theatrical releases before they land on flat-rate streaming.
+   - *Changes:* Ingest & Refresh job rules, target corpus size (`docs/architecture.md` §4).
 
-2. **External data sources (`IMDb TSV`, transient `TMDB reviews`, etc.).**
+2. **External data sources (`IMDb TSV`, `Rotten Tomatoes / Metacritic / Awards`, transient `TMDB reviews`).**
    - How many of our sampled TMDB streamable movies have a valid `imdb_id` that matches `title.ratings.tsv.gz` from `datasets.imdbws.com`, and how much does combining IMDb `averageRating` + `numVotes` with TMDB `vote_average` + `vote_count` + `popularity` improve the Bayesian quality score (`WR`)?
-   - What are the exact licensing/non-commercial terms of `datasets.imdbws.com` for a public portfolio project (`docs/product.md` §1)?
-   - Does passing transient TMDB `reviews` (or Wikipedia reception) to the offline enrichment LLM noticeably improve profile accuracy over `overview + tagline + keywords + genres + credits` alone, or is `TMDB bundle + IMDb ratings TSV` the optimal 90% design?
+   - Can we also enrich movies with **Rotten Tomatoes / Metacritic / Awards** (via free Wikidata SPARQL/dumps or OMDb) and does that materially improve separating "critically acclaimed" from "mainstream crowd-pleaser"?
+   - What are the exact licensing/non-commercial terms of `datasets.imdbws.com` (and Wikidata/OMDb if used) for a public portfolio project (`docs/product.md` §1)?
+   - Does passing transient TMDB `reviews` to the offline enrichment LLM noticeably improve profile accuracy over `overview + tagline + keywords + genres + credits` alone?
    - *Changes:* Offline pipeline inputs (`docs/architecture.md` §1 & §4), attribution (`P5` if applicable), `movies` schema (§5).
 
-3. **Movie document & Emotional Profile schema (locking 80–90% before `feat-012`).**
-   - What is the concrete v1 schema for `movies` and `movies.profile` (including closed-vocabulary enums for `tone`, `pacing`, `intensity`, `viewing_effort`, `ending_feel`, `content_warnings`, plus the text `summary` that gets embedded)?
-   - What exact text template should be fed to the embedding model (just `profile.summary`, or a structured concatenation of `tone + pacing + viewing_effort + ending_feel + themes + summary`)?
-   - *Changes:* `docs/architecture.md` §3 (step 2 & step 4 closed vocabulary) and §5 (`movies` document schema).
+3. **Mirror Schema: `QueryIntent` (Step 2) $\leftrightarrow$ `movies` & `movies.profile` (locking 80–90% before `feat-012`).**
+   - What is the concrete v1 schema for `movies` and `movies.profile` (including closed-vocabulary enums for `tone`, `pacing`, `intensity`, `viewing_effort`, `ending_feel`, `humor_style`, `content_warnings`, plus `year`, `quality_score`, `imdb_rating`, `imdb_votes`, `collection_id`, and `summary`)?
+   - What is the exact mirroring `QueryIntent` schema output by Step 2 (`Understand`) across all 3 channels:
+     1. Hard `$vectorSearch` pre-filters (`streamable`, `runtime`, `_id`, `profile.intensity`, `profile.content_warnings`, plus `year` range when the user specifies a decade/era);
+     2. Symmetric structured text template for embedding (aligning query embedding format 1-to-1 with movie embedding format);
+     3. Step 4 hybrid ranking controls (`specificity`, `era_mode` to disable recency decay when the user asks for *"classics"* or a past era, `acclaim_preference`, `preferred_viewing_effort`, `preferred_ending_feel`)?
+   - *Changes:* `docs/architecture.md` §3 (steps 2, 3, and 4) and §5 (`movies` document schema).
 
 4. **Hybrid retrieval & ranking formula (Vector + Quality + Era/Recency + Popularity + Specificity).**
    - Since Atlas `$vectorSearch` orders candidates purely by vector similarity (`numCandidates` → top $K$), how many candidates should Step 3 retrieve ($K = 50$ vs $K = 100$ vs $K = 150$) so that high-quality matches aren't crowded out before Step 4's hybrid re-scoring?
