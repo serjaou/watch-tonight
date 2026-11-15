@@ -12,17 +12,6 @@
       "evidence": ""
     },
     {
-      "id": "feat-009",
-      "type": "spike",
-      "name": "Spike: Atlas free tier and vector search",
-      "description": "Answer the questions in docs/spikes/09-atlas-vector-search.md about the Atlas free tier, vector-search pre-filters and the atlas-local image.",
-      "stories": ["US1", "US2"],
-      "status": "todo",
-      "dependencies": ["feat-005"],
-      "spec": "docs/spikes/09-atlas-vector-search.md",
-      "evidence": ""
-    },
-    {
       "id": "feat-010",
       "type": "spike",
       "name": "Spike: query-time embedding runtime",

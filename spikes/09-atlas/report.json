@@ -1,0 +1,434 @@
+{
+  "generated_at": "2026-11-15T10:29:54.290582+00:00",
+  "bson_size_models": {
+    "384d": {
+      "avg_bson_bytes_per_doc_float64_array": 6326.8,
+      "avg_bson_bytes_per_doc_float32_binary": 2982.8,
+      "metadata_bson_bytes": 1423.8,
+      "vector_float64_array_bson_bytes": 4903,
+      "vector_float32_binary_bson_bytes": 1559,
+      "est_20k_uncompressed_bson_mb_float64_array": 120.67,
+      "est_20k_uncompressed_bson_mb_float32_binary": 56.89,
+      "est_20k_hnsw_index_mb": 32.35,
+      "est_20k_total_uncompressed_mb_float64_array": 153.02,
+      "est_20k_total_uncompressed_mb_float32_binary": 89.24,
+      "pct_of_512mb_m0_limit_uncompressed_float64_array": 29.9,
+      "pct_of_512mb_m0_limit_uncompressed_float32_binary": 17.4
+    },
+    "768d": {
+      "avg_bson_bytes_per_doc_float64_array": 11320.2,
+      "avg_bson_bytes_per_doc_float32_binary": 4520.2,
+      "metadata_bson_bytes": 1425.2,
+      "vector_float64_array_bson_bytes": 9895,
+      "vector_float32_binary_bson_bytes": 3095,
+      "est_20k_uncompressed_bson_mb_float64_array": 215.92,
+      "est_20k_uncompressed_bson_mb_float32_binary": 86.22,
+      "est_20k_hnsw_index_mb": 61.65,
+      "est_20k_total_uncompressed_mb_float64_array": 277.57,
+      "est_20k_total_uncompressed_mb_float32_binary": 147.87,
+      "pct_of_512mb_m0_limit_uncompressed_float64_array": 54.2,
+      "pct_of_512mb_m0_limit_uncompressed_float32_binary": 28.9
+    },
+    "1024d": {
+      "avg_bson_bytes_per_doc_float64_array": 14665.5,
+      "avg_bson_bytes_per_doc_float32_binary": 5537.5,
+      "metadata_bson_bytes": 1418.5,
+      "vector_float64_array_bson_bytes": 13247,
+      "vector_float32_binary_bson_bytes": 4119,
+      "est_20k_uncompressed_bson_mb_float64_array": 279.72,
+      "est_20k_uncompressed_bson_mb_float32_binary": 105.62,
+      "est_20k_hnsw_index_mb": 81.18,
+      "est_20k_total_uncompressed_mb_float64_array": 360.9,
+      "est_20k_total_uncompressed_mb_float32_binary": 186.8,
+      "pct_of_512mb_m0_limit_uncompressed_float64_array": 70.5,
+      "pct_of_512mb_m0_limit_uncompressed_float32_binary": 36.5
+    }
+  },
+  "atlas_m0": {
+    "target": "atlas_m0",
+    "host_redacted": "cluster0.n32tseq.mongodb.net",
+    "mongodb_version": "8.0.37",
+    "pymongo_version": "4.20.0",
+    "async_client_class": "pymongo.asynchronous.mongo_client.AsyncMongoClient",
+    "corpus_384d": {
+      "insert": {
+        "doc_count": 20000,
+        "dims": 384,
+        "insert_seconds": 65.08
+      },
+      "coll_stats": {
+        "count": 20000,
+        "avg_obj_size_bytes": 6335,
+        "uncompressed_bson_mb": 120.85,
+        "wiredtiger_storage_mb": 108.17,
+        "btree_index_mb": 0.59,
+        "total_collection_disk_mb": 108.76,
+        "pct_of_512mb_m0_limit_disk": 21.24,
+        "pct_of_512mb_m0_limit_logical": 23.6
+      }
+    },
+    "corpus_768d": {
+      "insert": {
+        "doc_count": 20000,
+        "dims": 768,
+        "insert_seconds": 121.86
+      },
+      "coll_stats": {
+        "count": 20000,
+        "avg_obj_size_bytes": 11327,
+        "uncompressed_bson_mb": 216.05,
+        "wiredtiger_storage_mb": 290.23,
+        "btree_index_mb": 1.34,
+        "total_collection_disk_mb": 291.57,
+        "pct_of_512mb_m0_limit_disk": 56.95,
+        "pct_of_512mb_m0_limit_logical": 42.2
+      }
+    },
+    "search_index_lifecycle": {
+      "created_via": "collection.create_search_index(SearchIndexModel(..., type='vectorSearch'))",
+      "updated_via_code": true,
+      "initial_build_384d": {
+        "ready": true,
+        "elapsed_seconds": 50.83,
+        "statuses_seen": [
+          "PENDING@0.4s",
+          "BUILDING@29.67s",
+          "READY@50.83s"
+        ],
+        "index_meta": {
+          "id": "6af8a11f4b30cb4dd7677782",
+          "name": "movies_vector_idx",
+          "type": "vectorSearch",
+          "status": "READY",
+          "queryable": true
+        }
+      }
+    },
+    "prefilter_verification": {
+      "combined_filter": {
+        "streamable_in": [
+          "ES:8",
+          "ES:337",
+          "ES:119"
+        ],
+        "runtime_lte": 120,
+        "exclude_ids_count": 50,
+        "intensity_lte": 3,
+        "content_warnings_nin": [
+          "sexual_violence",
+          "animal_harm",
+          "self_harm"
+        ]
+      },
+      "returned_count": 40,
+      "violations_count": 0,
+      "empty_warnings_docs_returned": 26,
+      "non_empty_disjoint_warnings_docs_returned": 14,
+      "all_constraints_satisfied": true,
+      "unindexed_field_filter_error": "OperationFailure: PlanExecutor error during aggregation :: caused by :: Path 'year' needs to be indexed as filter, full error: {'ok': 0.0, 'errmsg': \"PlanExecutor error during aggregation :: caused by :: Path 'year' needs to be indexed as filter\", 'code': 8, 'codeName': 'UnknownError', '$clusterTime': {'clusterTime': Timestamp(1794679123, 1), 'signature': {'hash': b\"\\xbc'LNZ\\x85}p\\x99M\\xae\\xbd\\x93\\xae\\xd9K\\x07\\x1eg\\xf4\", 'keyId': 7647247170982117379}}, 'operationTime': Timestamp(1794679123, 1)}",
+      "sample_top_3": [
+        {
+          "_id": 18602,
+          "title": "Synthetic Movie #18602: The Long Winding Road Ahead",
+          "runtime": 87,
+          "streamable": [
+            "ES:119",
+            "ES:8"
+          ],
+          "profile": {
+            "intensity": 2,
+            "content_warnings": []
+          },
+          "score": 0.579791247844696
+        },
+        {
+          "_id": 1056,
+          "title": "Synthetic Movie #1056: The Long Winding Road Ahead",
+          "runtime": 82,
+          "streamable": [
+            "BO:119",
+            "ES:8",
+            "US:1899"
+          ],
+          "profile": {
+            "intensity": 1,
+            "content_warnings": [
+              "gore"
+            ]
+          },
+          "score": 0.5737653970718384
+        },
+        {
+          "_id": 7423,
+          "title": "Synthetic Movie #7423: The Long Winding Road Ahead",
+          "runtime": 84,
+          "streamable": [
+            "US:1899",
+            "ES:337",
+            "BO:119",
+            "BO:337"
+          ],
+          "profile": {
+            "intensity": 2,
+            "content_warnings": [
+              "gore",
+              "substance_abuse"
+            ]
+          },
+          "score": 0.5728212594985962
+        }
+      ],
+      "exclude_ids_list_size_probes": {
+        "50": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 622.53
+        },
+        "100": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 998.0
+        },
+        "250": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 138.05
+        },
+        "500": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 72.01
+        },
+        "1000": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 74.22
+        },
+        "2000": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 136.23
+        },
+        "5000": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 93.83
+        }
+      }
+    },
+    "latency_384d": {
+      "runs": 50,
+      "numCandidates": 400,
+      "limit": 40,
+      "min_ms": 46.23,
+      "p50_ms": 60.5,
+      "mean_ms": 71.69,
+      "p90_ms": 115.75,
+      "p95_ms": 120.78,
+      "max_ms": 135.84
+    },
+    "cleaned_up": true
+  },
+  "local_darwin_arm64": {
+    "target": "local_darwin_arm64",
+    "host_redacted": "localhost",
+    "mongodb_version": "9.0.4",
+    "pymongo_version": "4.20.0",
+    "async_client_class": "pymongo.asynchronous.mongo_client.AsyncMongoClient",
+    "corpus_384d": {
+      "insert": {
+        "doc_count": 20000,
+        "dims": 384,
+        "insert_seconds": 13.96
+      },
+      "coll_stats": {
+        "count": 20000,
+        "avg_obj_size_bytes": 6335,
+        "uncompressed_bson_mb": 120.85,
+        "wiredtiger_storage_mb": 96.95,
+        "btree_index_mb": 0.52,
+        "total_collection_disk_mb": 97.62,
+        "pct_of_512mb_m0_limit_disk": 19.07,
+        "pct_of_512mb_m0_limit_logical": 23.6
+      }
+    },
+    "corpus_768d": null,
+    "search_index_lifecycle": {
+      "created_via": "collection.create_search_index(SearchIndexModel(..., type='vectorSearch'))",
+      "updated_via_code": false,
+      "local_warmup_wait_s": 0.57,
+      "fixture_50_docs_build_384d": {
+        "doc_count": 50,
+        "dims": 384,
+        "ready": true,
+        "elapsed_seconds": 4.64,
+        "statuses_seen": [
+          "PENDING@0.03s",
+          "BUILDING@3.1s",
+          "READY@4.64s"
+        ],
+        "index_meta": {
+          "id": "6af989a3bb738cc7002a867b",
+          "name": "movies_vector_idx",
+          "type": "vectorSearch",
+          "status": "READY",
+          "queryable": true
+        }
+      },
+      "initial_build_384d": {
+        "ready": true,
+        "elapsed_seconds": 9.23,
+        "statuses_seen": [
+          "PENDING@0.04s",
+          "BUILDING@1.57s",
+          "READY@9.23s"
+        ],
+        "index_meta": {
+          "id": "6af989b5bb738cc7002a867d",
+          "name": "movies_vector_idx",
+          "type": "vectorSearch",
+          "status": "READY",
+          "queryable": true
+        }
+      }
+    },
+    "prefilter_verification": {
+      "combined_filter": {
+        "streamable_in": [
+          "ES:8",
+          "ES:337",
+          "ES:119"
+        ],
+        "runtime_lte": 120,
+        "exclude_ids_count": 50,
+        "intensity_lte": 3,
+        "content_warnings_nin": [
+          "sexual_violence",
+          "animal_harm",
+          "self_harm"
+        ]
+      },
+      "returned_count": 40,
+      "violations_count": 0,
+      "empty_warnings_docs_returned": 26,
+      "non_empty_disjoint_warnings_docs_returned": 14,
+      "all_constraints_satisfied": true,
+      "unindexed_field_filter_error": "OperationFailure: Executor error during aggregate command on namespace: watch_tonight_spike_09.movies_synthetic :: caused by :: Path 'year' needs to be indexed as filter, full error: {'ok': 0.0, 'errmsg': \"Executor error during aggregate command on namespace: watch_tonight_spike_09.movies_synthetic :: caused by :: Path 'year' needs to be indexed as filter\", 'code': 8, 'codeName': 'UnknownError', '$clusterTime': {'clusterTime': Timestamp(1794738622, 2), 'signature': {'hash': b'\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00', 'keyId': 0}}, 'operationTime': Timestamp(1794738622, 2)}",
+      "sample_top_3": [
+        {
+          "_id": 18602,
+          "title": "Synthetic Movie #18602: The Long Winding Road Ahead",
+          "runtime": 87,
+          "streamable": [
+            "ES:119",
+            "ES:8"
+          ],
+          "profile": {
+            "intensity": 2,
+            "content_warnings": []
+          },
+          "score": 0.579791247844696
+        },
+        {
+          "_id": 1056,
+          "title": "Synthetic Movie #1056: The Long Winding Road Ahead",
+          "runtime": 82,
+          "streamable": [
+            "BO:119",
+            "ES:8",
+            "US:1899"
+          ],
+          "profile": {
+            "intensity": 1,
+            "content_warnings": [
+              "gore"
+            ]
+          },
+          "score": 0.5737653970718384
+        },
+        {
+          "_id": 7423,
+          "title": "Synthetic Movie #7423: The Long Winding Road Ahead",
+          "runtime": 84,
+          "streamable": [
+            "US:1899",
+            "ES:337",
+            "BO:119",
+            "BO:337"
+          ],
+          "profile": {
+            "intensity": 2,
+            "content_warnings": [
+              "gore",
+              "substance_abuse"
+            ]
+          },
+          "score": 0.5728212594985962
+        }
+      ],
+      "exclude_ids_list_size_probes": {
+        "50": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 236.77
+        },
+        "100": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 164.34
+        },
+        "250": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 29.66
+        },
+        "500": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 26.83
+        },
+        "1000": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 25.01
+        },
+        "2000": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 25.73
+        },
+        "5000": {
+          "ok": true,
+          "returned": 20,
+          "leaked": 0,
+          "latency_ms": 35.49
+        }
+      }
+    },
+    "latency_384d": {
+      "runs": 50,
+      "numCandidates": 400,
+      "limit": 40,
+      "min_ms": 11.24,
+      "p50_ms": 15.35,
+      "mean_ms": 16.35,
+      "p90_ms": 20.57,
+      "p95_ms": 20.98,
+      "max_ms": 30.99
+    },
+    "cleaned_up": true
+  }
+}

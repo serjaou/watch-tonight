@@ -1,6 +1,17 @@
 {
   "features": [
     {
+      "id": "feat-009",
+      "type": "spike",
+      "name": "Spike: Atlas free tier and vector search",
+      "description": "Answer the questions in docs/spikes/09-atlas-vector-search.md about the Atlas free tier, vector-search pre-filters and the atlas-local image.",
+      "stories": ["US1", "US2"],
+      "status": "done",
+      "dependencies": ["feat-005"],
+      "spec": "docs/spikes/09-atlas-vector-search.md",
+      "evidence": "docs/handoffs/feat-009.md — Q1-Q5 answered on Atlas M0 + atlas-local; poe check green; reviewer: 1 (0)"
+    },
+    {
       "id": "feat-015",
       "type": "chore",
       "name": "Split growing state and log docs into index files plus per-entry detail files",
