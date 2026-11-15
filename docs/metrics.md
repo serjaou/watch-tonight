@@ -45,7 +45,7 @@ Each spike records its full measurements in `docs/spikes/NN-slug.md` and updates
 | Spike | Key metrics to record | Measured value |
 |---|---|---|
 | `feat-008` (TMDB & providers) | Rate limit (req/s), time to ingest 20k movies, flat-rate movie count per provider in ES / US / BO, `%` missing `poster_path`, daily provider churn | *Pending `feat-008` ([08-tmdb-and-providers.md](spikes/08-tmdb-and-providers.md))* |
-| `feat-009` (Atlas vector search) | Free-tier storage for 20k docs (384-d vs 768/1024-d), pre-filter support (`streamable` + `runtime` + `_id` + `intensity` + `content_warnings`), `$vectorSearch` `p50` / `p95` ms, index ready time in `atlas-local` | *Pending `feat-009` ([09-atlas-vector-search.md](spikes/09-atlas-vector-search.md))* |
+| `feat-009` (Atlas vector search) | Free-tier storage for 20k docs (384-d vs 768/1024-d), pre-filter support (`streamable` + `runtime` + `_id` + `intensity` + `content_warnings`), `$vectorSearch` `p50` / `p95` ms, index ready time in `atlas-local` | **20k docs on M0 (512 MiB limit):** 384-d = `120.85 MiB` logical (`108.76 MiB` disk, `~27.6%` w/ HNSW; `~17.4%` with `FLOAT32` binary vectors), 768-d = `216.05 MiB` logical (`~54.2%` w/ HNSW; `~28.9%` binary), 1024-d = `279.72 MiB` logical (`~70.5%` w/ HNSW; `~36.5%` binary). **Pre-filters:** all 5 combine in 1 `$vectorSearch` (`40/40` valid, `0` violations; `_id` `$nin` verified up to `5,000` IDs; bit-for-bit identical on M0 and `atlas-local`). **Latency (M0, 20k docs):** `p50 = 60.5 ms`, `p95 = 120.8 ms` (`atlas-local` Mac ARM: `p50 = 15.35 ms`, `p95 = 20.98 ms`). **Index ready time:** `atlas-local` = **`4.64 s`** (50-doc fixture) / **`9.23 s`** (20k docs); M0 = `50.83 s` (20k docs) ([09-atlas-vector-search.md](spikes/09-atlas-vector-search.md)) |
 | `feat-010` (Embedding runtime) | Candidate models & dimensions, image size (MB), RAM (MB), cold start (s), query `p50` / `p95` ms, time to embed 20k profiles on CPU, viable free host tier | *Pending `feat-010` ([10-embedding-runtime.md](spikes/10-embedding-runtime.md))* |
 | `feat-011` (Runtime LLM) | Provider & model comparison (Gemini free tier vs low-cost OpenAI), rate limits (RPM/TPM/RPD), tokens & USD per query (2 calls) and per 1,000 profiles, structured-output pass/retry rate on 10 queries (≥3 non-English), call `p50` / `p95` ms | *Pending `feat-011` ([11-runtime-llm.md](spikes/11-runtime-llm.md))* |
 
@@ -59,6 +59,7 @@ Tracks whether the harness catches issues before they reach the owner and how ea
 
 | ID | Type | Date | Machine · Tool | Stop-gate blocks | Reviewer (rounds / findings) | Escaped / owner fixes | Handoff Details |
 |---|---|---|---|---:|---|---:|---|
+| `feat-009` | `spike` | 2026-11-15 | Mac · Antigravity | 0 | 1 (0) | 0 | [feat-009.md](handoffs/feat-009.md) |
 | `feat-015` | `chore` | 2026-11-14 | Mac · Antigravity | 0 | 1 (0) | 0 | [feat-015.md](handoffs/feat-015.md) |
 | `feat-006` | `chore` | 2026-11-13 | Mac · Antigravity | 0 | 1 (0) | 0 | [feat-006.md](handoffs/feat-006.md) |
 | `feat-014` | `chore` | 2026-11-13 | Mac · Antigravity | 0 | 2 (2 + 0) | 0 | [feat-014.md](handoffs/feat-014.md) |
