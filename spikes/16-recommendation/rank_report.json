@@ -1,0 +1,202 @@
+{
+  "queries": 12,
+  "intents": [
+    {
+      "query": "I'm exhausted after work, I want something light and easy to watch",
+      "specificity": "broad",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any",
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "max_intensity": null,
+      "avoid": []
+    },
+    {
+      "query": "Something funny, I really need a laugh tonight",
+      "specificity": "broad",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any",
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "max_intensity": null,
+      "avoid": []
+    },
+    {
+      "query": "A feel-good movie that will leave me smiling",
+      "specificity": "broad",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any",
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "max_intensity": null,
+      "avoid": []
+    },
+    {
+      "query": "A tense submarine or single-location thriller",
+      "specificity": "specific",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any",
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "max_intensity": null,
+      "avoid": []
+    },
+    {
+      "query": "A slow-burn sci-fi mystery where a small crew is trapped on a ship or station and paranoia sets in",
+      "specificity": "specific",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any",
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "max_intensity": null,
+      "avoid": []
+    },
+    {
+      "query": "Gritty 90s neo-noir crime with a twist ending",
+      "specificity": "specific",
+      "era_mode": "classic_or_any_era",
+      "acclaim_preference": "any",
+      "year_min": 1990,
+      "year_max": 1999,
+      "audience": null,
+      "original_languages": [],
+      "max_intensity": null,
+      "avoid": []
+    },
+    {
+      "query": "A classic 80s adventure movie",
+      "specificity": "medium",
+      "era_mode": "classic_or_any_era",
+      "acclaim_preference": "any",
+      "year_min": 1980,
+      "year_max": 1989,
+      "audience": null,
+      "original_languages": [],
+      "max_intensity": null,
+      "avoid": []
+    },
+    {
+      "query": "Movie night with my kids (7 and 10), something fun with animals",
+      "specificity": "medium",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any",
+      "year_min": null,
+      "year_max": null,
+      "audience": "kids",
+      "original_languages": [],
+      "max_intensity": 2,
+      "avoid": []
+    },
+    {
+      "query": "A Korean thriller that keeps me on the edge of my seat",
+      "specificity": "medium",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any",
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [
+        "ko"
+      ],
+      "max_intensity": null,
+      "avoid": []
+    },
+    {
+      "query": "A critically acclaimed drama that makes me think, I don't mind subtitles",
+      "specificity": "broad",
+      "era_mode": "modern_default",
+      "acclaim_preference": "critically_acclaimed",
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "max_intensity": null,
+      "avoid": []
+    },
+    {
+      "query": "A hidden gem horror movie, not the usual mainstream stuff",
+      "specificity": "medium",
+      "era_mode": "modern_default",
+      "acclaim_preference": "hidden_gem",
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "max_intensity": null,
+      "avoid": []
+    },
+    {
+      "query": "Quiero llorar con una historia de amor bonita pero triste",
+      "specificity": "medium",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any",
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "max_intensity": null,
+      "avoid": []
+    }
+  ],
+  "pool_A": {
+    "size": 14478,
+    "relevance_at5": {
+      "baseline": 1.217,
+      "hybrid": 1.283
+    },
+    "mean_wr_at5": {
+      "baseline": 6.613,
+      "hybrid": 6.893
+    },
+    "mean_tmdb_votes_at5": {
+      "baseline": 1970.45,
+      "hybrid": 2318.4
+    },
+    "old_mediocre_in_top5_when_not_asked": {
+      "baseline": 1,
+      "hybrid": 1
+    },
+    "hybrid_top25_recall_vs_K300": {
+      "50": 0.903,
+      "100": 0.933,
+      "150": 0.947
+    }
+  },
+  "pool_B": {
+    "size": 300,
+    "relevance_at5": {
+      "B_template": 1.263,
+      "B_description": 1.298,
+      "B_rawtext": 1.298,
+      "B_tmdbtext": 1.123
+    },
+    "filtered_pool_sizes": [
+      300,
+      300,
+      300,
+      300,
+      300,
+      32,
+      28,
+      30,
+      2,
+      300,
+      300,
+      300
+    ]
+  },
+  "llm_tokens": {
+    "in": 32013,
+    "out": 4732
+  }
+}

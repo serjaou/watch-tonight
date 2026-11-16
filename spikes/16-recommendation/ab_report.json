@@ -1,0 +1,40 @@
+{
+  "films_compared": 50,
+  "base": {
+    "pacing": 0.96,
+    "viewing_effort": 0.82,
+    "ending_feel": 0.74,
+    "humor_style": 0.74,
+    "intensity_exact": 0.86,
+    "intensity_within_1": 1.0,
+    "tone_jaccard": 0.759,
+    "content_warnings_jaccard": 0.726,
+    "mean_input_tokens": 770,
+    "mean_output_tokens": 138
+  },
+  "reviews": {
+    "pacing": 0.94,
+    "viewing_effort": 0.82,
+    "ending_feel": 0.68,
+    "humor_style": 0.78,
+    "intensity_exact": 0.74,
+    "intensity_within_1": 1.0,
+    "tone_jaccard": 0.739,
+    "content_warnings_jaccard": 0.713,
+    "mean_input_tokens": 1039,
+    "mean_output_tokens": 137
+  },
+  "ending_feel_changed_by_reviews": {
+    "count": 12,
+    "reviews_matches_reference": 4,
+    "base_matches_reference": 7,
+    "examples": [
+      "Straw Dogs: base=bleak_or_ambiguous, reviews=tense_cathartic, ref=bleak_or_ambiguous",
+      "\u00a1Three Amigos!: base=uplifting, reviews=warm_resolved, ref=uplifting",
+      "El Mariachi: base=tense_cathartic, reviews=bittersweet, ref=bittersweet",
+      "The Return of the Living Dead: base=bleak_or_ambiguous, reviews=tense_cathartic, ref=bleak_or_ambiguous",
+      "Scent of a Woman: base=uplifting, reviews=warm_resolved, ref=uplifting",
+      "Alvin and the Chipmunks: The Squeakquel: base=uplifting, reviews=warm_resolved, ref=warm_resolved"
+    ]
+  }
+}

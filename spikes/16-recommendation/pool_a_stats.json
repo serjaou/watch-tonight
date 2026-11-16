@@ -1,0 +1,6 @@
+{
+  "docs": 14478,
+  "seconds": 1029.0,
+  "docs_per_s": 14.1,
+  "note": "Copied from the run log of embed_pool.py on 2026-11-16 (Windows laptop, CPU): 'embedded 14478 in 1029.0s (14.1 docs/s)'. Speed check before it: 'embedded 500 in 37.7s (13.3 docs/s)'. The script now writes this file itself."
+}
