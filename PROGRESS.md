@@ -1,22 +1,16 @@
 # Progress
 
 ## Now
-- **Active feature:** `feat-011` (Spike: runtime LLM, `docs/spikes/11-runtime-llm.md`), branch `spike/runtime-llm`. Done; [PR #12](https://github.com/serjaou/watch-tonight/pull/12) waits for the owner's merge, with CI `check` and `gates` green.
-- **State:** `feat-011` is complete (`status: answered`).
-  - **Recommended:** `gpt-6-luna` as primary, at `$0.00067` per query and ≈ `$1.10` for 20k profiles via Batch, with 0 schema errors. Framework: Pydantic AI `NativeOutput` + `FallbackModel`, with `gemini-3.5-flash-lite` paid as an optional fallback.
-  - **Ruled out:** the Gemini free tier for the online path, because its terms forbid serving EEA users.
-  - Spend: OpenAI ≈ `$0.022`, Gemini `$0`.
-- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-16 10:35 CET, Windows.
-- **Next step:** after the `feat-011` PR merges, start `feat-016` (*Spike: corpus selection, signals, profile schema, hybrid ranking*, `docs/spikes/16-recommendation-signals-and-ranking.md`). It's ready: questions listed, all dependencies done. Keep paid LLM calls to cents; the owner's OpenAI credit is ~$10.
+- **Active feature:** `feat-016` (Spike: corpus selection, external signals, profile schema, hybrid ranking, `docs/spikes/16-recommendation-signals-and-ranking.md`), branch `spike/recommendation-signals`. In progress.
+- **State:**
+  - Owner decisions of 2026-11-16 are recorded in `docs/architecture.md` §7: Q6 is OpenAI `gpt-6-luna` only (spend approved, no Gemini, no second-provider fallback), and Q14 is an age note in the UI.
+  - Spike work is starting.
+- **Last check:** `uv run poe check` green on `main` `08100c0`, 2026-11-16, Windows. CI on `main` green.
+- **Next step:** answer Q1–Q4 of spike 16 with throwaway scripts in `spikes/16-recommendation/`. LLM calls use `gpt-6-luna` only, kept to cents (the owner's OpenAI credit is ~$10).
 - **Waiting on owner:**
-  - Merge the `feat-011` PR.
-  - Decide before `feat-012`, using spike 11 §Q2 and §Q6:
-    - (a) approve a small usage-based spend for the online LLM (≈ $0.67 per 1,000 queries) and set a monthly hard cap on the OpenAI project;
-    - (b) the minors question: Gemini's terms bar services likely used by under-18s, and OpenAI needs a parent's or guardian's consent;
-    - (c) whether to enable Gemini billing for a fallback.
-  - Optional: read the Gemini free-tier RPD and TPM in AI Studio (https://ai.dev/rate-limit).
+  - Optional: add the age-note line (Q14) to `docs/product.md`, which is owner-only.
 - **Unverified:**
-  - The items under "Unverified" in `docs/handoffs/feat-011.md`, including retry-with-feedback on a real model and Gemini latency including 503s.
+  - The items under "Unverified" in `docs/handoffs/feat-011.md`.
 
 ## Log (newest first, 1 line each; full details in `docs/handoffs/`)
 - 2026-11-16 · Windows · Claude Code · `feat-011`: answered runtime LLM spike Q1–Q6 (`gpt-6-luna` `$0.00067`/query, 0 schema errors; Gemini free tier not usable for EEA users) → [feat-011.md](docs/handoffs/feat-011.md)
