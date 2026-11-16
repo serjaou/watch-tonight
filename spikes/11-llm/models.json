@@ -1,0 +1,446 @@
+{
+  "checked_at": "2026-11-16T08:48:45.728897+00:00",
+  "gemini": [
+    {
+      "name": "models/gemini-2.5-flash",
+      "displayName": "Gemini 2.5 Flash",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-2.5-pro",
+      "displayName": "Gemini 2.5 Pro",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-2.5-flash-preview-tts",
+      "displayName": "Gemini 2.5 Flash Preview TTS",
+      "inputTokenLimit": 8192,
+      "outputTokenLimit": 16384,
+      "thinking": null
+    },
+    {
+      "name": "models/gemini-2.5-pro-preview-tts",
+      "displayName": "Gemini 2.5 Pro Preview TTS",
+      "inputTokenLimit": 8192,
+      "outputTokenLimit": 16384,
+      "thinking": null
+    },
+    {
+      "name": "models/gemma-4-26b-a4b-it",
+      "displayName": "Gemma 4 26B A4B IT",
+      "inputTokenLimit": 262144,
+      "outputTokenLimit": 32768,
+      "thinking": true
+    },
+    {
+      "name": "models/gemma-4-31b-it",
+      "displayName": "Gemma 4 31B IT",
+      "inputTokenLimit": 262144,
+      "outputTokenLimit": 32768,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-flash-latest",
+      "displayName": "Gemini Flash Latest",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-flash-lite-latest",
+      "displayName": "Gemini Flash-Lite Latest",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-pro-latest",
+      "displayName": "Gemini Pro Latest",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-2.5-flash-lite",
+      "displayName": "Gemini 2.5 Flash-Lite",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-2.5-flash-image",
+      "displayName": "Nano Banana",
+      "inputTokenLimit": 32768,
+      "outputTokenLimit": 32768,
+      "thinking": null
+    },
+    {
+      "name": "models/gemini-3-flash-preview",
+      "displayName": "Gemini 3 Flash Preview",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.1-pro-preview",
+      "displayName": "Gemini 3.1 Pro Preview",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.1-pro-preview-customtools",
+      "displayName": "Gemini 3.1 Pro Preview Custom Tools",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.1-flash-lite-preview",
+      "displayName": "Gemini 3.1 Flash Lite Preview",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.1-flash-lite",
+      "displayName": "Gemini 3.1 Flash Lite",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3-pro-image-preview",
+      "displayName": "Nano Banana Pro",
+      "inputTokenLimit": 131072,
+      "outputTokenLimit": 32768,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3-pro-image",
+      "displayName": "Nano Banana Pro",
+      "inputTokenLimit": 131072,
+      "outputTokenLimit": 32768,
+      "thinking": true
+    },
+    {
+      "name": "models/nano-banana-pro-preview",
+      "displayName": "Nano Banana Pro",
+      "inputTokenLimit": 131072,
+      "outputTokenLimit": 32768,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.1-flash-image-preview",
+      "displayName": "Nano Banana 2",
+      "inputTokenLimit": 65536,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.1-flash-image",
+      "displayName": "Nano Banana 2",
+      "inputTokenLimit": 65536,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.1-flash-lite-image",
+      "displayName": "Nano Banana 2 Lite",
+      "inputTokenLimit": 65536,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-nano-banana-2.1",
+      "displayName": "Nano Banana 2.1",
+      "inputTokenLimit": 65536,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.5-flash",
+      "displayName": "Gemini 3.5 Flash",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.5-flash-lite",
+      "displayName": "Gemini 3.5 Flash Lite",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-omni-flash-preview",
+      "displayName": "Gemini Omni Flash Preview",
+      "inputTokenLimit": 131072,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-omni-1.1-flash",
+      "displayName": "Gemini Omni 1.1 Flash",
+      "inputTokenLimit": 131072,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-omni-1.2-flash",
+      "displayName": "Gemini Omni 1.2 Flash",
+      "inputTokenLimit": 131072,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.5-transcribe",
+      "displayName": "Gemini 3.5 Transcribe",
+      "inputTokenLimit": 98304,
+      "outputTokenLimit": 32768,
+      "thinking": null
+    },
+    {
+      "name": "models/gemini-3.6-flash",
+      "displayName": "Gemini 3.6 Flash",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.7-flash",
+      "displayName": "Gemini 3.7 Flash",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-3.8-flash",
+      "displayName": "Gemini 3.8 Flash",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-4-argon",
+      "displayName": "Gemini 4 Argon",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 32768,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-4-carbon",
+      "displayName": "Gemini 4 Carbon",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 32768,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-4-hydrogen",
+      "displayName": "Gemini 4 Hydrogen",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/lyria-3-clip-preview",
+      "displayName": "Lyria 3 Clip Preview",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": null
+    },
+    {
+      "name": "models/lyria-3-pro-preview",
+      "displayName": "Lyria 3 Pro Preview",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": null
+    },
+    {
+      "name": "models/lyria-3.5",
+      "displayName": "Lyria 3.5",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": null
+    },
+    {
+      "name": "models/gemini-3.1-flash-tts-preview",
+      "displayName": "Gemini 3.1 Flash TTS Preview",
+      "inputTokenLimit": 8192,
+      "outputTokenLimit": 16384,
+      "thinking": null
+    },
+    {
+      "name": "models/gemini-3.8-flash-tts",
+      "displayName": "Gemini 3.8 Flash TTS",
+      "inputTokenLimit": 8192,
+      "outputTokenLimit": 16384,
+      "thinking": null
+    },
+    {
+      "name": "models/gemini-3.8-flash-lite-tts",
+      "displayName": "Gemini 3.8 Flash Lite TTS",
+      "inputTokenLimit": 8192,
+      "outputTokenLimit": 16384,
+      "thinking": null
+    },
+    {
+      "name": "models/gemini-robotics-er-2-preview",
+      "displayName": "Gemini Robotics-ER 2 Preview",
+      "inputTokenLimit": 131072,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/gemini-2.5-computer-use-preview-10-2025",
+      "displayName": "Gemini 2.5 Computer Use Preview 10-2025",
+      "inputTokenLimit": 131072,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/antigravity-preview-05-2026",
+      "displayName": "Antigravity Agent Preview",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": null
+    },
+    {
+      "name": "models/antigravity-preview-09-2026",
+      "displayName": "Antigravity Agent Preview",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": null
+    },
+    {
+      "name": "models/antigravity-preview-latest",
+      "displayName": "Antigravity Agent Preview Latest",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": null
+    },
+    {
+      "name": "models/deep-research-max-preview-04-2026",
+      "displayName": "Deep Research Max Preview (Apr-21-2026)",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/deep-research-preview-04-2026",
+      "displayName": "Deep Research Preview (Apr-21-2026)",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    },
+    {
+      "name": "models/deep-research-pro-preview-12-2025",
+      "displayName": "Deep Research Pro Preview (Dec-12-2025) [Rerouted]",
+      "inputTokenLimit": 1048576,
+      "outputTokenLimit": 65536,
+      "thinking": true
+    }
+  ],
+  "openai": [
+    "chat-latest",
+    "chatgpt-image-latest",
+    "gpt-4.1",
+    "gpt-4.1-2025-04-14",
+    "gpt-4.1-mini",
+    "gpt-4.1-mini-2025-04-14",
+    "gpt-4o",
+    "gpt-4o-2024-08-06",
+    "gpt-4o-2024-11-20",
+    "gpt-4o-mini",
+    "gpt-4o-mini-2024-07-18",
+    "gpt-4o-mini-transcribe",
+    "gpt-4o-mini-transcribe-2025-03-20",
+    "gpt-4o-mini-transcribe-2025-12-15",
+    "gpt-4o-mini-tts",
+    "gpt-4o-mini-tts-2025-03-20",
+    "gpt-4o-mini-tts-2025-12-15",
+    "gpt-4o-transcribe",
+    "gpt-4o-transcribe-diarize",
+    "gpt-5",
+    "gpt-5-2025-08-07",
+    "gpt-5-mini",
+    "gpt-5-mini-2025-08-07",
+    "gpt-5-nano",
+    "gpt-5-nano-2025-08-07",
+    "gpt-5-pro",
+    "gpt-5-pro-2025-10-06",
+    "gpt-5-search-api",
+    "gpt-5-search-api-2025-10-14",
+    "gpt-5.1",
+    "gpt-5.1-2025-11-13",
+    "gpt-5.2",
+    "gpt-5.2-2025-12-11",
+    "gpt-5.2-pro",
+    "gpt-5.2-pro-2025-12-11",
+    "gpt-5.3-codex",
+    "gpt-5.4",
+    "gpt-5.4-2026-03-05",
+    "gpt-5.4-mini",
+    "gpt-5.4-mini-2026-03-17",
+    "gpt-5.4-nano",
+    "gpt-5.4-nano-2026-03-17",
+    "gpt-5.4-pro",
+    "gpt-5.4-pro-2026-03-05",
+    "gpt-5.5",
+    "gpt-5.5-2026-04-23",
+    "gpt-5.5-pro",
+    "gpt-5.5-pro-2026-04-23",
+    "gpt-5.6-luna",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-6-astra",
+    "gpt-6-luna",
+    "gpt-6-sol",
+    "gpt-6.1-sol",
+    "gpt-6.1-terra",
+    "gpt-audio",
+    "gpt-audio-1.5",
+    "gpt-audio-2025-08-28",
+    "gpt-audio-mini",
+    "gpt-audio-mini-2025-12-15",
+    "gpt-image-1-mini",
+    "gpt-image-1.5",
+    "gpt-image-2",
+    "gpt-image-2-2026-04-21",
+    "gpt-image-2.5-flare",
+    "gpt-image-2.5-flare-2026-09-08",
+    "gpt-image-2.5-sunburst",
+    "gpt-image-2.5-sunburst-2026-09-08",
+    "gpt-image-2.6-flare",
+    "gpt-image-2.6-sunburst",
+    "gpt-live-1",
+    "gpt-live-transcribe",
+    "gpt-realtime",
+    "gpt-realtime-1.5",
+    "gpt-realtime-2",
+    "gpt-realtime-2.1",
+    "gpt-realtime-2.1-mini",
+    "gpt-realtime-2025-08-28",
+    "gpt-realtime-mini",
+    "gpt-realtime-mini-2025-12-15",
+    "gpt-realtime-translate",
+    "gpt-realtime-whisper",
+    "gpt-transcribe",
+    "o3",
+    "o3-2025-04-16",
+    "omni-moderation-2024-09-26",
+    "omni-moderation-latest",
+    "text-embedding-3-large",
+    "text-embedding-3-small",
+    "text-embedding-ada-002",
+    "tts-1",
+    "tts-1-1106",
+    "tts-1-hd",
+    "tts-1-hd-1106",
+    "whisper-1"
+  ]
+}

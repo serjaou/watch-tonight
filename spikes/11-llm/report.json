@@ -1,0 +1,272 @@
+{
+  "gemini:gemini-3.5-flash-lite:level:minimal": {
+    "understand": {
+      "calls": 20,
+      "valid_first_try": "17/20",
+      "valid_after_retry": "18/20",
+      "attempts_total": 23,
+      "attempts_raised_api_error": 0,
+      "attempts_failed_checks": 5,
+      "rate_limited_waits": 1,
+      "latency_ms_first_ok": {
+        "n": 17,
+        "p50": 956.5,
+        "p95": 1503.1
+      },
+      "latency_ms_incl_retries": {
+        "n": 18,
+        "p50": 956.5,
+        "p95": 3104.0
+      },
+      "avg_input_tokens_per_attempt": 382,
+      "avg_billed_output_tokens_per_attempt": 103,
+      "avg_reasoning_tokens_per_attempt": 0,
+      "attempts_per_call": 1.15,
+      "errors": [
+        "checks: too many tones (4)",
+        "checks: too many tones (4)",
+        "checks: too many tones (4)",
+        "checks: too many tones (4)",
+        "checks: too many tones (4)"
+      ]
+    },
+    "rerank": {
+      "calls": 18,
+      "valid_first_try": "13/18",
+      "valid_after_retry": "17/18",
+      "attempts_total": 23,
+      "attempts_raised_api_error": 6,
+      "attempts_failed_checks": 0,
+      "rate_limited_waits": 0,
+      "latency_ms_first_ok": {
+        "n": 13,
+        "p50": 1671.7,
+        "p95": 2508.0
+      },
+      "latency_ms_incl_retries": {
+        "n": 17,
+        "p50": 1687.8,
+        "p95": 3083.2
+      },
+      "avg_input_tokens_per_attempt": 4477,
+      "avg_billed_output_tokens_per_attempt": 349,
+      "avg_reasoning_tokens_per_attempt": 0,
+      "attempts_per_call": 0.94,
+      "errors": [
+        "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Plea",
+        "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Plea",
+        "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Plea",
+        "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Plea",
+        "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Plea",
+        "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Plea"
+      ]
+    },
+    "profile": {
+      "calls": 20,
+      "valid_first_try": "18/20",
+      "valid_after_retry": "19/20",
+      "attempts_total": 22,
+      "attempts_raised_api_error": 3,
+      "attempts_failed_checks": 0,
+      "rate_limited_waits": 0,
+      "latency_ms_first_ok": {
+        "n": 18,
+        "p50": 1029.0,
+        "p95": 1731.9
+      },
+      "latency_ms_incl_retries": {
+        "n": 19,
+        "p50": 1031.6,
+        "p95": 1731.9
+      },
+      "avg_input_tokens_per_attempt": 359,
+      "avg_billed_output_tokens_per_attempt": 135,
+      "avg_reasoning_tokens_per_attempt": 0,
+      "attempts_per_call": 0.95,
+      "errors": [
+        "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Plea",
+        "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Plea",
+        "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Plea"
+      ]
+    },
+    "extraction": {
+      "runtime_ok": "18/18",
+      "avoid_includes_expected": "18/18",
+      "avoid_exact_no_extras": "17/18",
+      "intensity_ok": "4/4",
+      "intensity_scored_on": [
+        "q01-en-tired-romcom",
+        "q05-en-anything"
+      ],
+      "non_english_runtime_and_avoid_ok": "10/10",
+      "non_english_exact_no_extras": "9/10",
+      "avoid_extras_seen": [
+        "violence"
+      ]
+    },
+    "pitches": {
+      "count": 85,
+      "chars_mean": 205,
+      "chars_max": 280,
+      "over_350": 0,
+      "p2_flagged": 0,
+      "p2_flag_words": []
+    },
+    "llm_time_per_query_ms": {
+      "n": 17,
+      "p50": 2939.5,
+      "p95": 4673.4
+    },
+    "cost_usd": {
+      "price_per_1m": {
+        "input": 0.3,
+        "output": 2.5,
+        "batch_input": 0.15,
+        "batch_output": 1.25
+      },
+      "per_query": 0.002642,
+      "per_1000_queries": 2.642,
+      "per_1000_profiles": 0.4461,
+      "spent_in_this_run": 0.0547
+    },
+    "meta": {
+      "record": "meta",
+      "started_at": "2026-11-16T09:02:14.853131+00:00",
+      "provider": "gemini",
+      "model": "gemini-3.5-flash-lite",
+      "reasoning": "level:minimal",
+      "prompt_version": "spike-1",
+      "top_k": 40,
+      "rounds": 2,
+      "platform": "win32"
+    }
+  },
+  "openai:gpt-6-luna:none": {
+    "understand": {
+      "calls": 20,
+      "valid_first_try": "20/20",
+      "valid_after_retry": "20/20",
+      "attempts_total": 20,
+      "attempts_raised_api_error": 0,
+      "attempts_failed_checks": 0,
+      "rate_limited_waits": 0,
+      "latency_ms_first_ok": {
+        "n": 20,
+        "p50": 1635.4,
+        "p95": 2658.5
+      },
+      "latency_ms_incl_retries": {
+        "n": 20,
+        "p50": 1635.4,
+        "p95": 2658.5
+      },
+      "avg_input_tokens_per_attempt": 613,
+      "avg_billed_output_tokens_per_attempt": 67,
+      "avg_reasoning_tokens_per_attempt": 0,
+      "attempts_per_call": 1.0,
+      "errors": []
+    },
+    "rerank": {
+      "calls": 20,
+      "valid_first_try": "19/20",
+      "valid_after_retry": "19/20",
+      "attempts_total": 21,
+      "attempts_raised_api_error": 0,
+      "attempts_failed_checks": 2,
+      "rate_limited_waits": 0,
+      "latency_ms_first_ok": {
+        "n": 19,
+        "p50": 3258.6,
+        "p95": 4045.8
+      },
+      "latency_ms_incl_retries": {
+        "n": 19,
+        "p50": 3258.6,
+        "p95": 4045.8
+      },
+      "avg_input_tokens_per_attempt": 4191,
+      "avg_billed_output_tokens_per_attempt": 255,
+      "avg_reasoning_tokens_per_attempt": 0,
+      "attempts_per_call": 1.05,
+      "errors": [
+        "checks: duplicate picks",
+        "checks: duplicate picks"
+      ]
+    },
+    "profile": {
+      "calls": 20,
+      "valid_first_try": "20/20",
+      "valid_after_retry": "20/20",
+      "attempts_total": 20,
+      "attempts_raised_api_error": 0,
+      "attempts_failed_checks": 0,
+      "rate_limited_waits": 0,
+      "latency_ms_first_ok": {
+        "n": 20,
+        "p50": 2222.1,
+        "p95": 2801.2
+      },
+      "latency_ms_incl_retries": {
+        "n": 20,
+        "p50": 2222.1,
+        "p95": 2801.2
+      },
+      "avg_input_tokens_per_attempt": 580,
+      "avg_billed_output_tokens_per_attempt": 103,
+      "avg_reasoning_tokens_per_attempt": 0,
+      "attempts_per_call": 1.0,
+      "errors": []
+    },
+    "extraction": {
+      "runtime_ok": "20/20",
+      "avoid_includes_expected": "20/20",
+      "avoid_exact_no_extras": "20/20",
+      "intensity_ok": "6/6",
+      "intensity_scored_on": [
+        "q01-en-tired-romcom",
+        "q04-en-kids",
+        "q05-en-anything"
+      ],
+      "non_english_runtime_and_avoid_ok": "10/10",
+      "non_english_exact_no_extras": "10/10",
+      "avoid_extras_seen": []
+    },
+    "pitches": {
+      "count": 95,
+      "chars_mean": 194,
+      "chars_max": 242,
+      "over_350": 0,
+      "p2_flagged": 0,
+      "p2_flag_words": []
+    },
+    "llm_time_per_query_ms": {
+      "n": 19,
+      "p50": 4979.1,
+      "p95": 6303.7
+    },
+    "cost_usd": {
+      "price_per_1m": {
+        "input": 0.1,
+        "output": 0.5,
+        "cached_input": 0.01,
+        "batch_input": 0.05,
+        "batch_output": 0.25
+      },
+      "per_query": 0.000668,
+      "per_1000_queries": 0.668,
+      "per_1000_profiles": 0.1097,
+      "spent_in_this_run": 0.0156
+    },
+    "meta": {
+      "record": "meta",
+      "started_at": "2026-11-16T09:02:13.553555+00:00",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "reasoning": "none",
+      "prompt_version": "spike-1",
+      "top_k": 40,
+      "rounds": 2,
+      "platform": "win32"
+    }
+  }
+}

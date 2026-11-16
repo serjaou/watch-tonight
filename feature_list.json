@@ -1,17 +1,6 @@
 {
   "features": [
     {
-      "id": "feat-011",
-      "type": "spike",
-      "name": "Spike: runtime LLM",
-      "description": "Answer the questions in docs/spikes/11-runtime-llm.md: provider and model (Gemini free tier vs a low-cost OpenAI model); cost per query and per 1,000 profiles; data use; structured output incl. non-English input; latency; Pydantic AI vs plain SDK; fallback provider.",
-      "stories": ["US1"],
-      "status": "todo",
-      "dependencies": ["feat-005"],
-      "spec": "docs/spikes/11-runtime-llm.md",
-      "evidence": ""
-    },
-    {
       "id": "feat-016",
       "type": "spike",
       "name": "Spike: Movie corpus selection, external signals, profile schema and hybrid ranking",

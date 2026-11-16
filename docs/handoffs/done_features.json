@@ -1,6 +1,17 @@
 {
   "features": [
     {
+      "id": "feat-011",
+      "type": "spike",
+      "name": "Spike: runtime LLM",
+      "description": "Answer the questions in docs/spikes/11-runtime-llm.md: provider and model (Gemini free tier vs a low-cost OpenAI model); cost per query and per 1,000 profiles; data use; structured output incl. non-English input; latency; Pydantic AI vs plain SDK; fallback provider.",
+      "stories": ["US1"],
+      "status": "done",
+      "dependencies": ["feat-005"],
+      "spec": "docs/spikes/11-runtime-llm.md",
+      "evidence": "docs/handoffs/feat-011.md — Q1-Q6 answered (gpt-6-luna $0.00067/query, 0 schema errors; Gemini free 15 RPM, no EEA users); poe check green; reviewer: 2 (9+6)"
+    },
+    {
       "id": "feat-010",
       "type": "spike",
       "name": "Spike: query-time embedding runtime",

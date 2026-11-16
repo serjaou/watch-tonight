@@ -1,0 +1,62 @@
+[
+  {
+    "id": "q01-en-tired-romcom",
+    "lang": "en",
+    "text": "I feel tired and I want to watch something light, maybe a rom-com, but not too dramatic",
+    "expect": {"max_runtime_minutes": null, "avoid_includes": [], "max_intensity": "low"}
+  },
+  {
+    "id": "q02-en-tense-no-gore",
+    "lang": "en",
+    "text": "Something tense and clever that keeps me guessing until the end. Under 2 hours please, and no gore.",
+    "expect": {"max_runtime_minutes": 120, "avoid_includes": ["gore"], "max_intensity": "any"}
+  },
+  {
+    "id": "q03-en-good-cry",
+    "lang": "en",
+    "text": "Had a terrible week. I need a good cry, a beautiful sad story about family.",
+    "expect": {"max_runtime_minutes": null, "avoid_includes": [], "max_intensity": "any"}
+  },
+  {
+    "id": "q04-en-kids",
+    "lang": "en",
+    "text": "Movie night with my kids (8 and 11): fun and adventurous, nothing scary and no swearing.",
+    "expect": {"max_runtime_minutes": null, "avoid_includes": ["horror_scares", "strong_language"], "max_intensity": "low"}
+  },
+  {
+    "id": "q05-en-anything",
+    "lang": "en",
+    "text": "anything",
+    "expect": {"max_runtime_minutes": null, "avoid_includes": [], "max_intensity": null}
+  },
+  {
+    "id": "q06-es-light-90",
+    "lang": "es",
+    "text": "Estoy agotada después del trabajo, quiero algo divertido y ligero de menos de 90 minutos, nada de violencia.",
+    "expect": {"max_runtime_minutes": 90, "avoid_includes": ["violence"], "max_intensity": "any"}
+  },
+  {
+    "id": "q07-fr-horror-no-gore",
+    "lang": "fr",
+    "text": "J'ai envie d'un film d'horreur qui fait vraiment peur, mais sans trop de gore ni de sang.",
+    "expect": {"max_runtime_minutes": null, "avoid_includes": ["gore"], "max_intensity": "any"}
+  },
+  {
+    "id": "q08-pt-inspiring",
+    "lang": "pt",
+    "text": "Quero um filme inspirador sobre superação, algo que me deixe motivado para a semana. Uma hora e meia no máximo.",
+    "expect": {"max_runtime_minutes": 90, "avoid_includes": [], "max_intensity": "any"}
+  },
+  {
+    "id": "q09-de-slow-scifi",
+    "lang": "de",
+    "text": "Ich möchte einen langsamen, nachdenklichen Science-Fiction-Film sehen, bitte keine Action und keine Drogen.",
+    "expect": {"max_runtime_minutes": null, "avoid_includes": ["drug_use"], "max_intensity": "any"}
+  },
+  {
+    "id": "q10-ja-heartwarming-anime",
+    "lang": "ja",
+    "text": "今夜は怖くない、心温まるアニメ映画が見たいです。2時間以内でお願いします。",
+    "expect": {"max_runtime_minutes": 120, "avoid_includes": ["horror_scares"], "max_intensity": "any"}
+  }
+]

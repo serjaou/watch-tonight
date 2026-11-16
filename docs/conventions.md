@@ -14,6 +14,14 @@ Every task is a poethepoet task in `pyproject.toml` (`[tool.poe.tasks]`) and beh
 - PR gates (`.github/workflows/pr-gates.yml` → `scripts/ci/pr_gates.py`) fail a PR that changes `tests/acceptance/` or `evals/` until the owner adds the `tests-approved` label.
 - pre-commit runs gitleaks and the project's own ruff (from `uv.lock`) before each commit.
 
+### Windows notes (seen in feat-011)
+
+- Python's default text encoding on Windows is the locale's (cp1252). Pass `encoding="utf-8"` to every `open`/`read_text`/`write_text`. Set `PYTHONUTF8=1` (or `sys.stdout.reconfigure(encoding="utf-8")`) before printing non-ASCII text such as Japanese mood input.
+- PowerShell mangles quotes inside `python -c "..."`. For inline Python, use a Git Bash heredoc (`uv run python - <<'EOF'`) or a script file.
+- Windows PowerShell 5.1 `Get-Content` reads UTF-8 files as ANSI, so `–` shows up as `â€“`. Use `-Encoding UTF8`, or the Read tool. The file itself is fine.
+- `gh` is optional and not installed on this laptop. The repo is public, so CI status can be read without it: `Invoke-RestMethod 'https://api.github.com/repos/serjaou/watch-tonight/actions/runs?branch=<branch>&per_page=1' -Headers @{'User-Agent'='ci-check'}`.
+- Throwaway spike scripts with extra packages: `uv run --no-project --python 3.13 --with <pkg> python spikes/...`. Without `--python 3.13`, uv may pick the laptop's system Python 3.11.
+
 ## Code
 
 - **Layers** (`src/watch_tonight/`, enforced by import-linter in `pyproject.toml`):
