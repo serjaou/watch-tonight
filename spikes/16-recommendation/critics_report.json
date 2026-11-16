@@ -1,0 +1,42 @@
+{
+  "g7_movies": 14478,
+  "coverage": {
+    "rotten_tomatoes_pct": "9952/14478 (68.7%)",
+    "metacritic": "6877/14478 (47.5%)",
+    "any_award_received": "2237/14478 (15.5%)",
+    "any_nomination": "2755/14478 (19.0%)",
+    "rt_or_mc": "10110/14478 (69.8%)"
+  },
+  "rt_or_mc_coverage_by_era": {
+    "pre-2000": "2323/2526 (92.0%)",
+    "2000-2019": "5766/6953 (82.9%)",
+    "2020+": "2021/4999 (40.4%)"
+  },
+  "spearman_vs_tmdb_wr": {
+    "metacritic": 0.58,
+    "rotten_tomatoes": 0.588,
+    "imdb_rating (for comparison)": 0.842
+  },
+  "critic_darlings_audience_lukewarm": {
+    "rule": "metacritic >= p90 (83) and TMDB WR < median (6.68)",
+    "count": 66,
+    "examples": [
+      "It Follows (2015) MC 83, TMDB 6.582",
+      "Black Bag (2025) MC 85, TMDB 6.369",
+      "EO (2022) MC 85, TMDB 6.485",
+      "The Babadook (2014) MC 86, TMDB 6.536",
+      "The Green Knight (2021) MC 85, TMDB 6.576"
+    ]
+  },
+  "crowd_pleasers_critics_rated_low": {
+    "rule": "metacritic <= p20 (45) and TMDB WR >= p80 (7.27)",
+    "count": 54,
+    "examples": [
+      "Moana (2026) MC 42, TMDB 7.426",
+      "The Super Mario Galaxy Movie (2026) MC 37, TMDB 8.177",
+      "Michael (2026) MC 39, TMDB 8.577",
+      "The Tomorrow War (2021) MC 45, TMDB 7.521",
+      "Meet Joe Black (1998) MC 43, TMDB 7.376"
+    ]
+  }
+}
