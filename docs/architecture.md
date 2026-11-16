@@ -51,7 +51,7 @@ Ports are `Protocol`s in `domain` (draft names):
 | `MovieSource` | TMDB client (httpx + retries) | Metadata and watch providers |
 | `MovieRepository` | MongoDB | Read/write movies, record job runs |
 | `CandidateSearch` | Atlas `$vectorSearch` | Filtered vector search |
-| `LanguageModel` | Provider and model chosen in **(feat-011)** | Query intent, re-rank + pitches, emotional profiles (structured output) |
+| `LanguageModel` | OpenAI `gpt-6-luna` via Pydantic AI (Q6, feat-011) | Query intent, re-rank + pitches, emotional profiles (structured output) |
 | `Embedder` | Model choice and runtime **(feat-010)** | Profile and query vectors (same model for both) |
 
 Keeping each external service behind a port lets a provider be swapped (e.g. when a free tier runs out) without touching `application`, and lets unit tests use in-memory fakes.
@@ -133,14 +133,15 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
 | Q3 | Atlas free tier: storage, vector index limits, pre-filter on an array field + range + `$nin` | feat-009 | Corpus size, `streamable` design, query step 3 |
 | Q4 | Does `mongodb-atlas-local` run `$vectorSearch` on both machines (Mac ARM, Windows x86)? | feat-009 | Integration tests |
 | Q5 | Embedding model and where it runs at query time; which free host fits | feat-010 | `Embedder`, container image, hosting |
-| Q6 | Runtime LLM: provider and model (Gemini free tier vs a low-cost OpenAI model), cost per query and per 1,000 profiles, data use, structured output (incl. non-English input), latency, framework (Pydantic AI vs SDK), fallback provider | feat-011 | `LanguageModel`, enrichment cost, latency budget, privacy note |
 | Q7 | p95 latency target (product.md: to confirm, guess < 10 s) | Measured in the first end-to-end slice (feat-012 plans it) | Number of LLM calls, caching |
 | Q12 | How often do ingest, enrich and embed re-run to add newly streamable movies? | feat-008 (rate of change), then feat-012 | Job schedule, LLM and embedding cost |
 
-### Decided (owner, 2026-11-13 / 2026-11-14)
+### Decided (owner, 2026-11-13 / 2026-11-14 / 2026-11-16)
 
 | # | Question | Decision | Recorded in |
 |---|---|---|---|
+| Q6 | Runtime LLM: provider, model, cost, data use, framework, fallback | **OpenAI only, `gpt-6-luna`**, for the online calls and the offline enrichment (Batch API).<br>The owner approved a small usage-based spend (≈ $0.67 per 1,000 queries, ≈ $1.10 once for 20k profiles), capped by the prepaid OpenAI balance with auto-recharge off.<br>**No Gemini, free or paid.** The free tier can't serve EEA users, and its terms (paid too) bar services likely to be accessed by under-18s (Q14).<br>No second provider as fallback: an OpenAI outage maps to *Service unavailable* / *Results without pitches* (Q8). A second OpenAI model as fallback may be tested in the first slice.<br>Framework: Pydantic AI (`NativeOutput`, `output_validator` + `ModelRetry`); the ADR comes with feat-012. | docs/spikes/11-runtime-llm.md, `LanguageModel` |
+| Q14 | Minors (OpenAI requires parent or guardian consent; Gemini bars services likely used by under-18s) | General-audience app for adults, using only OpenAI. The UI shows a short age note, e.g. *"For adults. Under 18? Use it with a parent's or guardian's permission."*, next to the privacy note naming OpenAI (30-day abuse-monitoring retention, no training). The product.md wording is the owner's to add. | docs/spikes/11-runtime-llm.md §Q2, UI slice |
 | Q8 | What to return when the LLM fails | The understanding call fails → *Service unavailable*. The re-rank call fails or its output stays invalid after a retry → the valid results without pitches. | product.md §4, query steps 2 and 6 |
 | Q9 | Non-English input | Any input language; UI, titles and pitches in English, and the UI says so. The LLM writes the intent in English. | product.md §2, query step 2 |
 | Q10 | Frontend framework | React. Tooling is decided in the UI slice. | §1 |
