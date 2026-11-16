@@ -21,6 +21,7 @@ Run the **End of Session** steps in [AGENTS.md](../../../AGENTS.md), with these 
 4. When the task is complete (not for a mid-task handoff):
    - create `docs/handoffs/<feat-id>.md` with the task metadata, summary/outcome, and full verification command + output evidence;
    - move the feature entry from [feature_list.json](../../../feature_list.json) to the top of `docs/handoffs/done_features.json` with `status: "done"` and a 1-line `evidence` (`<= 160` chars) starting with `docs/handoffs/<feat-id>.md — ...`;
+   - keep the active window: if fewer than 3 `todo` items remain in `feature_list.json`, move the top items of the **Ordered** section of [docs/backlog.md](../../../docs/backlog.md) into it, in the owner's order and following that file's rules: the JSON description ends with `Detail: docs/backlog.md#<id>`, and the backlog section stays, marked as moved. Never take items from **Proposed**;
    - add an index row for `<feat-id>` at the top of the `/handoff` table in [docs/metrics.md](../../../docs/metrics.md) linking to `handoffs/<feat-id>.md` (and fill in its spike baseline row in §1.4 if it is a spike);
    - open a PR from the feature branch to `main`:
      - with the GitHub CLI if installed: `gh pr create --base main --fill`;

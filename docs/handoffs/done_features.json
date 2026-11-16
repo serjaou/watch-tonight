@@ -1,6 +1,17 @@
 {
   "features": [
     {
+      "id": "feat-012",
+      "type": "chore",
+      "name": "Architecture refinement and MVP backlog slicing",
+      "description": "Refine the architecture with the spike results (ADRs incl. Q11, open questions in docs/architecture.md §7) and slice the MVP backlog: thin end-to-end slice first; profile design (schema, closed vocabulary, prompt, owner-rated sample) as its own feature; slice mode and size rules in /spec.",
+      "stories": [],
+      "status": "done",
+      "dependencies": ["feat-008", "feat-009", "feat-010", "feat-011", "feat-016"],
+      "spec": null,
+      "evidence": "docs/handoffs/feat-012.md — architecture v1, ADRs 0005-0008, backlog sliced (docs/backlog.md), sizing as guides; poe check green; reviewer: 2 (18+9)"
+    },
+    {
       "id": "feat-016",
       "type": "spike",
       "name": "Spike: Movie corpus selection, external signals, profile schema and hybrid ranking",

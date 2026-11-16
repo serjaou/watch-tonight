@@ -1,17 +1,6 @@
 {
   "features": [
     {
-      "id": "feat-012",
-      "type": "chore",
-      "name": "Architecture refinement and MVP backlog slicing",
-      "description": "Refine the architecture with the spike results (ADRs incl. Q11, open questions in docs/architecture.md §7) and slice the MVP backlog: thin end-to-end slice first; profile design (schema, closed vocabulary, prompt, owner-rated sample) as its own feature; slice mode and size rules in /spec.",
-      "stories": [],
-      "status": "todo",
-      "dependencies": ["feat-008", "feat-009", "feat-010", "feat-011", "feat-016"],
-      "spec": null,
-      "evidence": ""
-    },
-    {
       "id": "feat-017",
       "type": "chore",
       "name": "Measure flat-rate catalogue churn (spike 16 follow-up)",
@@ -20,6 +9,28 @@
       "status": "todo",
       "dependencies": ["feat-016"],
       "spec": null,
+      "evidence": ""
+    },
+    {
+      "id": "feat-018",
+      "type": "feature",
+      "name": "Walking skeleton: search end to end",
+      "description": "POST /search end to end on the ~300 spike-16 movies (the seed script re-fetches their TMDB bundles; raw TMDB data is not committed) in atlas-local: QueryIntent via Pydantic AI + gpt-6-luna (incl. a note for constraints it can't map), fastembed query vector, $vectorSearch with the pre-filters (verifying the untested ones and the audience rule), step-4 checks, re-rank + pitch, response states, exclude_ids (US3), trace with timings and cost; a minimal static provider list. Adds the first deterministic evals (P1, P3 as applied, P4, pitch length, real IDs, schema). First end-to-end latency numbers (Q7); answers Q4 on Windows. Split at /spec time if it holds independent behaviours.",
+      "stories": ["US1", "US2", "US3"],
+      "status": "todo",
+      "dependencies": ["feat-012", "feat-016"],
+      "spec": "docs/specs/18-walking-skeleton.md",
+      "evidence": ""
+    },
+    {
+      "id": "feat-019",
+      "type": "feature",
+      "name": "Profile design and owner-rated sample",
+      "description": "Finalize the v1 profile vocabulary with anchored definitions (viewing_effort, tone), the enrichment prompt and prompt_version, whether profiles keep an evidence field, and a profile-quality eval on ~30 films the owner rates (ADR 0005).",
+      "stories": ["US1", "US2"],
+      "status": "todo",
+      "dependencies": ["feat-018"],
+      "spec": "docs/specs/19-profile-design.md",
       "evidence": ""
     }
   ]

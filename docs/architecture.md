@@ -1,7 +1,10 @@
-# Architecture (v0, draft)
+# Architecture (v1)
 
 **What this file is:** how watch-tonight is built. What it does and the rules it must keep are in `docs/product.md` (P1–P7); why each choice was made is in `docs/decisions/`.
-**Status:** v0 draft (feat-005), written before the spikes. Points marked **(feat-0NN)** are open until that spike answers them; feat-012 turns the answers into ADRs and updates this file.
+**Status:** v1 (feat-012, 2026-11-16).
+- It applies the spikes on TMDB (feat-008), Atlas (feat-009), embeddings (feat-010), the runtime LLM (feat-011) and recommendation quality (feat-016), plus the owner decisions in §7.
+- ADRs 0005–0008 record the main choices.
+- Points marked **(slice)** are confirmed while building, not before.
 
 ---
 
@@ -10,13 +13,15 @@
 ```mermaid
 flowchart LR
   subgraph Offline["Offline jobs (src/watch_tonight/jobs)"]
-    T[TMDB API] -->|metadata, keywords, reviews| I[Ingest catalogue]
-    T -->|watch providers per country| R[Refresh availability, daily]
-    I --> DB[(MongoDB Atlas)]
+    T[TMDB API] -->|daily /discover crawl ES/US/BO| C[Crawl + admit G7]
+    T -->|per-movie bundle| C
+    T -->|watch providers| R[Refresh availability + signals, daily]
+    WD[Wikidata SPARQL] -->|critic score, awards| C
+    C --> DB[(MongoDB Atlas M0)]
     R --> DB
-    DB --> E[Enrich: LLM writes emotional profile]
+    DB --> E[Enrich: OpenAI Batch writes profile]
     E --> DB
-    DB --> M[Embed profiles]
+    DB --> M[Embed profile template, fastembed]
     M --> DB
   end
   subgraph Online
@@ -25,102 +30,188 @@ flowchart LR
     A[AI assistant] --> MCP[MCP server]
     API --> S[SearchMovies use case]
     MCP --> S
-    S -->|understand, re-rank + pitch| L[LLM]
-    S -->|filtered vector search| DB
+    S -->|understand, re-rank + pitch| L[OpenAI gpt-6-luna]
+    S -->|embed query, in-process| EM[fastembed]
+    S -->|filtered vector search K=150| DB
   end
 ```
 
 | Component | Package | Responsibility |
 |---|---|---|
-| Ingest catalogue | `jobs` → `application` | Load new movies from TMDB into `movies`. Stored movies are re-fetched only on purpose (§4). |
-| Refresh availability | `jobs` → `application` | Daily: rewrite `streamable` (flat-rate only, P1, **(feat-008)**) and `availability_updated_at` for every stored movie. |
-| Enrich | `jobs` → `application` | LLM writes each movie's emotional profile from its data, with the evidence it used. |
-| Embed | `jobs` → `application` | Turn each profile into a vector for search. |
+| Crawl + admit | `jobs` → `application` | Daily `/discover/movie` crawl of flat-rate films in ES/US/BO, sliced by release window. Films that pass gate **G7** and aren't stored yet are fetched (one bundle call each) and stored (§4). |
+| Refresh | `jobs` → `application` | Daily: `streamable`, `availability_updated_at` and `unstreamable_since` per stored movie (flat-rate only, P1), plus TMDB `popularity`, `vote_*` and `quality_score` from the crawl. |
+| Enrich | `jobs` → `application` | The LLM writes each new movie's profile (v1 schema, ADR 0005) from TMDB data only, through the OpenAI Batch API. |
+| Embed | `jobs` → `application` | Turn `template(profile)` into a 384-d vector (ADR 0007). |
 | SearchMovies | `application` | The one online use case. API and MCP call it and return the same response model (US4). |
 | API, MCP server | `api`, `mcp_server` | Thin adapters: parse input, call the use case, map results and errors. |
-| Web UI | `web/` | Thin React client of the API (Q10); mobile-friendly (≈375 px). Tooling (bundler, tests) is decided in the UI slice. |
+| Web UI | `web/` | Thin React client of the API (Q10); mobile-friendly (≈ 375 px); shows the age and privacy notes (Q14). Tooling is decided in the UI slice. |
 
 ## 2. Layers and ports
 
-`domain` ← `application` ← `infra`, `api`, `mcp_server`, `jobs` (enforced by import-linter; see `docs/conventions.md`). In C# terms: `domain` is the Core project with the interfaces and `infra` holds the implementations. Each entry point (`api`, `mcp_server`, `jobs`) is a composition root that wires `infra` adapters into the use cases (FastAPI `Depends` ≈ ASP.NET Core DI). Shared wiring code, if any, lives in one module all three import, never in `api`, so the MCP server and the jobs don't depend on FastAPI.
+`domain` ← `application` ← `infra`, `api`, `mcp_server`, `jobs` (enforced by import-linter; see `docs/conventions.md`).
+- In C# terms, `domain` is the Core project with the interfaces, and `infra` holds the implementations.
+- Each entry point (`api`, `mcp_server`, `jobs`) is a composition root that wires `infra` adapters into the use cases (FastAPI `Depends` ≈ ASP.NET Core DI).
+- Shared wiring code, if any, lives in one module all three import, never in `api`, so the MCP server and the jobs don't depend on FastAPI.
 
-Ports are `Protocol`s in `domain` (draft names):
+Ports are `Protocol`s in `domain`:
 
 | Port | Implemented in `infra` by | Used for |
 |---|---|---|
-| `MovieSource` | TMDB client (httpx + retries) | Metadata and watch providers |
-| `MovieRepository` | MongoDB | Read/write movies, record job runs |
-| `CandidateSearch` | Atlas `$vectorSearch` | Filtered vector search |
-| `LanguageModel` | OpenAI `gpt-6-luna` via Pydantic AI (Q6, feat-011) | Query intent, re-rank + pitches, emotional profiles (structured output) |
-| `Embedder` | Model choice and runtime **(feat-010)** | Profile and query vectors (same model for both) |
+| `MovieSource` | TMDB client (httpx, retries, ≤ 25 req/s measured safe) | `/discover` crawl, per-movie bundle, watch providers |
+| `QualitySignals` | Wikidata SPARQL (CC0) | `critic_score`, `awards_count`, looked up by TMDB ID (P4947) (Q15); when missing, ranking falls back to TMDB WR |
+| `MovieRepository` | MongoDB via `pymongo.AsyncMongoClient` (Motor is deprecated, feat-009) | Read/write movies, record job runs |
+| `CandidateSearch` | Atlas `$vectorSearch`, one vector index with the filter paths declared | Filtered vector search, K = 150 |
+| `LanguageModel` | OpenAI `gpt-6-luna` via Pydantic AI (ADR 0006) | Query intent, re-rank + pitches, profiles |
+| `Embedder` | `fastembed` `BAAI/bge-small-en-v1.5`, 384-d, ONNX CPU, in-process (ADR 0007) | Profile and query vectors (same model for both) |
 
-Keeping each external service behind a port lets a provider be swapped (e.g. when a free tier runs out) without touching `application`, and lets unit tests use in-memory fakes.
+Keeping each external service behind a port lets a provider be swapped without touching `application`, and lets unit tests use in-memory fakes.
 
 ## 3. Query flow (online)
 
-1. **Validate** the request `{text, country, providers[], max_runtime?, max_intensity?, avoid[]?, exclude_ids[]}`: P4 (text ≤ 500 chars, not empty), supported country, at least one provider. UI constraints are picked from fixed options (`max_intensity` and `avoid` from the closed vocabulary below), so they never go through the LLM (P3). Failure → *Invalid input* state.
-2. **Understand:** the LLM is the middle man between the user and the data (Q11). It turns the text, in any language (Q9), into a typed intent (Pydantic model):
-   - wanted tone and themes;
-   - structured filters extracted from the text, drawn only from a **closed vocabulary** shared with the profile schema (max runtime, content warnings from a fixed list, intensity on a fixed scale), so every filter matches a real field;
-   - an English summary to embed.
+1. **Validate** the request `{text, country, providers[], max_runtime?, max_intensity?, avoid[]?, exclude_ids[]}`.
+   - Checks: P4 (text ≤ 500 chars, not empty), supported country, and at least one provider from the curated list for that country (spike 08 Q5).
+     - The skeleton seeds a minimal static list of the main services.
+     - feat-020 builds the real list. Aliasing ad tiers and channels onto a parent service is applied only when writing `streamable`, and only if catalogue overlap proves it safe for P1 **(slice)**.
+   - UI constraints are picked from fixed options (`max_intensity` and `avoid` from the closed vocabulary), so they never go through the LLM (P3).
+   - Failure → *Invalid input* state.
+2. **Understand:** the LLM turns the text, in any language (Q9), into a `QueryIntent` (ADR 0005) with three channels:
+   - **hard filters** from the closed vocabulary: `max_runtime_minutes`, `max_intensity`, `avoid`, `year_min`/`year_max`, `audience` (kids/teens), `original_languages`;
+   - **semantic fields:** `tone`, `pacing`, `viewing_effort`, `ending_feel`, `humor_style`, `themes`, and an English `semantic_description` written in profile style;
+   - **ranking controls:** `specificity`, `era_mode`, `acclaim_preference`;
+   - **`unmapped_constraints`:** things the text asks to avoid or require that the vocabulary can't express (e.g. "no spiders"). They are not applied, and the response tells the user (Q18).
 
-   UI constraints are merged in as given. When the UI and the text set the same constraint, the stricter one applies (e.g. UI 120 min + text "under 90 minutes" → 90) and `avoid` lists are combined, so P3 holds for both. If this call fails, or its output is still invalid after one retry **(feat-011)**, the response is *Service unavailable*: without an intent there is nothing reliable to search with (Q8).
-3. **Retrieve:** embed the summary; `$vectorSearch` with a pre-filter **(feat-009)**: `streamable` contains one of `{country}:{provider}`, `runtime ≤ max_runtime`, `_id ∉ exclude_ids`, plus the intent's avoid/intensity filters if Atlas supports them as pre-filters. Take the top 30–50 candidates.
-4. **Check candidates (deterministic, in `application`):** drop every candidate that breaks P1 (availability re-checked) or P3 (runtime by value; avoid and intensity by comparing the intent's filters with the profile fields, never by asking an LLM). If fewer than 5 remain, the response will be *Partial*, with the product.md §4 note.
-5. **Re-rank and pitch:** the LLM picks up to 5 of the remaining candidates and writes a pitch for each that follows P2 and ADR 0001 (≤ 350 chars). Because it only sees valid candidates, the flow stays at 2 LLM calls per query.
-6. **Check the LLM's output (deterministic):** every picked ID is one of the step-4 candidates (no invented titles), pitch length (P2), response schema valid. On failure, retry the call **(feat-011)**. If it still fails (or the LLM is down at this step), return up to 5 step-4 candidates by search score without pitches: the *Results without pitches* state (Q8). It is never *Partial* because of the LLM, since that note ("add a service or relax a constraint") would mislead. But if step 4 already left fewer than 5 candidates, the response also carries the *Partial* note.
-7. **Respond:** `state` (*Success*, *Partial* or *Results without pitches*) and `notes`, a list of zero, one or two user-facing notes (the pitches note and the *Partial* note can both apply). Each result has title, year, runtime, poster URL, services, pitch (when available), TMDB link and its own `availability_updated_at` (P6; a refresh can be half done). Also attribution (P5) and a `trace` (stage timings, tokens, estimated cost).
+   UI constraints are merged in as given. When the UI and the text set the same constraint, the stricter one applies (e.g. UI 120 min + text "under 90 minutes" → 90), and `avoid` lists are combined, so P3 holds for both.
+
+   Validation errors are retried once with the error fed back (`ModelRetry`, ADR 0006; shown so far only with a scripted fake **(slice)**). Cosmetic problems are fixed deterministically instead, e.g. tones truncated to 3. If the call still fails, the response is *Service unavailable* (Q8).
+3. **Retrieve:** embed `semantic_description`, then run `$vectorSearch` with `limit = 150` and a pre-filter:
+   - `streamable` contains one of `{country}:{provider}`;
+   - `runtime ≤ max_runtime`, `_id ∉ exclude_ids`;
+   - `profile.intensity ≤`, `profile.content_warnings ∉ avoid`;
+   - the `year` range, `original_language` in the list;
+   - the `audience` rule (Q16).
+
+   - **What's verified:** spike 09 verified the first five filters together on M0, including `$nin` on 5,000 IDs.
+   - **Still to verify in feat-018 (slice):**
+     - the `year`, `original_language` and certification paths;
+     - the `audience` rule, which needs an `$or` that also matches films with a null certification.
+     - If Atlas can't express it, `audience` is applied in step 4 only.
+   - `numCandidates` and the latency at K = 150 need the full corpus on M0, so they're measured in feat-021.
+4. **Check and rank candidates (deterministic, in `application`):**
+   - Drop every candidate that breaks P1 (availability re-checked), US3 (`_id` in `exclude_ids`) or P3 (runtime, avoid, intensity, year, language and audience, re-checked by value, never by an LLM).
+   - Re-score with the hybrid formula (ADR 0008): similarity on a fixed scale, plus quality, era and popularity.
+     - Weighted by `specificity`, `era_mode` and `acclaim_preference`.
+     - The scale and the weights are set in feat-022. Until then, the skeleton orders candidates by similarity.
+   - Keep one film per `collection_id` (films without a collection are never deduped) and pass the top 25 to step 5.
+   - If fewer than 5 remain, the response will be *Partial*, with the product.md §4 note.
+5. **Re-rank and pitch:**
+   - The LLM picks up to 5 of the 25 and writes a pitch for each, following P2 and ADR 0001 (≤ 350 chars).
+   - It sees each candidate's data and profile fields, plus the intent's semantic fields as context.
+   - Because it only sees valid candidates, the flow stays at 2 LLM calls per query.
+6. **Check the LLM's output (deterministic):**
+   - Every picked ID is one of the step-4 candidates (no invented titles); no duplicates; exactly `min(5, number of candidates)` picks; pitch length (P2); valid schema.
+   - On failure, retry once with the error fed back.
+   - If it still fails (or the LLM is down at this step), return up to 5 step-4 candidates **by hybrid score**, without pitches: the *Results without pitches* state (Q8).
+   - It is never *Partial* because of the LLM. But if step 4 already left fewer than 5 candidates, the response also carries the *Partial* note.
+7. **Respond:**
+   - `state` (*Success*, *Partial* or *Results without pitches*) and `notes`: zero or more user-facing notes. These are the pitches note, the *Partial* note, and the "couldn't apply" note listing `unmapped_constraints` (Q18).
+   - Each result: title, year, runtime, poster URL, services, pitch (when available), TMDB link, and its own `availability_updated_at` (P6).
+   - Also attribution (P5) and a `trace`: stage timings, tokens, estimated cost.
 
 US3 needs no accounts: the client sends the IDs it has already shown as `exclude_ids`.
 
+**Measured so far** (feat-011 used a simpler prompt: 40 candidates with TMDB overviews and a placeholder vocabulary; v1 sends 25 candidates with profile fields):
+- both LLM calls together: p50 ≈ 5.0 s and p95 ≈ 6.3 s (feat-011, from a laptop in Spain);
+- query embedding ≈ 5 ms (feat-010);
+- `$vectorSearch` on M0: p95 121 ms at limit 40 (feat-009);
+- cost ≈ $0.00067 per query.
+
 ## 4. Offline pipeline
 
-- **Corpus:** popular movies with a flat-rate provider in ES, US or BO; 5–20k, bounded by TMDB rate limits **(feat-008)**, the Atlas free tier **(feat-009)**, embedding time **(feat-010)** and LLM cost for enrichment **(feat-011)**.
-- **Profile quality drives recommendation quality.** The richer and more accurate the movie data and its emotional profile, the better the results. So the profile schema (including the closed vocabulary of step 2), the enrichment prompt and a profile-quality eval on a sample the owner rates get their own feature when the backlog is sliced (feat-012).
-- **Movie data is ingested once.** Metadata (title, overview, keywords, credits, poster path) is treated as unchanging; only availability changes. It is fetched again only on purpose, e.g. to add a new field to the schema, or if TMDB's terms limit how long it may be stored **(feat-008)**.
+- **Corpus: gate G7** (feat-016, ADR 0008) over the flat-rate films of ES, US and BO. It keeps ≈ 14.5k of 51.5k films, ≈ 20% of M0. G7 requires:
+  - TMDB votes ≥ 20 if the film is ≤ 1 year old, ≥ 60 if ≤ 3, ≥ 120 if ≤ 10, otherwise ≥ 200;
+  - Bayesian `quality_score` (WR) ≥ 5.0;
+  - WR ≥ 6.3 if the film is more than 25 years old;
+  - admission data checks: an overview, a poster (Q13), `runtime > 0` (TMDB uses 0 for unknown, which would wrongly pass `runtime ≤ max`), and at least one genre.
+- **WR constants are pinned:** `C = 6.08` and `m = 50`, computed from the 2026-11-16 catalogue (feat-016). They are recomputed only on purpose, as a gate revision, so `quality_score` and the gate don't drift day to day.
+- **Admission over time:** the daily crawl admits any crawled film that passes G7 and isn't stored. The gate applies at admission only: a stored film that later drops below G7 stays.
+- **Inputs:**
+  - TMDB metadata, keywords (drop `*stinger`), credits, certifications (US and ES), collection;
+  - Wikidata critic score and awards (CC0, internal only).
+  - **No IMDb data and no reviews** (Q15).
+- **Metadata freshness:**
+  - TMDB `popularity`, `vote_*` and `quality_score` are refreshed daily from the crawl, at no extra calls.
+  - Other metadata is fetched at admission and fetched again on purpose: a new schema field, or TMDB's storage terms. TMDB expects a daily availability refresh plus periodic metadata re-ingest (spike 08 Q1).
+  - feat-020 owns the re-fetch policy **(slice)**: recent films (whose keywords and certifications fill in after release), plus a periodic full re-ingest (≈ 14.5k calls, ≈ 10 min). When a re-fetch changes the profile inputs, `source_hash` triggers re-enrichment.
+- **Profile quality drives recommendation quality.** The profile design feature anchors the vocabulary definitions (`viewing_effort` came out nearly binary in feat-016), writes the enrichment prompt, and adds a profile-quality eval on an owner-rated sample.
+- **Enrichment:** OpenAI Batch API, `gpt-6-luna`. G7 costs ≈ $1.03 once and a new film ≈ $0.00007. These figures come from the price list; feat-016 used standard calls, and the Batch path and its Pydantic AI support are checked in feat-021 **(slice)**.
 - **Idempotency:**
-  - each movie stores a `source_hash` of the inputs used to build its profile, plus the profile's `prompt_version`;
-  - enrichment and embedding re-run only when the hash, the prompt version or the embedding model changed;
+  - each movie stores a `source_hash` of the inputs used to build its profile, plus `prompt_version`, `model` and `embedding_model`;
+  - enrichment and embedding re-run only when one of them changed;
   - every job run is recorded in `ingestion_runs` (counts, duration, errors).
-- **Refresh** touches only `streamable` and `availability_updated_at` of stored movies, so it is cheap to run daily. Movies that become streamable later enter the corpus only when ingest, enrich and embed re-run; their schedule is open (Q12).
+- **Refresh and retention (Q17):**
+  - Keep films that leave streaming (`streamable: []`, `unstreamable_since` set). No eviction job in the MVP.
+  - Proposal to confirm in the ingest slice **(slice)**: films missing from every region's crawl get `streamable: []` with no per-movie call, and `/watch/providers` is called only for listed films.
+  - The churn rate is measured in feat-017 (Q12).
 
-## 5. Data model (MongoDB sketch)
+## 5. Data model (MongoDB, v1)
 
 ```jsonc
 // movies (_id = TMDB id)
 {
-  "_id": 603, "title": "The Matrix", "year": 1999, "runtime": 136,
-  "genres": ["Action", "Science Fiction"], "keywords": ["simulated reality"],
-  "overview": "…", "credits": {"directors": ["…"], "cast": ["…"]},
-  "poster_path": "/abc123.jpg",               // TMDB image path; URL built at display time (feat-008)
-  "review_snippets": ["…"],                   // only if TMDB terms allow it (feat-008)
-  "streamable": ["ES:8", "US:8"],             // "country:provider", flat-rate only (P1)
-  "availability_updated_at": "2026-11-09T03:00:00Z",
-  "profile": {"tone": ["dark"], "pacing": "fast", "intensity": 4, "themes": ["identity"],
-              "content_warnings": ["violence"], "summary": "…", "evidence": ["overview"],
-              "model": "…", "prompt_version": "p1"},
-  "embedding": [/* floats */], "embedding_model": "…",   // model and size: feat-010
-  "source_hash": "…", "updated_at": "…"
+  "_id": 603, "title": "The Matrix", "original_title": "The Matrix", "original_language": "en",
+  "year": 1999, "runtime": 136, "genres": ["Action", "Science Fiction"],
+  "keywords": ["simulated reality"], "overview": "…", "tagline": "…",
+  "credits": {"directors": ["…"], "cast": ["… top 5"]},
+  "collection_id": 2344, "certification_us": "R", "certification_es": "18",   // null when none (Q16)
+  "poster_path": "/abc123.jpg",                       // URL built at display time
+  "tmdb_vote_average": 8.2, "tmdb_vote_count": 27000, "tmdb_popularity": 31.4,
+  "quality_score": 8.1,                               // Bayesian WR from TMDB votes (refreshed daily)
+  "critic_score": 73, "awards_count": 4,              // Wikidata, internal only (Q15)
+  "streamable": ["ES:8", "US:8"],                     // "country:provider", flat-rate only (P1)
+  "availability_updated_at": "2026-11-16T03:00:00Z",
+  "unstreamable_since": null,                         // set when streamable empties (Q17)
+  "profile": {
+    "tone": ["dark", "tense"], "pacing": "fast", "intensity": 4,
+    "viewing_effort": "engaging", "ending_feel": "tense_cathartic", "humor_style": "none",
+    "content_warnings": ["violence"], "themes": ["identity", "control"],
+    "summary": "… how it feels to watch, ≤ 400 chars"
+  },
+  "embedding": [/* 384 floats */], "embedding_model": "BAAI/bge-small-en-v1.5",
+  "prompt_version": "p1", "model": "gpt-6-luna", "source_hash": "…", "updated_at": "…"
 }
-// also: providers (id, name, logo per country), ingestion_runs, eval_runs
+// also: providers (curated list per country: id, name, logo, aliases of ad tiers and channels
+//       onto the parent service; spike 08 Q5), ingestion_runs, eval_runs
 ```
 
-`streamable` is flattened to strings so the vector-search pre-filter stays a simple indexed field **(feat-009)**. The exact profile fields are refined with real examples when enrichment is built.
+- `streamable` is flattened to strings so the pre-filter stays a simple indexed field.
+- Filter paths declared in the vector index: `_id` (for `exclude_ids`), `streamable`, `runtime`, `year`, `original_language`, `certification_us`, `certification_es`, `profile.intensity`, `profile.content_warnings`. Every path used in the filter must be declared, or Atlas raises `OperationFailure` (spike 09).
+- **No `review_snippets`** (Q15).
+- Whether profiles keep an `evidence` field is decided in the profile design feature.
 
 ## 6. Cross-cutting
 
 - **Configuration and secrets:** `pydantic-settings` reads environment variables (`.env` locally, never committed; `.env.example` lists them). Like `IOptions<T>` bound from configuration.
-- **Errors:** domain exceptions (e.g. `PromptValidationError`) map to the response states. API: 422 for invalid input, 503 for *Service unavailable*. MCP: a tool error with the same message. No made-up results when the LLM or database is down.
-- **Observability:** the per-response `trace` (above) and the `ingestion_runs` records are the raw data; which metrics are reported, and how, is `docs/metrics.md` (feat-006).
+- **Errors:**
+  - Domain exceptions (e.g. `PromptValidationError`) map to the response states.
+  - API: 422 for invalid input, 503 for *Service unavailable*. MCP: a tool error with the same message.
+  - No made-up results when the LLM or the database is down.
+- **Observability:** the per-response `trace` and the `ingestion_runs` records; which metrics are reported, and how, is in `docs/metrics.md`.
 - **Evals (`evals/`, owner-approved, protected by the PR gate):**
   - deterministic evals run in CI at 100%: P1, P3 on the constraints as applied, P4, pitch length, real catalogue IDs, output schema;
   - quality evals:
-    - constraint extraction (P3): golden queries with their expected filters, including non-English input (Q9);
-    - retrieval precision@5 on a golden set of 30–50 owner-labelled queries;
-    - pitch quality judged by an LLM calibrated against the owner's labels.
-- **Tests:** unit tests on `domain` and `application` with fake ports; integration tests on `infra` against the `mongodb-atlas-local` container **(feat-009)**, marked `integration`; acceptance tests per spec.
-- **Hosting:** API, UI and the daily job on a free tier **(feat-010)**: memory limits decide the embedding runtime.
-- **Cost:** zero by default (product.md §1). Images are linked from TMDB, never stored. The `trace` records the estimated cost of every query, and any paid service or recurring cost needs the owner's approval.
+    - constraint extraction (P3): golden queries with expected filters, including non-English input;
+    - retrieval relevance on 30–50 owner-labelled queries (this also tunes the hybrid weights, ADR 0008);
+    - profile quality on an owner-rated sample;
+    - pitch quality judged by an LLM calibrated against owner labels.
+  - The LLM judge disagreed with itself on 26% of items in feat-016, so judge-based differences under about 0.1 are not evidence.
+- **Tests:**
+  - unit tests on `domain` and `application` with fake ports;
+  - integration tests on `infra` against the `mongodb-atlas-local` container, marked `integration`;
+  - acceptance tests per spec.
+- **Hosting:** API and the daily job on a free tier: Google Cloud Run or Azure Container Apps, with Render Free plus a GitHub Actions cron as the fallback (feat-010).
+  - The in-process embedder adds ≈ 212 MB to the image and needs ≈ 279 MB RSS at query time.
+  - The UI host is decided in the UI slice.
+- **Cost:** OpenAI usage only (Q6): ≈ $0.67 per 1,000 queries and ≈ $1.03 once for the corpus, capped by the prepaid balance. Everything else is free tier. Images are linked from TMDB, never stored.
 
 ## 7. Questions
 
@@ -128,25 +219,26 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
 
 | # | Question | Answered by | Changes |
 |---|---|---|---|
-| Q1 | TMDB terms: storing metadata and review excerpts, caching rules, exact attribution (TMDB and JustWatch) | feat-008 | Data model, enrichment inputs, P5 wording |
-| Q2 | TMDB rate limits and flat-rate provider coverage in ES, US and BO (is BO usable?) | feat-008 | Corpus size, countries at launch |
-| Q3 | Atlas free tier: storage, vector index limits, pre-filter on an array field + range + `$nin` | feat-009 | Corpus size, `streamable` design, query step 3 |
-| Q4 | Does `mongodb-atlas-local` run `$vectorSearch` on both machines (Mac ARM, Windows x86)? | feat-009 | Integration tests |
-| Q5 | Embedding model and where it runs at query time; which free host fits | feat-010 | `Embedder`, container image, hosting |
-| Q7 | p95 latency target (product.md: to confirm, guess < 10 s) | Measured in the first end-to-end slice (feat-012 plans it) | Number of LLM calls, caching |
-| Q12 | How often do ingest, enrich and embed re-run to add newly streamable movies? | feat-008 (rate of change), then feat-012 | Job schedule, LLM and embedding cost |
+| Q4 | Does `mongodb-atlas-local` run `$vectorSearch` on both machines? It ran on the Mac (feat-009), and the image is published for `linux/amd64`. The Windows run is pending because Docker Desktop wasn't running during feat-012. | Walking skeleton's integration tests (feat-018) | Integration tests on Windows |
+| Q7 | p95 latency target (product.md: to confirm, guess < 10 s). The LLM calls alone are p95 ≈ 6.3 s from a laptop. | feat-018 (end to end, local, small corpus), feat-021 (`$vectorSearch` at K = 150 on M0), feat-025 (from the host) | Number of LLM calls, K, caching |
+| Q12 | How often new films are admitted, and the churn rate. Plan: the daily `/discover` crawl admits films that pass G7. | feat-017 (churn), ingest slice (feat-020) | Job schedule, cost |
 
-### Decided (owner, 2026-11-13 / 2026-11-14 / 2026-11-16)
+### Decided (owner and spikes, 2026-11-13 to 2026-11-16)
 
 | # | Question | Decision | Recorded in |
 |---|---|---|---|
-| Q6 | Runtime LLM: provider, model, cost, data use, framework, fallback | **OpenAI only, `gpt-6-luna`**, for the online calls and the offline enrichment (Batch API).<br>The owner approved a small usage-based spend (≈ $0.67 per 1,000 queries, ≈ $1.10 once for 20k profiles), capped by the prepaid OpenAI balance with auto-recharge off.<br>**No Gemini, free or paid.** The free tier can't serve EEA users, and its terms (paid too) bar services likely to be accessed by under-18s (Q14).<br>No second provider as fallback: an OpenAI outage maps to *Service unavailable* / *Results without pitches* (Q8). A second OpenAI model as fallback may be tested in the first slice.<br>Framework: Pydantic AI (`NativeOutput`, `output_validator` + `ModelRetry`); the ADR comes with feat-012. | docs/spikes/11-runtime-llm.md, `LanguageModel` |
-| Q15 | External data for quality and enrichment | **No IMDb data**, for now: its licence bars building a movie database, and it adds ≈ 2% of films. **No TMDB reviews** in the enrichment prompt (no measured gain, +35% tokens). Quality comes from TMDB votes (Bayesian WR); `critic_score` and `awards_count` come from Wikidata (CC0) and are used internally only. | docs/spikes/16-recommendation-signals-and-ranking.md §5 Q2 |
-| Q16 | `audience` filter (kids or teens) when a film has no age certification | Use the US certification, else the ES certification, else the film's profile:<br>- kids: US G/PG, else ES `A`/`Ai`/`7`/`7i`, else `intensity ≤ 2` and none of violence, gore, sexual_content, nudity, sexual_violence, horror_scares, drug_use, strong_language, self_harm, child_harm, animal_harm;<br>- teens: US ≤ PG-13, else ES up to `12`, else `intensity ≤ 3` and none of sexual_content, nudity, sexual_violence, gore.<br>Certifications are the first non-empty, non-`NR` value in TMDB `release_dates`. | spike 16 §5 Q3, query steps 3–4 (P3) |
-| Q17 | Movies that leave streaming | Keep them (`streamable: []`): their profile and vector are already paid for. **No eviction job in the MVP** (the corpus is ≈ 20% of M0 and grows slowly). The refresh sets and clears `unstreamable_since`, so eviction can be added later if storage passes about 60% of M0. | spike 16 §5 Q1, §4 |
-| Q14 | Minors (OpenAI requires parent or guardian consent; Gemini bars services likely used by under-18s) | General-audience app for adults, using only OpenAI. The UI shows a short age note, e.g. *"For adults. Under 18? Use it with a parent's or guardian's permission."*, next to the privacy note naming OpenAI (30-day abuse-monitoring retention, no training). The product.md wording is the owner's to add. | docs/spikes/11-runtime-llm.md §Q2, UI slice |
+| Q1 | TMDB terms | Non-commercial use is allowed. Storing metadata for the app's own search is allowed, but bulk redistribution is not. Don't persist reviews (Q15). Don't train models on TMDB data. Attribution: the TMDB logo and the notice in P5, plus "Streaming availability by JustWatch". | docs/spikes/08-tmdb-and-providers.md Q1–Q2 |
+| Q2 | TMDB rate limits and coverage; is BO usable? | 25 req/s measured with 0 `429`s; ≈ 14 min for 20k bundle calls. **BO is usable** (62% of the Popular 500 are on flat-rate). G7 coverage: ES 9,952, US 11,961, BO 6,835 films. | spike 08 Q3–Q5, spike 16 §5 Q1 |
+| Q3 | Atlas free tier and pre-filters | The 14.5k-film corpus fits M0 at ≈ 20% (384-d). Up to 3 vector indexes, and we need 1. The **5 tested filters** (`streamable`, `runtime`, `_id` `$nin` on 5,000 IDs, `profile.intensity`, `profile.content_warnings`) combine in one `$vectorSearch`. The v1 additions are verified in feat-018 (§3 step 3). | spike 09 Q1–Q2 |
+| Q5 | Embedding model and runtime; hosting | `fastembed` `BAAI/bge-small-en-v1.5` (384-d) in-process: p50 5 ms, 279 MB RSS, +212 MB image. Hosting on Cloud Run or ACA (free). | ADR 0007, spike 10 |
+| Q6 | Runtime LLM: provider, model, cost, data use, framework, fallback | **OpenAI only, `gpt-6-luna`**, online and for enrichment (Batch). The owner approved a small usage-based spend, capped by the prepaid balance. **No Gemini.** No second provider as fallback; an outage maps to *Service unavailable* / *Results without pitches* (Q8). Framework: Pydantic AI. | ADR 0006, spike 11 |
 | Q8 | What to return when the LLM fails | The understanding call fails → *Service unavailable*. The re-rank call fails or its output stays invalid after a retry → the valid results without pitches. | product.md §4, query steps 2 and 6 |
-| Q9 | Non-English input | Any input language; UI, titles and pitches in English, and the UI says so. The LLM writes the intent in English. | product.md §2, query step 2 |
+| Q9 | Non-English input | Any input language. UI, titles and pitches are in English, and the UI says so. The LLM writes the intent in English. | product.md §2, query step 2 |
 | Q10 | Frontend framework | React. Tooling is decided in the UI slice. | §1 |
-| Q11 | How "avoid" and intensity constraints are checked | The LLM translates the free text into structured filters over a closed vocabulary shared with the profile schema; the data layer applies them deterministically (as Atlas pre-filters if supported, feat-009) and step 4 re-checks them. Defining the vocabulary is part of the profile feature (§4); the ADR comes with feat-012. | product.md P3, query steps 2–4 |
-| Q13 | Movies without a TMDB poster | Leave movies without a `poster_path` out of the corpus at ingest time (`0/500` popular and `0/480` deep-sampled flat-rate movies lacked one in `feat-008`; no UI placeholder needed). | docs/spikes/08-tmdb-and-providers.md Q6, §4 |
+| Q11 | How "avoid", intensity and the other constraints are checked | The LLM translates the free text into a `QueryIntent` over a closed vocabulary that mirrors the profile and movie fields. The data layer applies the filters as Atlas pre-filters, and step 4 re-checks them deterministically. | ADR 0005, spike 16 §5 Q3 |
+| Q13 | Movies without a TMDB poster | Left out at admission. None of the 980 films sampled in feat-008 (Popular 500 plus 480 deep flat-rate) lacked one. | spike 08 Q6, §4 |
+| Q14 | Minors | General-audience app for adults, OpenAI only. The UI shows the age note and the privacy note (product.md §2). | product.md §2, spike 11 §Q2 |
+| Q15 | External data for quality and enrichment | **No IMDb data** (its licence bars building a database; it adds ≈ 2%). **No TMDB reviews** in enrichment (no gain, +35% tokens). Quality comes from TMDB WR. `critic_score` and `awards_count` come from Wikidata (CC0), internal only. | ADR 0008, spike 16 §5 Q2 |
+| Q16 | `audience` filter when a film has no certification | US certification, else ES, else the profile:<br>- kids: US G/PG, else ES `A`/`Ai`/`7`/`7i`, else `intensity ≤ 2` and none of violence, gore, sexual_content, nudity, sexual_violence, horror_scares, drug_use, strong_language, self_harm, child_harm, animal_harm;<br>- teens: US ≤ PG-13, else ES up to `12`, else `intensity ≤ 3` and none of sexual_content, nudity, sexual_violence, gore.<br>Certifications are the first non-empty, non-`NR` value in TMDB `release_dates`. | product.md P3, ADR 0005, spike 16 §5 Q3 |
+| Q18 | Constraints the closed vocabulary can't express (e.g. "no spiders") | They are not applied, and the response says so with a short note, e.g. *"We couldn't apply: no spiders"*. Results are still returned. (Owner, 2026-11-16.) | §3 steps 2 and 7, ADR 0005 |
+| Q17 | Movies that leave streaming | Keep them (`streamable: []`). No eviction job in the MVP. `unstreamable_since` allows adding eviction if storage passes ≈ 60% of M0. | spike 16 §5 Q1, §4 |
