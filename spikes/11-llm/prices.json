@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-11-16",
+  "sources": {
+    "gemini": "https://aistudio.google.com/docs/pricing (ai.google.dev/gemini-api/docs/pricing redirects here); paid tier, Standard; output price includes thinking tokens",
+    "openai": "https://developers.openai.com/api/docs/pricing; Standard, short context (<=272K input)"
+  },
+  "per_1m_tokens_usd": {
+    "gemini-3.5-flash-lite": {"input": 0.30, "output": 2.50, "batch_input": 0.15, "batch_output": 1.25},
+    "gemini-3.1-flash-lite": {"input": 0.25, "output": 1.50, "batch_input": 0.125, "batch_output": 0.75},
+    "gpt-6-luna": {"input": 0.10, "output": 0.50, "cached_input": 0.01, "batch_input": 0.05, "batch_output": 0.25},
+    "gpt-5.6-luna": {"input": 0.20, "output": 1.20, "cached_input": 0.02, "batch_input": 0.10, "batch_output": 0.60},
+    "gpt-5.4-nano": {"input": 0.20, "output": 1.25, "cached_input": 0.02, "batch_input": 0.10, "batch_output": 0.625}
+  },
+  "notes": "Gemini free tier: 'Free of charge' for both flash-lite models, but content is used to improve Google products and the free tier may not serve users in the EEA, Switzerland or the UK (https://aistudio.google.com/docs/terms, effective 2026-03-23)."
+}
