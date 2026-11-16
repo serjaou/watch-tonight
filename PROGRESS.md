@@ -1,7 +1,7 @@
 # Progress
 
 ## Now
-- **Active feature:** `feat-011` (Spike: runtime LLM, `docs/spikes/11-runtime-llm.md`), branch `spike/runtime-llm`. Done; its PR waits for the owner's merge.
+- **Active feature:** `feat-011` (Spike: runtime LLM, `docs/spikes/11-runtime-llm.md`), branch `spike/runtime-llm`. Done; [PR #12](https://github.com/serjaou/watch-tonight/pull/12) waits for the owner's merge, with CI `check` and `gates` green.
 - **State:** `feat-011` is complete (`status: answered`).
   - **Recommended:** `gpt-6-luna` as primary, at `$0.00067` per query and ≈ `$1.10` for 20k profiles via Batch, with 0 schema errors. Framework: Pydantic AI `NativeOutput` + `FallbackModel`, with `gemini-3.5-flash-lite` paid as an optional fallback.
   - **Ruled out:** the Gemini free tier for the online path, because its terms forbid serving EEA users.
@@ -16,7 +16,6 @@
     - (c) whether to enable Gemini billing for a fallback.
   - Optional: read the Gemini free-tier RPD and TPM in AI Studio (https://ai.dev/rate-limit).
 - **Unverified:**
-  - CI on the `feat-011` PR.
   - The items under "Unverified" in `docs/handoffs/feat-011.md`, including retry-with-feedback on a real model and Gemini latency including 503s.
 
 ## Log (newest first, 1 line each; full details in `docs/handoffs/`)
