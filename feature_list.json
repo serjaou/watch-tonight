@@ -6,7 +6,7 @@
       "name": "Spike: Movie corpus selection, external signals, profile schema and hybrid ranking",
       "description": "Answer the questions in docs/spikes/16-recommendation-signals-and-ranking.md: age-aware corpus selection (the 1984 problem), external signals (IMDb ratings TSV vs transient TMDB reviews), v1 movie & emotional profile schema, and hybrid ranking formula (vector similarity + Bayesian quality + era/popularity weighted by query specificity).",
       "stories": ["US1", "US2"],
-      "status": "todo",
+      "status": "in_progress",
       "dependencies": ["feat-008", "feat-009", "feat-010", "feat-011"],
       "spec": "docs/spikes/16-recommendation-signals-and-ranking.md",
       "evidence": ""
