@@ -1,6 +1,6 @@
 # watch-tonight: agent guide
 Movie recommender: free-text mood + country + streaming services → 5 movies streamable now, each with a grounded pitch about the movie (never about the user; see `docs/product.md` P2).
-Python 3.13 · FastAPI · MongoDB Atlas Vector Search · an LLM (provider chosen in feat-011) · React web UI in web/.
+Python 3.13 · FastAPI · MongoDB Atlas Vector Search · OpenAI `gpt-6-luna` via Pydantic AI (ADR 0006) · fastembed (ADR 0007) · React web UI in web/.
 
 The owner is learning Python and agentic engineering through this project.
 Explain non-obvious Python and framework choices with a C# comparison. Prefer small, reviewable steps.
@@ -8,10 +8,11 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 
 ## Map (read on demand, not all at once)
 - PROGRESS.md: current state and next step. Read first.
-- feature_list.json: active/upcoming features (`todo|in_progress|blocked`). Source of truth for scope; completed items live in `docs/handoffs/done_features.json`.
+- feature_list.json: the active window (`in_progress` + the next few `todo`/`blocked` items). Source of truth for current scope; completed items live in `docs/handoffs/done_features.json`.
+- docs/backlog.md: the later items in the owner's priority order, with full detail; they move into feature_list.json when they come next
 - docs/product.md: problem, users, scope, out of scope, product rules P1–P7
 - docs/conventions.md: commands, code and test conventions, what the harness tests check
-- docs/architecture.md: components, layers and ports, query flow, data model, open questions (v0 draft until feat-012)
+- docs/architecture.md: components, layers and ports, query flow, data model, open questions (v1 since feat-012; ADRs 0005–0008)
 - docs/specs/: one spec per non-trivial feature
 - docs/spikes/: timeboxed investigations answering design unknowns (questions first, answers with evidence)
 - docs/decisions/: why things are the way they are (ADRs)
@@ -29,7 +30,7 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
    a. An item is `in_progress` or `todo` and **ready** (see Definition of Ready) → build it.
    b. The top unblocked `todo` feature has no spec or a `draft` spec → run `/spec` with the owner.
    c. `/spec` uncovers an unknown that changes the design → create a `spike` entry and `docs/spikes/NN-slug.md`, and run it.
-   d. No `todo` items remain → stop and ask the owner to slice the next features from `docs/product.md`. Never invent features.
+   d. No `todo` items remain → move the top item(s) of the **Ordered** section of `docs/backlog.md` into feature_list.json, following that file's rules. If none are ordered, stop and ask the owner to slice or order the next features (from `docs/product.md` or the **Proposed** section). Never invent features.
 4. Report in at most 8 lines: branch, check and CI result, the item and whether it is ready, a 3-line plan, blocking questions. If the item is ready and the next step is clear, continue; otherwise wait for "go".
 
 ## Workflow (ADR 0004)
@@ -39,21 +40,21 @@ The owner uses Antigravity on a Mac and Claude Code on a Windows laptop. Everyth
 - `/defend` and `/tutor` run only when the owner asks; they are not workflow steps.
 
 ## Working rules
-- One feature at a time, in `feature_list.json` order (only the owner reorders it).
+- One feature at a time, in `feature_list.json` order, then `docs/backlog.md` order (only the owner reorders either).
 - **Definition of Ready** (derived, never a status in `feature_list.json`): all `dependencies` are `done`, and:
   - `type: "chore"` → no spec needed;
   - `type: "spike"` → explicit questions listed in `docs/spikes/NN-slug.md` (throwaway code in `spikes/`, never `src/`, 1–2 sessions max);
   - `type: "feature"` → spec in `docs/specs/NN-slug.md` has `status: approved` and no open design-changing questions.
-- If implementation proves an approved spec wrong, stop coding, set the spec back to `draft`, explain the gap and get owner approval. If a spec exceeds 1 page or 3 sessions, split the feature.
+- If implementation proves an approved spec wrong, stop coding, set the spec back to `draft`, explain the gap and get owner approval. Size guides, not caps (owner, 2026-11-16): about 1 page, up to about 10 acceptance tests ordered by relevance and priority, a few sessions. Propose a split when a feature holds behaviours that could ship separately. Never drop relevant detail just to meet a number.
 - Never edit tests/acceptance/ or evals/ unless the owner asks for it in this session. CI fails a PR that touches them until the owner adds the `tests-approved` label; never add it yourself.
 - Never commit to or push `main`, never commit secrets, never add a dependency without explaining why.
 - Never add a paid service or a recurring cost without the owner's approval (budget: zero cost by default, `docs/product.md` §1).
 - **Definition of Done:** acceptance tests pass (or spike questions answered in `docs/spikes/`) + `uv run poe check` passes + evidence recorded. Paste commands and outputs; don't just claim.
-- Stay in scope. Record ideas outside the feature as new "todo" entries in feature_list.json instead of doing them.
+- Stay in scope. Record ideas outside the feature, and proposed splits, in the **Proposed** section of `docs/backlog.md`, for the owner to order, instead of doing them.
 
 ## End of Session (`/handoff`: at the end of every task, and when the owner ends the session, even mid-task)
 1. Rewrite the "Now" section of PROGRESS.md. If no item after the active one is ready, add `Waiting on owner: refine feat-XXX` (refine one ahead). Add a 1-line entry to the top of "Log" linking to `docs/handoffs/<feat-id>.md` when complete.
-2. When the task is complete, write `docs/handoffs/<feat-id>.md` (summary, outcome, full command + output evidence), move the feature from `feature_list.json` to the top of `docs/handoffs/done_features.json` with `status: "done"` and a 1-line `evidence` summary referencing `docs/handoffs/<feat-id>.md`, and add its index row to `docs/metrics.md`.
+2. When the task is complete, write `docs/handoffs/<feat-id>.md` (summary, outcome, full command + output evidence), move the feature from `feature_list.json` to the top of `docs/handoffs/done_features.json` with `status: "done"` and a 1-line `evidence` summary referencing `docs/handoffs/<feat-id>.md`, and add its index row to `docs/metrics.md`. If fewer than 3 `todo` items remain, refill `feature_list.json` from the **Ordered** section of `docs/backlog.md`.
 3. Ask: "What do I know now that the next session needs and is not in the repo?" Save it where it belongs (ADR, conventions, spec, PROGRESS.md, `docs/harness-log/` + index row in `docs/harness-log.md`).
 4. Commit (WIP is fine) and push the feature branch, so the next session restarts from a clean tree. When the task is complete, open a PR to `main`. Report what is still unverified.
 

@@ -43,7 +43,8 @@ Agents work on branches and open PRs; these settings make sure nothing reaches `
 - [docs/workflow.md](docs/workflow.md) — **owner's 1-page SDLC & daily session cheat sheet**
 - [AGENTS.md](AGENTS.md) — map and working rules for AI agents
 - [PROGRESS.md](PROGRESS.md) — current session state and log
-- [feature_list.json](feature_list.json) — scope and feature status
+- [feature_list.json](feature_list.json) — the active window: the current item and the next few
+- [docs/backlog.md](docs/backlog.md) — later items in the owner's priority order, with full detail
 - [docs/product.md](docs/product.md) — product specification and rules
 - [LEARNING.md](LEARNING.md) — Python & agentic engineering concept map and learning log
 
