@@ -1,14 +1,26 @@
 # Progress
 
 ## Now
-- **Active feature:** `feat-010` (Spike: query-time embedding runtime in `docs/spikes/10-embedding-runtime.md`), branch `spike/embedding-runtime` (`done`, waiting for owner PR merge).
-- **State:** `feat-010` completed (`status: answered` in `docs/spikes/10-embedding-runtime.md`): answered Q1–Q6 choosing `BAAI/bge-small-en-v1.5` (`384-d`) via `fastembed` (ONNX Runtime CPU) (`p50=5.04ms`, `p95=5.88ms`, `279.1 MB` query-time RSS, `+212.2 MB` added image size, `0.58s` cold start, `11.77 min` for 20k profiles on CPU, `0.999999` cosine parity with PyTorch).
-- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-15 17:39 CET, Mac.
-- **Next step:** After the owner merges the `feat-010` PR to `main` and puts LLM API keys (`GEMINI_API_KEY` and/or `OPENAI_API_KEY`) in `.env`, start `feat-011` (*Spike: runtime LLM* in `docs/spikes/11-runtime-llm.md`).
-- **Waiting on owner:** Merge the `feat-010` PR to `main`; put LLM API keys in local `.env` before starting `feat-011`.
-- **Unverified:** CI on the `feat-010` PR.
+- **Active feature:** `feat-011` (Spike: runtime LLM, `docs/spikes/11-runtime-llm.md`), branch `spike/runtime-llm`. Done; its PR waits for the owner's merge.
+- **State:** `feat-011` is complete (`status: answered`).
+  - **Recommended:** `gpt-6-luna` as primary, at `$0.00067` per query and ≈ `$1.10` for 20k profiles via Batch, with 0 schema errors. Framework: Pydantic AI `NativeOutput` + `FallbackModel`, with `gemini-3.5-flash-lite` paid as an optional fallback.
+  - **Ruled out:** the Gemini free tier for the online path, because its terms forbid serving EEA users.
+  - Spend: OpenAI ≈ `$0.022`, Gemini `$0`.
+- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-16 10:35 CET, Windows.
+- **Next step:** after the `feat-011` PR merges, start `feat-016` (*Spike: corpus selection, signals, profile schema, hybrid ranking*, `docs/spikes/16-recommendation-signals-and-ranking.md`). It's ready: questions listed, all dependencies done. Keep paid LLM calls to cents; the owner's OpenAI credit is ~$10.
+- **Waiting on owner:**
+  - Merge the `feat-011` PR.
+  - Decide before `feat-012`, using spike 11 §Q2 and §Q6:
+    - (a) approve a small usage-based spend for the online LLM (≈ $0.67 per 1,000 queries) and set a monthly hard cap on the OpenAI project;
+    - (b) the minors question: Gemini's terms bar services likely used by under-18s, and OpenAI needs a parent's or guardian's consent;
+    - (c) whether to enable Gemini billing for a fallback.
+  - Optional: read the Gemini free-tier RPD and TPM in AI Studio (https://ai.dev/rate-limit).
+- **Unverified:**
+  - CI on the `feat-011` PR.
+  - The items under "Unverified" in `docs/handoffs/feat-011.md`, including retry-with-feedback on a real model and Gemini latency including 503s.
 
 ## Log (newest first, 1 line each; full details in `docs/handoffs/`)
+- 2026-11-16 · Windows · Claude Code · `feat-011`: answered runtime LLM spike Q1–Q6 (`gpt-6-luna` `$0.00067`/query, 0 schema errors; Gemini free tier not usable for EEA users) → [feat-011.md](docs/handoffs/feat-011.md)
 - 2026-11-15 · Mac · Antigravity · `feat-010`: answered embedding runtime spike Q1–Q6 (`fastembed` `bge-small-en-v1.5` 384-d: `p50=5.04ms`, `279MB` RSS, `212MB` disk) → [feat-010.md](docs/handoffs/feat-010.md)
 - 2026-11-15 · Mac · Antigravity · `feat-008`: answered TMDB terms, rate limits (25.2 req/s), ES/US/BO coverage, and 24.5h provider churn → [feat-008.md](docs/handoffs/feat-008.md)
 - 2026-11-15 · Mac · Antigravity · `feat-009`: answered Atlas M0 + `atlas-local` vector search spike Q1–Q5 (`p50=60.5ms`/`p95=120.8ms`, 5-way pre-filter, 20k storage) → [feat-009.md](docs/handoffs/feat-009.md)

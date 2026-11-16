@@ -1,0 +1,72 @@
+{
+  "pydantic_ai_slim": "2.68.0",
+  "fallback_on_default": [
+    "ModelAPIError"
+  ],
+  "api_failures": {
+    "503_unavailable": {
+      "fell_back": true,
+      "answered_by": "secondary",
+      "calls": {
+        "primary": 1,
+        "secondary": 1
+      }
+    },
+    "503_http": {
+      "fell_back": true,
+      "answered_by": "secondary",
+      "calls": {
+        "primary": 1,
+        "secondary": 1
+      }
+    },
+    "429_rate_limit": {
+      "fell_back": true,
+      "answered_by": "secondary",
+      "calls": {
+        "primary": 1,
+        "secondary": 1
+      }
+    },
+    "timeout": {
+      "fell_back": true,
+      "answered_by": "secondary",
+      "calls": {
+        "primary": 1,
+        "secondary": 1
+      }
+    },
+    "401_auth": {
+      "fell_back": true,
+      "answered_by": "secondary",
+      "calls": {
+        "primary": 1,
+        "secondary": 1
+      }
+    }
+  },
+  "invalid_output": {
+    "result": "UnexpectedModelBehavior: Exceeded maximum output retries (1)",
+    "calls": {
+      "primary": 2
+    }
+  },
+  "retry_budget": {
+    "not passed": {
+      "model_calls": 2,
+      "outcome": "Exceeded maximum output retries (1)"
+    },
+    "retries=0": {
+      "model_calls": 1,
+      "outcome": "Exceeded maximum output retries (0)"
+    },
+    "retries=1": {
+      "model_calls": 2,
+      "outcome": "Exceeded maximum output retries (1)"
+    },
+    "retries=2": {
+      "model_calls": 3,
+      "outcome": "Exceeded maximum output retries (2)"
+    }
+  }
+}

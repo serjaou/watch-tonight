@@ -1,0 +1,261 @@
+{
+  "pydantic_ai_slim": "2.68.0",
+  "args": {
+    "openai_model": "gpt-6-luna",
+    "openai_reasoning": "none",
+    "gemini_model": "gemini-3.5-flash-lite",
+    "gemini_thinking": "minimal",
+    "queries": "q02-en-tense-no-gore,q06-es-light-90,q10-ja-heartwarming-anime",
+    "min_interval": 5.0,
+    "offline_only": false
+  },
+  "testmodel_default": "rejected by output_validator: Exceeded maximum output retries (1)",
+  "testmodel_output": {
+    "input_language": "en",
+    "summary_en": "A light comedy.",
+    "tone": [
+      "light"
+    ],
+    "themes": [
+      "comedy"
+    ],
+    "max_runtime_minutes": null,
+    "avoid": [],
+    "max_intensity": null
+  },
+  "functionmodel_retry": {
+    "model_calls": 2,
+    "output": {
+      "picks": [
+        {
+          "tmdb_id": 1,
+          "pitch": "A quiet, warm drama."
+        }
+      ]
+    }
+  },
+  "live": [
+    {
+      "provider": "openai",
+      "output_mode": "tool (default)",
+      "query_id": "q02-en-tense-no-gore",
+      "understand_ms": 2171,
+      "understand_usage": {
+        "requests": 1,
+        "input_tokens": 662,
+        "output_tokens": 78
+      },
+      "rerank_ms": 4024,
+      "rerank_usage": {
+        "requests": 1,
+        "input_tokens": 4030,
+        "output_tokens": 270
+      },
+      "max_pitch_chars": 236,
+      "ok": true
+    },
+    {
+      "provider": "openai",
+      "output_mode": "tool (default)",
+      "query_id": "q06-es-light-90",
+      "understand_ms": 1843,
+      "understand_usage": {
+        "requests": 1,
+        "input_tokens": 663,
+        "output_tokens": 76
+      },
+      "rerank_ms": 4575,
+      "rerank_usage": {
+        "requests": 1,
+        "input_tokens": 4172,
+        "output_tokens": 271
+      },
+      "max_pitch_chars": 207,
+      "ok": true
+    },
+    {
+      "provider": "openai",
+      "output_mode": "tool (default)",
+      "query_id": "q10-ja-heartwarming-anime",
+      "understand_ms": 1899,
+      "understand_usage": {
+        "requests": 1,
+        "input_tokens": 665,
+        "output_tokens": 77
+      },
+      "rerank_ms": 3028,
+      "rerank_usage": {
+        "requests": 1,
+        "input_tokens": 4432,
+        "output_tokens": 247
+      },
+      "max_pitch_chars": 202,
+      "ok": true
+    },
+    {
+      "provider": "openai",
+      "output_mode": "native",
+      "query_id": "q02-en-tense-no-gore",
+      "understand_ms": 2240,
+      "understand_usage": {
+        "requests": 1,
+        "input_tokens": 577,
+        "output_tokens": 74
+      },
+      "rerank_ms": 3733,
+      "rerank_usage": {
+        "requests": 1,
+        "input_tokens": 4036,
+        "output_tokens": 233
+      },
+      "max_pitch_chars": 208,
+      "ok": true
+    },
+    {
+      "provider": "openai",
+      "output_mode": "native",
+      "query_id": "q06-es-light-90",
+      "understand_ms": 1336,
+      "understand_usage": {
+        "requests": 1,
+        "input_tokens": 578,
+        "output_tokens": 66
+      },
+      "rerank_ms": 4482,
+      "rerank_usage": {
+        "requests": 1,
+        "input_tokens": 4148,
+        "output_tokens": 282
+      },
+      "max_pitch_chars": 224,
+      "ok": true
+    },
+    {
+      "provider": "openai",
+      "output_mode": "native",
+      "query_id": "q10-ja-heartwarming-anime",
+      "understand_ms": 1866,
+      "understand_usage": {
+        "requests": 1,
+        "input_tokens": 580,
+        "output_tokens": 67
+      },
+      "rerank_ms": 3798,
+      "rerank_usage": {
+        "requests": 1,
+        "input_tokens": 4407,
+        "output_tokens": 272
+      },
+      "max_pitch_chars": 216,
+      "ok": true
+    },
+    {
+      "provider": "gemini",
+      "output_mode": "tool (default)",
+      "query_id": "q02-en-tense-no-gore",
+      "understand_ms": 1087,
+      "understand_usage": {
+        "requests": 1,
+        "input_tokens": 725,
+        "output_tokens": 95
+      },
+      "rerank_ms": 1494,
+      "rerank_usage": {
+        "requests": 1,
+        "input_tokens": 4196,
+        "output_tokens": 305
+      },
+      "max_pitch_chars": 248,
+      "ok": true
+    },
+    {
+      "provider": "gemini",
+      "output_mode": "tool (default)",
+      "query_id": "q06-es-light-90",
+      "ok": false,
+      "error": "ModelUnavailableError: status_code: 503, model_name: gemini-3.5-flash-lite, body: {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
+    },
+    {
+      "provider": "gemini",
+      "output_mode": "tool (default)",
+      "query_id": "q10-ja-heartwarming-anime",
+      "understand_ms": 871,
+      "understand_usage": {
+        "requests": 1,
+        "input_tokens": 724,
+        "output_tokens": 99
+      },
+      "ok": false,
+      "error": "ModelUnavailableError: status_code: 503, model_name: gemini-3.5-flash-lite, body: {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
+    },
+    {
+      "provider": "gemini",
+      "output_mode": "native",
+      "query_id": "q02-en-tense-no-gore",
+      "ok": false,
+      "error": "ModelUnavailableError: status_code: 503, model_name: gemini-3.5-flash-lite, body: {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
+    },
+    {
+      "provider": "gemini",
+      "output_mode": "native",
+      "query_id": "q06-es-light-90",
+      "understand_ms": 1225,
+      "understand_usage": {
+        "requests": 1,
+        "input_tokens": 385,
+        "output_tokens": 113
+      },
+      "ok": false,
+      "error": "ModelUnavailableError: status_code: 503, model_name: gemini-3.5-flash-lite, body: {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
+    },
+    {
+      "provider": "gemini",
+      "output_mode": "native",
+      "query_id": "q10-ja-heartwarming-anime",
+      "understand_ms": 960,
+      "understand_usage": {
+        "requests": 1,
+        "input_tokens": 382,
+        "output_tokens": 84
+      },
+      "rerank_ms": 1729,
+      "rerank_usage": {
+        "requests": 1,
+        "input_tokens": 4548,
+        "output_tokens": 357
+      },
+      "max_pitch_chars": 227,
+      "ok": true
+    }
+  ],
+  "fallback": [
+    {
+      "setup": "broken_key_then_openai",
+      "try": 1,
+      "ok": true,
+      "answered_by": "gpt-6-luna",
+      "ms": 3075
+    },
+    {
+      "setup": "gemini_free_then_openai",
+      "try": 1,
+      "ok": true,
+      "answered_by": "gemini-3.5-flash-lite",
+      "ms": 1141
+    },
+    {
+      "setup": "gemini_free_then_openai",
+      "try": 2,
+      "ok": true,
+      "answered_by": "gemini-3.5-flash-lite",
+      "ms": 1165
+    },
+    {
+      "setup": "gemini_free_then_openai",
+      "try": 3,
+      "ok": true,
+      "answered_by": "gemini-3.5-flash-lite",
+      "ms": 1935
+    }
+  ]
+}
