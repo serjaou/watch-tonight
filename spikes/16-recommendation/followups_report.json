@@ -1,0 +1,106 @@
+{
+  "tmdb_es_certifications": [
+    "A: General admission.",
+    "Ai: General admission.",
+    "7: Not recommended for audiences under 7.",
+    "7i: Not recommended for audiences under 7.",
+    "12: Not recommended for audiences under 12.",
+    "16: Not recommended for audiences under 16.",
+    "18: Not recommended for audiences under 18.",
+    "X: Prohibited for audiences under 18."
+  ],
+  "M1_franchise_duplicates": {
+    "movies_checked": 309,
+    "with_collection": 48,
+    "A_base": {
+      "duplicate_slots_top25": 1,
+      "duplicate_slots_top5": 0,
+      "queries_with_dupes_top25": 1
+    },
+    "A_hybrid": {
+      "duplicate_slots_top25": 0,
+      "duplicate_slots_top5": 0,
+      "queries_with_dupes_top25": 0
+    },
+    "examples": []
+  },
+  "M4_certification": {
+    "us_usable (not empty, not NR)": "190/300 (63%)",
+    "es_usable": "100/300 (33%)",
+    "us_or_es": "209/300 (70%)",
+    "neither": "91/300 (30%)",
+    "us_usable_non_english": "29/300 (10%)",
+    "non_english_total": "101/300 (34%)",
+    "kids_kept_us_only": "55/300 (18%)",
+    "kids_kept_us_else_es": "56/300 (19%)",
+    "kids_kept_us_else_es_else_gentle_profile": "68/300 (23%)"
+  },
+  "L5_profile_distribution": {
+    "pacing": {
+      "medium": 196,
+      "fast": 73,
+      "slow": 31
+    },
+    "viewing_effort": {
+      "engaging": 152,
+      "easy": 140,
+      "demanding": 7,
+      "comfort_background": 1
+    },
+    "ending_feel": {
+      "bleak_or_ambiguous": 65,
+      "bittersweet": 65,
+      "warm_resolved": 62,
+      "tense_cathartic": 56,
+      "uplifting": 52
+    },
+    "humor_style": {
+      "none": 127,
+      "warm_gentle": 68,
+      "witty_dry": 39,
+      "broad_slapstick": 31,
+      "dark_humor": 20,
+      "absurd_satirical": 15
+    },
+    "intensity": {
+      "3": 107,
+      "4": 105,
+      "2": 68,
+      "5": 16,
+      "1": 4
+    },
+    "tone": {
+      "thoughtful": 126,
+      "tense": 100,
+      "dark": 92,
+      "funny": 79,
+      "melancholic": 70,
+      "exciting": 60,
+      "gritty": 59,
+      "light": 58,
+      "heartwarming": 52,
+      "romantic": 52,
+      "weird": 29,
+      "whimsical": 28,
+      "uplifting": 26,
+      "scary": 23,
+      "epic": 16,
+      "satirical": 12,
+      "cozy": 1
+    },
+    "content_warnings": {
+      "violence": 160,
+      "strong_language": 103,
+      "horror_scares": 37,
+      "sexual_content": 34,
+      "drug_use": 22,
+      "nudity": 19,
+      "child_harm": 17,
+      "gore": 13,
+      "sexual_violence": 6,
+      "self_harm": 5,
+      "animal_harm": 3
+    }
+  },
+  "tmdb_calls": 610
+}

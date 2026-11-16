@@ -20,6 +20,8 @@ Every task is a poethepoet task in `pyproject.toml` (`[tool.poe.tasks]`) and beh
 - PowerShell mangles quotes inside `python -c "..."`. For inline Python, use a Git Bash heredoc (`uv run python - <<'EOF'`) or a script file.
 - Windows PowerShell 5.1 `Get-Content` reads UTF-8 files as ANSI, so `–` shows up as `â€“`. Use `-Encoding UTF8`, or the Read tool. The file itself is fine.
 - `gh` is installed via winget, to `C:\Program Files\GitHub CLI\gh.exe`, and is logged in. A shell started before the install doesn't have it on PATH yet, so call it by full path until the session restarts. Without `gh`, CI status of this public repo can still be read: `Invoke-RestMethod 'https://api.github.com/repos/serjaou/watch-tonight/actions/runs?branch=<branch>&per_page=1' -Headers @{'User-Agent'='ci-check'}`.
+- Git Bash `curl` uses Windows schannel and can fail with `CRYPT_E_NO_REVOCATION_CHECK`. Download with Python `urllib` instead of weakening TLS checks.
+- JSONL with real-world text (any OS): split on `"\n"`, never `str.splitlines()`. TMDB overviews contain U+2028/U+2029, which `splitlines()` treats as line breaks (feat-016).
 - Throwaway spike scripts with extra packages: `uv run --no-project --python 3.13 --with <pkg> python spikes/...`. Without `--python 3.13`, uv may pick the laptop's system Python 3.11.
 
 ## Code

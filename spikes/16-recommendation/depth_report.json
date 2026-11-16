@@ -1,0 +1,162 @@
+{
+  "per_query": [
+    {
+      "query": "I'm exhausted after work, I want something light and easy to",
+      "specificity": "broad",
+      "pool": 14478,
+      "deepest_vector_rank_in_hybrid_top25": 112,
+      "recall@K25": 0.6,
+      "recall@K50": 0.76,
+      "recall@K100": 0.92,
+      "recall@K150": 0.96,
+      "recall@K200": 1.0
+    },
+    {
+      "query": "Something funny, I really need a laugh tonight",
+      "specificity": "broad",
+      "pool": 14478,
+      "deepest_vector_rank_in_hybrid_top25": 91,
+      "recall@K25": 0.76,
+      "recall@K50": 0.92,
+      "recall@K100": 0.92,
+      "recall@K150": 0.92,
+      "recall@K200": 0.96
+    },
+    {
+      "query": "A feel-good movie that will leave me smiling",
+      "specificity": "broad",
+      "pool": 14478,
+      "deepest_vector_rank_in_hybrid_top25": 114,
+      "recall@K25": 0.68,
+      "recall@K50": 0.84,
+      "recall@K100": 0.92,
+      "recall@K150": 0.96,
+      "recall@K200": 0.96
+    },
+    {
+      "query": "A tense submarine or single-location thriller",
+      "specificity": "specific",
+      "pool": 14478,
+      "deepest_vector_rank_in_hybrid_top25": 28,
+      "recall@K25": 0.92,
+      "recall@K50": 0.96,
+      "recall@K100": 0.96,
+      "recall@K150": 0.96,
+      "recall@K200": 0.96
+    },
+    {
+      "query": "A slow-burn sci-fi mystery where a small crew is trapped on ",
+      "specificity": "specific",
+      "pool": 14478,
+      "deepest_vector_rank_in_hybrid_top25": 38,
+      "recall@K25": 0.88,
+      "recall@K50": 0.96,
+      "recall@K100": 0.96,
+      "recall@K150": 0.96,
+      "recall@K200": 1.0
+    },
+    {
+      "query": "Gritty 90s neo-noir crime with a twist ending",
+      "specificity": "specific",
+      "pool": 793,
+      "deepest_vector_rank_in_hybrid_top25": 36,
+      "recall@K25": 0.88,
+      "recall@K50": 0.96,
+      "recall@K100": 0.96,
+      "recall@K150": 0.96,
+      "recall@K200": 1.0
+    },
+    {
+      "query": "A classic 80s adventure movie",
+      "specificity": "medium",
+      "pool": 565,
+      "deepest_vector_rank_in_hybrid_top25": 74,
+      "recall@K25": 0.88,
+      "recall@K50": 0.92,
+      "recall@K100": 0.92,
+      "recall@K150": 0.92,
+      "recall@K200": 0.92
+    },
+    {
+      "query": "Movie night with my kids (7 and 10), something fun with anim",
+      "specificity": "medium",
+      "pool": 14478,
+      "deepest_vector_rank_in_hybrid_top25": 50,
+      "recall@K25": 0.8,
+      "recall@K50": 0.92,
+      "recall@K100": 0.92,
+      "recall@K150": 0.96,
+      "recall@K200": 0.96
+    },
+    {
+      "query": "A Korean thriller that keeps me on the edge of my seat",
+      "specificity": "medium",
+      "pool": 241,
+      "deepest_vector_rank_in_hybrid_top25": 58,
+      "recall@K25": 0.84,
+      "recall@K50": 0.88,
+      "recall@K100": 0.92,
+      "recall@K150": 0.92,
+      "recall@K200": 0.92
+    },
+    {
+      "query": "A critically acclaimed drama that makes me think, I don't mi",
+      "specificity": "broad",
+      "pool": 14478,
+      "deepest_vector_rank_in_hybrid_top25": 50,
+      "recall@K25": 0.76,
+      "recall@K50": 0.88,
+      "recall@K100": 0.88,
+      "recall@K150": 0.92,
+      "recall@K200": 0.92
+    },
+    {
+      "query": "A hidden gem horror movie, not the usual mainstream stuff",
+      "specificity": "medium",
+      "pool": 14478,
+      "deepest_vector_rank_in_hybrid_top25": 52,
+      "recall@K25": 0.8,
+      "recall@K50": 0.88,
+      "recall@K100": 0.96,
+      "recall@K150": 0.96,
+      "recall@K200": 1.0
+    },
+    {
+      "query": "Quiero llorar con una historia de amor bonita pero triste",
+      "specificity": "medium",
+      "pool": 14478,
+      "deepest_vector_rank_in_hybrid_top25": 36,
+      "recall@K25": 0.8,
+      "recall@K50": 0.96,
+      "recall@K100": 0.96,
+      "recall@K150": 0.96,
+      "recall@K200": 1.0
+    }
+  ],
+  "mean_recall_by_specificity": {
+    "broad": {
+      "K25": 0.7,
+      "K50": 0.85,
+      "K100": 0.91,
+      "K150": 0.94,
+      "K200": 0.96,
+      "n": 4
+    },
+    "medium": {
+      "K25": 0.824,
+      "K50": 0.912,
+      "K100": 0.936,
+      "K150": 0.944,
+      "K200": 0.96,
+      "n": 5
+    },
+    "specific": {
+      "K25": 0.893,
+      "K50": 0.96,
+      "K100": 0.96,
+      "K150": 0.96,
+      "K200": 0.987,
+      "n": 3
+    }
+  }
+}

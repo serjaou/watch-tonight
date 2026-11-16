@@ -1,0 +1,438 @@
+{
+  "catalog_movies_vote_count_ge_10": 51527,
+  "usable_poster_and_overview": 51414,
+  "imdb_join": {
+    "wikidata_mapped": "46685/51414 (90.8%)",
+    "with_imdb_rating": "46647/51414 (90.7%)",
+    "by_decade_with_rating": {
+      "1970s": "2849/2940",
+      "1980s": "3201/3314",
+      "1990s": "3680/3806",
+      "2000s": "6523/6762",
+      "2010s": "14475/16259",
+      "2020s": "9981/12301",
+      "pre-1970": "5938/6032"
+    }
+  },
+  "tmdb_vs_imdb": {
+    "n": 46646,
+    "median_imdb_to_tmdb_vote_ratio": 39.0,
+    "spearman_rating_all": 0.811,
+    "spearman_rating_tmdb_votes_lt_100": 0.779,
+    "spearman_rating_tmdb_votes_ge_1000": 0.903
+  },
+  "wr_params": {
+    "tmdb": {
+      "C": 6.08,
+      "m": 50.0
+    },
+    "imdb": {
+      "C": 6.05,
+      "m": 2277
+    }
+  },
+  "wr_top10pct_overlap_tmdb_vs_imdb": 0.699,
+  "wr_spearman_tmdb_vs_imdb": 0.832,
+  "gates": {
+    "G0 none (vote_count>=10)": {
+      "kept": 51414,
+      "by_region": {
+        "ES": 26040,
+        "US": 42022,
+        "BO": 15406
+      },
+      "by_decade": {
+        "1970s": 2940,
+        "1980s": 3314,
+        "1990s": 3806,
+        "2000s": 6762,
+        "2010s": 16259,
+        "2020s": 12301,
+        "pre-1970": 6032
+      },
+      "pre_2000_share": 0.313,
+      "last_3_years": 6135,
+      "pre_2000_median_tmdb_wr": 6.14,
+      "lowest_wr_pre_2000_examples": [
+        "\"MANOS\" The Hands of Fate (1966) tmdb 2.197/241",
+        "Going Overboard (1989) tmdb 2.3/167",
+        "The Beast of Yucca Flats (1961) tmdb 2.348/99",
+        "Lawnmower Man 2: Beyond Cyberspace (1996) tmdb 3.325/186",
+        "Santa Claus Conquers the Martians (1964) tmdb 3.2/144"
+      ],
+      "best_excluded_pre_2000": [],
+      "most_popular_excluded_last_3_years": []
+    },
+    "G1 flat tmdb votes>=50": {
+      "kept": 25767,
+      "by_region": {
+        "ES": 15660,
+        "US": 21077,
+        "BO": 9462
+      },
+      "by_decade": {
+        "1970s": 1235,
+        "1980s": 1762,
+        "1990s": 2097,
+        "2000s": 3841,
+        "2010s": 8525,
+        "2020s": 5722,
+        "pre-1970": 2585
+      },
+      "pre_2000_share": 0.298,
+      "last_3_years": 2807,
+      "pre_2000_median_tmdb_wr": 6.44,
+      "lowest_wr_pre_2000_examples": [
+        "\"MANOS\" The Hands of Fate (1966) tmdb 2.197/241",
+        "Going Overboard (1989) tmdb 2.3/167",
+        "The Beast of Yucca Flats (1961) tmdb 2.348/99",
+        "Lawnmower Man 2: Beyond Cyberspace (1996) tmdb 3.325/186",
+        "Santa Claus Conquers the Martians (1964) tmdb 3.2/144"
+      ],
+      "best_excluded_pre_2000": [
+        "Kireedam (1989) tmdb 7.9/47",
+        "Mayabazar (1957) tmdb 8.074/34",
+        "Sandhesam (1991) tmdb 7.9/29",
+        "Devasuram (1993) tmdb 7.0/41",
+        "Spadikam (1995) tmdb 7.3/43",
+        "Sagara Sangamam (1983) tmdb 7.8/25"
+      ],
+      "most_popular_excluded_last_3_years": [
+        "Never Surrender (2026) tmdb 7.1/34 pop 209",
+        "The Anacondas (2025) tmdb 3.6/17 pop 90",
+        "Allen (2026) tmdb 6.9/37 pop 75",
+        "Jailer 2 (2026) tmdb 8.026/38 pop 69"
+      ]
+    },
+    "G2 flat tmdb votes>=200": {
+      "kept": 12421,
+      "by_region": {
+        "ES": 8529,
+        "US": 10255,
+        "BO": 5628
+      },
+      "by_decade": {
+        "1970s": 452,
+        "1980s": 843,
+        "1990s": 1216,
+        "2000s": 2285,
+        "2010s": 4291,
+        "2020s": 2489,
+        "pre-1970": 845
+      },
+      "pre_2000_share": 0.27,
+      "last_3_years": 1165,
+      "pre_2000_median_tmdb_wr": 6.81,
+      "lowest_wr_pre_2000_examples": [
+        "\"MANOS\" The Hands of Fate (1966) tmdb 2.197/241",
+        "Troll 2 (1990) tmdb 3.936/494",
+        "Jaws: The Revenge (1987) tmdb 4.092/1233",
+        "Baby Geniuses (1999) tmdb 4.081/432",
+        "Barb Wire (1996) tmdb 4.12/520"
+      ],
+      "best_excluded_pre_2000": [
+        "The Message (1976) tmdb 8.5/54",
+        "Manichitrathazhu (1993) tmdb 7.6/97",
+        "Kireedam (1989) tmdb 7.9/47",
+        "Mayabazar (1957) tmdb 8.074/34",
+        "Sandhesam (1991) tmdb 7.9/29",
+        "The Pinchcliffe Grand Prix (1975) tmdb 7.832/110"
+      ],
+      "most_popular_excluded_last_3_years": [
+        "A Story of Derry (2026) tmdb 6.688/128 pop 260",
+        "Never Surrender (2026) tmdb 7.1/34 pop 209",
+        "The Mongoose (2026) tmdb 6.261/182 pop 147",
+        "Heartland (2026) tmdb 6.716/51 pop 114"
+      ]
+    },
+    "G3 age-aware tmdb votes": {
+      "kept": 12554,
+      "by_region": {
+        "ES": 8784,
+        "US": 10439,
+        "BO": 6430
+      },
+      "by_decade": {
+        "1970s": 188,
+        "1980s": 416,
+        "1990s": 712,
+        "2000s": 1906,
+        "2010s": 4237,
+        "2020s": 4799,
+        "pre-1970": 296
+      },
+      "pre_2000_share": 0.128,
+      "last_3_years": 3219,
+      "pre_2000_median_tmdb_wr": 7.02,
+      "lowest_wr_pre_2000_examples": [
+        "Jaws: The Revenge (1987) tmdb 4.092/1233",
+        "Plan 9 from Outer Space (1957) tmdb 4.2/644",
+        "Batman & Robin (1997) tmdb 4.393/5653",
+        "The Avengers (1998) tmdb 4.4/822",
+        "Super Mario Bros. (1993) tmdb 4.497/1525"
+      ],
+      "best_excluded_pre_2000": [
+        "Stop Making Sense (1984) tmdb 8.4/407",
+        "The Message (1976) tmdb 8.5/54",
+        "Night and Fog (1956) tmdb 8.294/596",
+        "Manichitrathazhu (1993) tmdb 7.6/97",
+        "Kireedam (1989) tmdb 7.9/47",
+        "Mayabazar (1957) tmdb 8.074/34"
+      ],
+      "most_popular_excluded_last_3_years": [
+        "The Anacondas (2025) tmdb 3.6/17 pop 90",
+        "The Gospel of Christmas (2026) tmdb 7.342/19 pop 41",
+        "Snoopy Presents: 12 Days of Snoopy (2026) tmdb 6.9/13 pop 33",
+        "Being Heumann (2026) tmdb 6.75/18 pop 31"
+      ]
+    },
+    "G4 age-aware tmdb votes + WR>=6.0 if age>25": {
+      "kept": 12398,
+      "by_region": {
+        "ES": 8683,
+        "US": 10319,
+        "BO": 6368
+      },
+      "by_decade": {
+        "1970s": 182,
+        "1980s": 382,
+        "1990s": 614,
+        "2000s": 1891,
+        "2010s": 4237,
+        "2020s": 4799,
+        "pre-1970": 293
+      },
+      "pre_2000_share": 0.119,
+      "last_3_years": 3219,
+      "pre_2000_median_tmdb_wr": 7.11,
+      "lowest_wr_pre_2000_examples": [
+        "Species (1995) tmdb 5.998/1978",
+        "The Cable Guy (1996) tmdb 5.999/2823",
+        "Day of the Woman (1978) tmdb 5.997/767",
+        "Poltergeist II: The Other Side (1986) tmdb 5.999/822",
+        "The Arrival (1996) tmdb 6.0/897"
+      ],
+      "best_excluded_pre_2000": [
+        "Stop Making Sense (1984) tmdb 8.4/407",
+        "The Message (1976) tmdb 8.5/54",
+        "Night and Fog (1956) tmdb 8.294/596",
+        "Manichitrathazhu (1993) tmdb 7.6/97",
+        "Kireedam (1989) tmdb 7.9/47",
+        "Mayabazar (1957) tmdb 8.074/34"
+      ],
+      "most_popular_excluded_last_3_years": [
+        "The Anacondas (2025) tmdb 3.6/17 pop 90",
+        "The Gospel of Christmas (2026) tmdb 7.342/19 pop 41",
+        "Snoopy Presents: 12 Days of Snoopy (2026) tmdb 6.9/13 pop 33",
+        "Being Heumann (2026) tmdb 6.75/18 pop 31"
+      ]
+    },
+    "G5 age-aware imdb votes": {
+      "kept": 10677,
+      "by_region": {
+        "ES": 7473,
+        "US": 9073,
+        "BO": 5739
+      },
+      "by_decade": {
+        "1970s": 209,
+        "1980s": 445,
+        "1990s": 796,
+        "2000s": 1882,
+        "2010s": 3265,
+        "2020s": 3752,
+        "pre-1970": 328
+      },
+      "pre_2000_share": 0.167,
+      "last_3_years": 2599,
+      "pre_2000_median_tmdb_wr": 6.98,
+      "lowest_wr_pre_2000_examples": [
+        "\"MANOS\" The Hands of Fate (1966) tmdb 2.197/241",
+        "Troll 2 (1990) tmdb 3.936/494",
+        "Jaws: The Revenge (1987) tmdb 4.092/1233",
+        "Baby Geniuses (1999) tmdb 4.081/432",
+        "Barb Wire (1996) tmdb 4.12/520"
+      ],
+      "best_excluded_pre_2000": [
+        "Stop Making Sense (1984) tmdb 8.4/407",
+        "The Message (1976) tmdb 8.5/54",
+        "Night and Fog (1956) tmdb 8.294/596",
+        "Manichitrathazhu (1993) tmdb 7.6/97",
+        "Le Trou (1960) tmdb 8.2/616",
+        "Kireedam (1989) tmdb 7.9/47"
+      ],
+      "most_popular_excluded_last_3_years": [
+        "A Story of Derry (2026) tmdb 6.688/128 pop 260",
+        "Apocalypse Z: New World (2026) tmdb 6.133/218 pop 226",
+        "Never Surrender (2026) tmdb 7.1/34 pop 209",
+        "The Anacondas (2025) tmdb 3.6/17 pop 90"
+      ]
+    },
+    "G6 age-aware tmdb (old>=300) + WR>=6.5 if age>25": {
+      "kept": 12747,
+      "by_region": {
+        "ES": 8949,
+        "US": 10594,
+        "BO": 6393
+      },
+      "by_decade": {
+        "1970s": 268,
+        "1980s": 421,
+        "1990s": 600,
+        "2000s": 1884,
+        "2010s": 4237,
+        "2020s": 4799,
+        "pre-1970": 538
+      },
+      "pre_2000_share": 0.143,
+      "last_3_years": 3219,
+      "pre_2000_median_tmdb_wr": 7.16,
+      "lowest_wr_pre_2000_examples": [
+        "River's Edge (1986) tmdb 6.561/343",
+        "Everything You Always Wanted to Know About Sex *But Were Afraid to Ask (1972) tmdb 6.521/1039",
+        "The Limey (1999) tmdb 6.541/524",
+        "Tango & Cash (1989) tmdb 6.511/2262",
+        "Sleeping with the Enemy (1991) tmdb 6.52/1302"
+      ],
+      "best_excluded_pre_2000": [
+        "The Message (1976) tmdb 8.5/54",
+        "Manichitrathazhu (1993) tmdb 7.6/97",
+        "Kireedam (1989) tmdb 7.9/47",
+        "Mayabazar (1957) tmdb 8.074/34",
+        "Shoah (1985) tmdb 8.2/228",
+        "The Human Condition III: A Soldier's Prayer (1961) tmdb 8.4/233"
+      ],
+      "most_popular_excluded_last_3_years": [
+        "The Anacondas (2025) tmdb 3.6/17 pop 90",
+        "The Gospel of Christmas (2026) tmdb 7.342/19 pop 41",
+        "Snoopy Presents: 12 Days of Snoopy (2026) tmdb 6.9/13 pop 33",
+        "Being Heumann (2026) tmdb 6.75/18 pop 31"
+      ]
+    },
+    "G7 age-aware tmdb (old>=200) + WR>=6.3 if age>25, WR>=5.0 all": {
+      "kept": 14478,
+      "by_region": {
+        "ES": 9952,
+        "US": 11961,
+        "BO": 6835
+      },
+      "by_decade": {
+        "1970s": 371,
+        "1980s": 565,
+        "1990s": 793,
+        "2000s": 2156,
+        "2010s": 4797,
+        "2020s": 4999,
+        "pre-1970": 797
+      },
+      "pre_2000_share": 0.174,
+      "last_3_years": 3203,
+      "pre_2000_median_tmdb_wr": 7.02,
+      "lowest_wr_pre_2000_examples": [
+        "The Greatest Show on Earth (1952) tmdb 6.34/296",
+        "Rabid (1977) tmdb 6.322/596",
+        "Horror Express (1972) tmdb 6.341/356",
+        "Turner & Hooch (1989) tmdb 6.32/1512",
+        "The Beverly Hillbillies (1993) tmdb 6.331/628"
+      ],
+      "best_excluded_pre_2000": [
+        "The Message (1976) tmdb 8.5/54",
+        "Manichitrathazhu (1993) tmdb 7.6/97",
+        "Kireedam (1989) tmdb 7.9/47",
+        "Mayabazar (1957) tmdb 8.074/34",
+        "Sandhesam (1991) tmdb 7.9/29",
+        "The Pinchcliffe Grand Prix (1975) tmdb 7.832/110"
+      ],
+      "most_popular_excluded_last_3_years": [
+        "The Anacondas (2025) tmdb 3.6/17 pop 90",
+        "War of the Worlds (2025) tmdb 4.038/1208 pop 89",
+        "The Gospel of Christmas (2026) tmdb 7.342/19 pop 41",
+        "Snoopy Presents: 12 Days of Snoopy (2026) tmdb 6.9/13 pop 33"
+      ]
+    }
+  },
+  "imdb_rescue_over_G7": {
+    "rule": "excluded by G7, imdb_votes>=10k and IMDb WR>=7.0",
+    "count": 291,
+    "share_of_G7": 0.02,
+    "by_language_top5": [
+      [
+        "en",
+        87
+      ],
+      [
+        "hi",
+        80
+      ],
+      [
+        "ta",
+        42
+      ],
+      [
+        "te",
+        32
+      ],
+      [
+        "ml",
+        15
+      ]
+    ],
+    "pre_2000": 87,
+    "examples": [
+      "The Kashmir Files (2022, hi) tmdb 112 votes",
+      "Dil Bechara (2020, hi) tmdb 101 votes",
+      "Karthikeya 2 (2022, te) tmdb 36 votes",
+      "Rocketry: The Nambi Effect (2022, ta) tmdb 77 votes",
+      "Dasvi (2022, hi) tmdb 44 votes",
+      "777 Charlie (2022, kn) tmdb 84 votes"
+    ]
+  },
+  "gate_thresholds": {
+    "G3/G4 tmdb_age_votes": "age<=1:20, <=3:60, <=10:150, <=25:300, else 600",
+    "G5 imdb_age_votes": "age<=1:1k, <=3:3k, <=10:8k, <=25:15k, else 25k",
+    "G6 tmdb_age_votes": "age<=1:20, <=3:60, <=10:150, else 300; WR>=6.5 if age>25",
+    "G7 tmdb_age_votes": "age<=1:20, <=3:60, <=10:120, else 200; WR>=5.0; WR>=6.3 if age>25"
+  },
+  "language_top10_usable": [
+    [
+      "en",
+      33407
+    ],
+    [
+      "es",
+      3172
+    ],
+    [
+      "fr",
+      3155
+    ],
+    [
+      "ja",
+      1541
+    ],
+    [
+      "it",
+      1464
+    ],
+    [
+      "hi",
+      877
+    ],
+    [
+      "de",
+      874
+    ],
+    [
+      "zh",
+      699
+    ],
+    [
+      "ko",
+      644
+    ],
+    [
+      "ta",
+      499
+    ]
+  ]
+}

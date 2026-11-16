@@ -1,18 +1,28 @@
 # Progress
 
 ## Now
-- **Active feature:** `feat-016` (Spike: corpus selection, external signals, profile schema, hybrid ranking, `docs/spikes/16-recommendation-signals-and-ranking.md`), branch `spike/recommendation-signals`. In progress.
-- **State:**
-  - Owner decisions of 2026-11-16 are recorded in `docs/architecture.md` §7: Q6 is OpenAI `gpt-6-luna` only (spend approved, no Gemini, no second-provider fallback), and Q14 is an age note in the UI.
-  - Spike work is starting.
-- **Last check:** `uv run poe check` green on `main` `08100c0`, 2026-11-16, Windows. CI on `main` green.
-- **Next step:** answer Q1–Q4 of spike 16 with throwaway scripts in `spikes/16-recommendation/`. LLM calls use `gpt-6-luna` only, kept to cents (the owner's OpenAI credit is ~$10).
+- **Active feature:** `feat-016` (Spike: corpus selection, external signals, profile schema, hybrid ranking), branch `spike/recommendation-signals`. Done; its PR waits for the owner's merge.
+- **State:** `feat-016` is complete (`status: answered`; §5 findings, §6 summary and architecture-change table).
+  - Gate G7 gives 14,478 films. IMDb and reviews are recommended against. Wikidata `critic_score` stays internal.
+  - The v1 mirror schema is set, and retrieval uses K = 150 with a hybrid re-score.
+  - Spend ≈ $0.13: `gpt-6-luna`, plus ≈ $0.07 on `gpt-6.1-terra` for the reference labels.
+  - Owner decisions Q6 and Q14 are recorded in `docs/architecture.md` §7.
+- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-16 12:43 CET, Windows.
+- **Next step:** after the merge, `feat-012` (architecture refinement and MVP backlog slicing). It's a chore, so it's ready. It applies the spike 16 §6 table and the decisions below. `feat-017` (churn re-crawl) can run any time after 2026-11-17 10:41 UTC.
 - **Waiting on owner:**
-  - Optional: add the age-note line (Q14) to `docs/product.md`, which is owner-only.
+  - Merge the `feat-016` PR.
+  - Decide spike 16 §6:
+    - (a) drop IMDb;
+    - (b) drop reviews from enrichment;
+    - (c) the `audience` fallback when a film has no certification;
+    - (d) the eviction threshold, after feat-017.
+  - Optional: add the age-note line (Q14) to `docs/product.md`.
 - **Unverified:**
-  - The items under "Unverified" in `docs/handoffs/feat-011.md`.
+  - The items under "Unverified" in `docs/handoffs/feat-016.md`, including corpus-scale profile retrieval, hybrid weights without a golden set, and K = 150 latency.
+  - CI on the PR.
 
 ## Log (newest first, 1 line each; full details in `docs/handoffs/`)
+- 2026-11-16 · Windows · Claude Code · `feat-016`: answered recommendation spike Q1–Q4 (G7 gate 14,478 films, no IMDb/reviews, v1 mirror schema, K=150 hybrid; $0.13) → [feat-016.md](docs/handoffs/feat-016.md)
 - 2026-11-16 · Windows · Claude Code · `feat-011`: answered runtime LLM spike Q1–Q6 (`gpt-6-luna` `$0.00067`/query, 0 schema errors; Gemini free tier not usable for EEA users) → [feat-011.md](docs/handoffs/feat-011.md)
 - 2026-11-15 · Mac · Antigravity · `feat-010`: answered embedding runtime spike Q1–Q6 (`fastembed` `bge-small-en-v1.5` 384-d: `p50=5.04ms`, `279MB` RSS, `212MB` disk) → [feat-010.md](docs/handoffs/feat-010.md)
 - 2026-11-15 · Mac · Antigravity · `feat-008`: answered TMDB terms, rate limits (25.2 req/s), ES/US/BO coverage, and 24.5h provider churn → [feat-008.md](docs/handoffs/feat-008.md)

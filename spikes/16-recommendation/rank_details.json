@@ -1,0 +1,2163 @@
+[
+  {
+    "query": "I'm exhausted after work, I want something light and easy to watch",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": null,
+      "avoid": [],
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "tone": [
+        "light",
+        "cozy"
+      ],
+      "pacing": "medium",
+      "viewing_effort": "easy",
+      "ending_feel": null,
+      "humor_style": null,
+      "themes": [],
+      "semantic_description": "A relaxed, low-pressure movie that feels light and easy to settle into after a tiring day. It should be straightforward to follow, with a comfortable atmosphere rather than demanding or intense storytelling.",
+      "specificity": "broad",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any"
+    },
+    "filtered_pool": 14478,
+    "A_base": [
+      575568,
+      15804,
+      13689,
+      356500,
+      77948,
+      22094,
+      411638,
+      586586,
+      269494,
+      10589,
+      354285,
+      12493,
+      351211,
+      33564,
+      571055,
+      78854,
+      4946,
+      77495,
+      1003722,
+      18329,
+      1675,
+      37094,
+      399031,
+      276844,
+      368942
+    ],
+    "A_hybrid": [
+      15804,
+      13689,
+      12493,
+      575568,
+      269494,
+      1675,
+      18329,
+      22094,
+      37094,
+      411638,
+      33564,
+      76,
+      707886,
+      356500,
+      77495,
+      28971,
+      11602,
+      4946,
+      965150,
+      571055,
+      1402,
+      354285,
+      10843,
+      10589,
+      53023
+    ],
+    "B_filtered_pool": 300,
+    "B_template": [
+      1280684,
+      30127,
+      17962,
+      1248454,
+      582206
+    ],
+    "B_description": [
+      582206,
+      17962,
+      30127,
+      398177,
+      208277
+    ],
+    "B_rawtext": [
+      12429,
+      1675,
+      9397,
+      30127,
+      1312150
+    ],
+    "B_tmdbtext": [
+      1675,
+      298614,
+      300,
+      1167351,
+      425591
+    ],
+    "rel_A_base": [
+      2,
+      0,
+      1,
+      0,
+      0
+    ],
+    "rel_A_hybrid": [
+      0,
+      1,
+      0,
+      2,
+      0
+    ],
+    "rel_B_template": [
+      1,
+      1,
+      1,
+      2,
+      2
+    ],
+    "rel_B_description": [
+      2,
+      1,
+      1,
+      2,
+      0
+    ],
+    "rel_B_rawtext": [
+      2,
+      1,
+      2,
+      1,
+      1
+    ],
+    "rel_B_tmdbtext": [
+      1,
+      2,
+      1,
+      1,
+      0
+    ],
+    "A_base_titles": [
+      "An Almost Ordinary Summer (2019)",
+      "A Brighter Summer Day (1991)",
+      "Peaceful Warrior (2006)",
+      "Detour (2017)",
+      "The Cold Light of Day (2012)"
+    ],
+    "A_hybrid_titles": [
+      "A Brighter Summer Day (1991)",
+      "Peaceful Warrior (2006)",
+      "High and Low (1963)",
+      "An Almost Ordinary Summer (2019)",
+      "A Hard Day (2014)"
+    ],
+    "B_template_titles": [
+      "Corina (2025)",
+      "The Invisible Woman (2009)",
+      "After Life (1999)",
+      "Sunny Sanskari Ki Tulsi Kumari (2025)",
+      "The Best Is Yet to Come (2019)"
+    ],
+    "B_rawtext_titles": [
+      "Ponyo (2008)",
+      "Day for Night (1973)",
+      "Evolution (2001)",
+      "The Invisible Woman (2009)",
+      "Ricky Gervais: Mortality (2025)"
+    ]
+  },
+  {
+    "query": "Something funny, I really need a laugh tonight",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": null,
+      "avoid": [],
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "tone": [
+        "funny"
+      ],
+      "pacing": null,
+      "viewing_effort": null,
+      "ending_feel": null,
+      "humor_style": null,
+      "themes": [],
+      "semantic_description": "A genuinely funny, laugh-focused movie that offers an easy escape and lifts the mood. It should keep the emphasis on humor rather than drama or emotional heaviness.",
+      "specificity": "broad",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any"
+    },
+    "filtered_pool": 14478,
+    "A_base": [
+      75198,
+      78854,
+      447335,
+      7233,
+      8363,
+      399725,
+      374475,
+      43923,
+      376660,
+      555790,
+      399031,
+      560391,
+      380225,
+      505015,
+      310593,
+      735726,
+      295699,
+      8193,
+      519597,
+      375794,
+      239568,
+      575568,
+      1139819,
+      5991,
+      18329
+    ],
+    "A_hybrid": [
+      8363,
+      78854,
+      447335,
+      75198,
+      374475,
+      376660,
+      375794,
+      43923,
+      380225,
+      7233,
+      399725,
+      18329,
+      310593,
+      5991,
+      555790,
+      8193,
+      735726,
+      10234,
+      45523,
+      399031,
+      303991,
+      295699,
+      37916,
+      604578,
+      505015
+    ],
+    "B_filtered_pool": 300,
+    "B_template": [
+      1248454,
+      72890,
+      1279433,
+      239573,
+      1593
+    ],
+    "B_description": [
+      582206,
+      23398,
+      9397,
+      72890,
+      14367
+    ],
+    "B_rawtext": [
+      34423,
+      14367,
+      10147,
+      12620,
+      1312150
+    ],
+    "B_tmdbtext": [
+      5991,
+      298614,
+      582206,
+      55976,
+      30127
+    ],
+    "rel_A_base": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rel_A_hybrid": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rel_B_template": [
+      2,
+      2,
+      1,
+      2,
+      2
+    ],
+    "rel_B_description": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rel_B_rawtext": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rel_B_tmdbtext": [
+      0,
+      2,
+      2,
+      1,
+      2
+    ],
+    "A_base_titles": [
+      "Welcome Aboard (2011)",
+      "Easy! (2011)",
+      "Let Yourself Go (2017)",
+      "Rebound (2005)",
+      "Superbad (2007)"
+    ],
+    "A_hybrid_titles": [
+      "Superbad (2007)",
+      "Easy! (2011)",
+      "Let Yourself Go (2017)",
+      "Welcome Aboard (2011)",
+      "Toni Erdmann (2016)"
+    ],
+    "B_template_titles": [
+      "Sunny Sanskari Ki Tulsi Kumari (2025)",
+      "Girl Most Likely (2013)",
+      "Inheritance (2024)",
+      "Unfinished Business (2015)",
+      "Night at the Museum (2006)"
+    ],
+    "B_rawtext_titles": [
+      "The Slammin' Salmon (2009)",
+      "Adventures in Babysitting (1987)",
+      "Bad Santa (2003)",
+      "The House Bunny (2008)",
+      "Ricky Gervais: Mortality (2025)"
+    ]
+  },
+  {
+    "query": "A feel-good movie that will leave me smiling",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": null,
+      "avoid": [],
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "tone": [
+        "light",
+        "heartwarming",
+        "uplifting"
+      ],
+      "pacing": null,
+      "viewing_effort": null,
+      "ending_feel": "uplifting",
+      "humor_style": null,
+      "themes": [
+        "joy",
+        "hope",
+        "human connection"
+      ],
+      "semantic_description": "A warm, uplifting movie that leaves you feeling happier than when it began. Expect a feel-good emotional arc and a satisfying finish that brings a smile.",
+      "specificity": "broad",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any"
+    },
+    "filtered_pool": 14478,
+    "A_base": [
+      53023,
+      18329,
+      399031,
+      1402,
+      274479,
+      1139819,
+      744276,
+      26518,
+      607141,
+      310593,
+      1230550,
+      354285,
+      47218,
+      15804,
+      881209,
+      460668,
+      366514,
+      965150,
+      277432,
+      13689,
+      489412,
+      9836,
+      2898,
+      946726,
+      1119173
+    ],
+    "A_hybrid": [
+      53023,
+      1402,
+      18329,
+      15804,
+      744276,
+      274479,
+      399031,
+      310593,
+      965150,
+      20530,
+      489412,
+      1139819,
+      26518,
+      2898,
+      13689,
+      1230550,
+      607141,
+      843,
+      150540,
+      239571,
+      47218,
+      354285,
+      1483525,
+      642121,
+      460668
+    ],
+    "B_filtered_pool": 300,
+    "B_template": [
+      1280684,
+      5123,
+      14871,
+      582206,
+      1429743
+    ],
+    "B_description": [
+      582206,
+      1429743,
+      10510,
+      5123,
+      17661
+    ],
+    "B_rawtext": [
+      582206,
+      10510,
+      16052,
+      1429743,
+      17661
+    ],
+    "B_tmdbtext": [
+      1167351,
+      713776,
+      582206,
+      5991,
+      245844
+    ],
+    "rel_A_base": [
+      1,
+      0,
+      0,
+      2,
+      1
+    ],
+    "rel_A_hybrid": [
+      1,
+      2,
+      0,
+      1,
+      0
+    ],
+    "rel_B_template": [
+      2,
+      1,
+      2,
+      2,
+      2
+    ],
+    "rel_B_description": [
+      2,
+      2,
+      2,
+      1,
+      2
+    ],
+    "rel_B_rawtext": [
+      2,
+      2,
+      1,
+      2,
+      2
+    ],
+    "rel_B_tmdbtext": [
+      1,
+      0,
+      2,
+      0,
+      0
+    ],
+    "A_base_titles": [
+      "Happiness (1965)",
+      "Happy Together (1997)",
+      "Happy End (2017)",
+      "The Pursuit of Happyness (2006)",
+      "Joy (2015)"
+    ],
+    "A_hybrid_titles": [
+      "Happiness (1965)",
+      "The Pursuit of Happyness (2006)",
+      "Happy Together (1997)",
+      "A Brighter Summer Day (1991)",
+      "After Ever Happy (2022)"
+    ],
+    "B_template_titles": [
+      "Corina (2025)",
+      "August Rush (2007)",
+      "Make It Happen (2008)",
+      "The Best Is Yet to Come (2019)",
+      "Frozen Hot Boys (2025)"
+    ],
+    "B_rawtext_titles": [
+      "The Best Is Yet to Come (2019)",
+      "Miracle on 34th Street (1994)",
+      "Selena (1997)",
+      "Frozen Hot Boys (2025)",
+      "Going My Way (1944)"
+    ]
+  },
+  {
+    "query": "A tense submarine or single-location thriller",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": null,
+      "avoid": [],
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "tone": [
+        "tense"
+      ],
+      "pacing": "medium",
+      "viewing_effort": "engaging",
+      "ending_feel": null,
+      "humor_style": null,
+      "themes": [
+        "confinement",
+        "survival",
+        "high-stakes pressure"
+      ],
+      "semantic_description": "A tense, contained thriller unfolds in the claustrophobic confines of a submarine or another single location. The pressure steadily builds as characters face danger and difficult choices with limited room to escape.",
+      "specificity": "specific",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any"
+    },
+    "filtered_pool": 14478,
+    "A_base": [
+      12590,
+      2756,
+      83,
+      1127384,
+      347548,
+      8329,
+      1232933,
+      1109534,
+      441531,
+      443791,
+      269173,
+      19058,
+      763788,
+      85414,
+      390497,
+      394374,
+      284289,
+      899445,
+      575769,
+      375327,
+      1388808,
+      159095,
+      8555,
+      1032666,
+      14636
+    ],
+    "A_hybrid": [
+      12590,
+      2756,
+      83,
+      1127384,
+      8329,
+      347548,
+      1232933,
+      1109534,
+      441531,
+      390497,
+      443791,
+      394374,
+      763788,
+      85414,
+      269173,
+      1318413,
+      575769,
+      284289,
+      1032666,
+      1388808,
+      14636,
+      19058,
+      375327,
+      899445,
+      339527
+    ],
+    "B_filtered_pool": 300,
+    "B_template": [
+      403119,
+      1412598,
+      14851,
+      303,
+      477489
+    ],
+    "B_description": [
+      403119,
+      852432,
+      19223,
+      14851,
+      353979
+    ],
+    "B_rawtext": [
+      403119,
+      19223,
+      2161,
+      331,
+      4169
+    ],
+    "B_tmdbtext": [
+      456287,
+      403119,
+      2161,
+      245844,
+      4886
+    ],
+    "rel_A_base": [
+      2,
+      2,
+      1,
+      1,
+      1
+    ],
+    "rel_A_hybrid": [
+      2,
+      2,
+      1,
+      1,
+      1
+    ],
+    "rel_B_template": [
+      2,
+      1,
+      1,
+      0,
+      1
+    ],
+    "rel_B_description": [
+      2,
+      2,
+      2,
+      1,
+      2
+    ],
+    "rel_B_rawtext": [
+      2,
+      2,
+      2,
+      0,
+      0
+    ],
+    "rel_B_tmdbtext": [
+      0,
+      2,
+      2,
+      1,
+      2
+    ],
+    "A_base_titles": [
+      "Below (2002)",
+      "The Abyss (1989)",
+      "Open Water (2004)",
+      "Deep Water (2026)",
+      "Containment (2015)"
+    ],
+    "A_hybrid_titles": [
+      "Below (2002)",
+      "The Abyss (1989)",
+      "Open Water (2004)",
+      "Deep Water (2026)",
+      "[REC] (2007)"
+    ],
+    "B_template_titles": [
+      "47 Meters Down (2017)",
+      "Killer Whale (2026)",
+      "The Escapist (2008)",
+      "Notorious (1946)",
+      "Just a Breath Away (2018)"
+    ],
+    "B_rawtext_titles": [
+      "47 Meters Down (2017)",
+      "A Pure Formality (1994)",
+      "Fantastic Voyage (1966)",
+      "Jurassic Park III (2001)",
+      "Breach (2007)"
+    ]
+  },
+  {
+    "query": "A slow-burn sci-fi mystery where a small crew is trapped on a ship or station and paranoia sets in",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": null,
+      "avoid": [],
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "tone": [
+        "thoughtful",
+        "tense",
+        "dark"
+      ],
+      "pacing": "slow",
+      "viewing_effort": "engaging",
+      "ending_feel": null,
+      "humor_style": null,
+      "themes": [
+        "isolation",
+        "paranoia",
+        "crew conflict",
+        "survival",
+        "mystery"
+      ],
+      "semantic_description": "A slow-building science-fiction mystery unfolds in the claustrophobic confines of a ship or space station, where a small crew is cut off from help. As strange events and uncertainty mount, suspicion spreads among the crew, creating an increasingly tense atmosphere.",
+      "specificity": "specific",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any"
+    },
+    "filtered_pool": 14478,
+    "A_base": [
+      640882,
+      395992,
+      19898,
+      8413,
+      1083381,
+      1188423,
+      790462,
+      999136,
+      269173,
+      347548,
+      725273,
+      265016,
+      274870,
+      593,
+      8329,
+      434853,
+      600836,
+      190847,
+      98568,
+      945961,
+      431,
+      329865,
+      594718,
+      8555,
+      9645
+    ],
+    "A_hybrid": [
+      640882,
+      395992,
+      19898,
+      1083381,
+      8413,
+      1188423,
+      790462,
+      999136,
+      347548,
+      269173,
+      593,
+      274870,
+      8329,
+      265016,
+      329865,
+      945961,
+      725273,
+      434853,
+      600836,
+      431,
+      98568,
+      2756,
+      594718,
+      190847,
+      447332
+    ],
+    "B_filtered_pool": 300,
+    "B_template": [
+      19223,
+      1226840,
+      2161,
+      4886,
+      477489
+    ],
+    "B_description": [
+      19223,
+      4886,
+      1226840,
+      852432,
+      2161
+    ],
+    "B_rawtext": [
+      19223,
+      4886,
+      2161,
+      412157,
+      32613
+    ],
+    "B_tmdbtext": [
+      2161,
+      1226840,
+      4886,
+      401513,
+      32613
+    ],
+    "rel_A_base": [
+      2,
+      1,
+      2,
+      2,
+      0
+    ],
+    "rel_A_hybrid": [
+      2,
+      1,
+      2,
+      0,
+      2
+    ],
+    "rel_B_template": [
+      0,
+      0,
+      1,
+      1,
+      0
+    ],
+    "rel_B_description": [
+      0,
+      1,
+      0,
+      0,
+      1
+    ],
+    "rel_B_rawtext": [
+      0,
+      1,
+      1,
+      0,
+      1
+    ],
+    "rel_B_tmdbtext": [
+      1,
+      0,
+      1,
+      0,
+      1
+    ],
+    "A_base_titles": [
+      "3022 (2019)",
+      "Life (2017)",
+      "Pandorum (2009)",
+      "Event Horizon (1997)",
+      "Backrooms (2026)"
+    ],
+    "A_hybrid_titles": [
+      "3022 (2019)",
+      "Life (2017)",
+      "Pandorum (2009)",
+      "Backrooms (2026)",
+      "Event Horizon (1997)"
+    ],
+    "B_template_titles": [
+      "A Pure Formality (1994)",
+      "Things Will Be Different (2024)",
+      "Fantastic Voyage (1966)",
+      "And Then There Were None (1945)",
+      "Just a Breath Away (2018)"
+    ],
+    "B_rawtext_titles": [
+      "A Pure Formality (1994)",
+      "And Then There Were None (1945)",
+      "Fantastic Voyage (1966)",
+      "A Dark Place (2018)",
+      "Horror Express (1972)"
+    ]
+  },
+  {
+    "query": "Gritty 90s neo-noir crime with a twist ending",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": null,
+      "avoid": [],
+      "year_min": 1990,
+      "year_max": 1999,
+      "audience": null,
+      "original_languages": [],
+      "tone": [
+        "gritty",
+        "dark",
+        "tense"
+      ],
+      "pacing": null,
+      "viewing_effort": "engaging",
+      "ending_feel": "bleak_or_ambiguous",
+      "humor_style": null,
+      "themes": [
+        "crime",
+        "moral ambiguity",
+        "deception",
+        "unexpected revelations"
+      ],
+      "semantic_description": "A gritty 1990s neo-noir crime film steeped in shadowy atmosphere, moral ambiguity, and mounting tension. Its mysteries and deceptions build toward a surprising twist ending that reframes what came before.",
+      "specificity": "specific",
+      "era_mode": "classic_or_any_era",
+      "acclaim_preference": "any"
+    },
+    "filtered_pool": 793,
+    "A_base": [
+      37233,
+      36095,
+      807,
+      13815,
+      11092,
+      37094,
+      19200,
+      8052,
+      9366,
+      9319,
+      2118,
+      22423,
+      34996,
+      9516,
+      638,
+      10413,
+      9303,
+      9535,
+      22244,
+      1811,
+      819,
+      9800,
+      19223,
+      1710,
+      25284
+    ],
+    "A_hybrid": [
+      37233,
+      36095,
+      807,
+      13815,
+      37094,
+      11092,
+      9366,
+      19200,
+      2118,
+      8052,
+      9319,
+      638,
+      9516,
+      9303,
+      22423,
+      34996,
+      10413,
+      819,
+      9800,
+      22244,
+      9535,
+      680,
+      19223,
+      1811,
+      524
+    ],
+    "B_filtered_pool": 32,
+    "B_template": [
+      406,
+      9367,
+      10347,
+      19223,
+      10412
+    ],
+    "B_description": [
+      406,
+      9367,
+      10347,
+      19223,
+      404
+    ],
+    "B_rawtext": [
+      10347,
+      406,
+      9367,
+      9434,
+      19223
+    ],
+    "B_tmdbtext": [
+      19223,
+      241,
+      281,
+      11159,
+      10347
+    ],
+    "rel_A_base": [
+      1,
+      2,
+      2,
+      1,
+      2
+    ],
+    "rel_A_hybrid": [
+      1,
+      2,
+      2,
+      1,
+      1
+    ],
+    "rel_B_template": [
+      1,
+      1,
+      1,
+      2,
+      0
+    ],
+    "rel_B_description": [
+      1,
+      1,
+      1,
+      2,
+      0
+    ],
+    "rel_B_rawtext": [
+      1,
+      1,
+      1,
+      1,
+      2
+    ],
+    "rel_B_tmdbtext": [
+      2,
+      1,
+      2,
+      0,
+      1
+    ],
+    "A_base_titles": [
+      "The Firm (1993)",
+      "Cure (1997)",
+      "Se7en (1995)",
+      "Fresh (1994)",
+      "Presumed Innocent (1990)"
+    ],
+    "A_hybrid_titles": [
+      "The Firm (1993)",
+      "Cure (1997)",
+      "Se7en (1995)",
+      "Fresh (1994)",
+      "Falling Down (1993)"
+    ],
+    "B_template_titles": [
+      "La Haine (1995)",
+      "El Mariachi (1993)",
+      "Dobermann (1997)",
+      "A Pure Formality (1994)",
+      "Romper Stomper (1992)"
+    ],
+    "B_rawtext_titles": [
+      "Dobermann (1997)",
+      "La Haine (1995)",
+      "El Mariachi (1993)",
+      "Grosse Pointe Blank (1997)",
+      "A Pure Formality (1994)"
+    ]
+  },
+  {
+    "query": "A classic 80s adventure movie",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": null,
+      "avoid": [],
+      "year_min": 1980,
+      "year_max": 1989,
+      "audience": null,
+      "original_languages": [],
+      "tone": [
+        "exciting",
+        "epic"
+      ],
+      "pacing": "medium",
+      "viewing_effort": "easy",
+      "ending_feel": null,
+      "humor_style": null,
+      "themes": [
+        "adventure",
+        "exploration",
+        "danger"
+      ],
+      "semantic_description": "A classic 1980s adventure with an exciting, escapist feel, taking viewers through exploration, danger, and memorable set pieces. It offers an easy-to-follow journey with the spirit of a crowd-pleasing adventure.",
+      "specificity": "medium",
+      "era_mode": "classic_or_any_era",
+      "acclaim_preference": "any"
+    },
+    "filtered_pool": 565,
+    "A_base": [
+      10515,
+      2669,
+      11285,
+      11120,
+      14506,
+      106,
+      13155,
+      1648,
+      43559,
+      8879,
+      2383,
+      25237,
+      18763,
+      54898,
+      10673,
+      9340,
+      11893,
+      11300,
+      699,
+      32054,
+      27958,
+      17360,
+      15927,
+      19933,
+      13597
+    ],
+    "A_hybrid": [
+      10515,
+      2669,
+      11285,
+      11120,
+      106,
+      14506,
+      13155,
+      25237,
+      1648,
+      8879,
+      9340,
+      2383,
+      43559,
+      10673,
+      54898,
+      18763,
+      11893,
+      13597,
+      11300,
+      699,
+      17360,
+      32054,
+      11704,
+      27958,
+      19933
+    ],
+    "B_filtered_pool": 28,
+    "B_template": [
+      8810,
+      14367,
+      9549,
+      9873,
+      28176
+    ],
+    "B_description": [
+      14367,
+      9549,
+      28176,
+      6978,
+      8810
+    ],
+    "B_rawtext": [
+      14367,
+      6978,
+      21521,
+      11654,
+      9549
+    ],
+    "B_tmdbtext": [
+      55976,
+      9549,
+      11654,
+      8810,
+      8388
+    ],
+    "rel_A_base": [
+      2,
+      1,
+      0,
+      1,
+      2
+    ],
+    "rel_A_hybrid": [
+      2,
+      1,
+      0,
+      1,
+      2
+    ],
+    "rel_B_template": [
+      2,
+      1,
+      1,
+      1,
+      0
+    ],
+    "rel_B_description": [
+      1,
+      1,
+      0,
+      2,
+      2
+    ],
+    "rel_B_rawtext": [
+      1,
+      2,
+      2,
+      0,
+      1
+    ],
+    "rel_B_tmdbtext": [
+      0,
+      1,
+      0,
+      2,
+      2
+    ],
+    "A_base_titles": [
+      "Castle in the Sky (1986)",
+      "The Bounty (1984)",
+      "Cocoon: The Return (1988)",
+      "The Mosquito Coast (1986)",
+      "The Adventures of Baron Munchausen (1988)"
+    ],
+    "A_hybrid_titles": [
+      "Castle in the Sky (1986)",
+      "The Bounty (1984)",
+      "Cocoon: The Return (1988)",
+      "The Mosquito Coast (1986)",
+      "Predator (1987)"
+    ],
+    "B_template_titles": [
+      "Mad Max 2 (1981)",
+      "Adventures in Babysitting (1987)",
+      "The Right Stuff (1983)",
+      "F/X (1986)",
+      "Tucker: The Man and His Dream (1988)"
+    ],
+    "B_rawtext_titles": [
+      "Adventures in Babysitting (1987)",
+      "Big Trouble in Little China (1986)",
+      "Project A - Part II (1987)",
+      "The Hunger (1983)",
+      "The Right Stuff (1983)"
+    ]
+  },
+  {
+    "query": "Movie night with my kids (7 and 10), something fun with animals",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": 2,
+      "avoid": [],
+      "year_min": null,
+      "year_max": null,
+      "audience": "kids",
+      "original_languages": [],
+      "tone": [
+        "light",
+        "funny",
+        "heartwarming"
+      ],
+      "pacing": "medium",
+      "viewing_effort": "easy",
+      "ending_feel": "warm_resolved",
+      "humor_style": "warm_gentle",
+      "themes": [
+        "animals",
+        "family",
+        "adventure"
+      ],
+      "semantic_description": "A fun, family-friendly movie centered on animals, with a lighthearted atmosphere and gentle humor. It should be easy to follow and leave the family feeling warm and happy.",
+      "specificity": "medium",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any"
+    },
+    "filtered_pool": 14478,
+    "A_base": [
+      9836,
+      478159,
+      22949,
+      291264,
+      50135,
+      9904,
+      38317,
+      394759,
+      399031,
+      490000,
+      26518,
+      522924,
+      587429,
+      575568,
+      355547,
+      14012,
+      953,
+      547009,
+      1599993,
+      293299,
+      492282,
+      11888,
+      286532,
+      477510,
+      14059
+    ],
+    "A_hybrid": [
+      9836,
+      478159,
+      22949,
+      291264,
+      50135,
+      522924,
+      9904,
+      293299,
+      587429,
+      394759,
+      399031,
+      953,
+      38317,
+      355547,
+      490000,
+      26518,
+      18329,
+      14012,
+      770254,
+      575568,
+      263109,
+      492282,
+      520172,
+      1599993,
+      547009
+    ],
+    "B_filtered_pool": 30,
+    "B_template": [
+      38843,
+      1387866,
+      10510,
+      331588,
+      23398
+    ],
+    "B_description": [
+      10510,
+      38843,
+      1387866,
+      23398,
+      2605
+    ],
+    "B_rawtext": [
+      23398,
+      11802,
+      10510,
+      585083,
+      2605
+    ],
+    "B_tmdbtext": [
+      64328,
+      331588,
+      23398,
+      1387866,
+      83965
+    ],
+    "rel_A_base": [
+      2,
+      1,
+      0,
+      0,
+      2
+    ],
+    "rel_A_hybrid": [
+      2,
+      1,
+      0,
+      0,
+      2
+    ],
+    "rel_B_template": [
+      0,
+      0,
+      0,
+      0,
+      2
+    ],
+    "rel_B_description": [
+      0,
+      0,
+      0,
+      2,
+      1
+    ],
+    "rel_B_rawtext": [
+      2,
+      2,
+      0,
+      0,
+      1
+    ],
+    "rel_B_tmdbtext": [
+      2,
+      0,
+      2,
+      0,
+      0
+    ],
+    "A_base_titles": [
+      "Happy Feet (2006)",
+      "Patrick (2018)",
+      "Old Dogs (2009)",
+      "The Family Fang (2016)",
+      "Animals United (2010)"
+    ],
+    "A_hybrid_titles": [
+      "Happy Feet (2006)",
+      "Patrick (2018)",
+      "Old Dogs (2009)",
+      "The Family Fang (2016)",
+      "Animals United (2010)"
+    ],
+    "B_template_titles": [
+      "Ramona and Beezus (2010)",
+      "Disaster Holiday (2024)",
+      "Miracle on 34th Street (1994)",
+      "The Great Gilly Hopkins (2015)",
+      "Alvin and the Chipmunks: The Squeakquel (2009)"
+    ],
+    "B_rawtext_titles": [
+      "Alvin and the Chipmunks: The Squeakquel (2009)",
+      "Space Chimps (2008)",
+      "Miracle on 34th Street (1994)",
+      "Hotel Transylvania: Transformania (2022)",
+      "Short Circuit (1986)"
+    ]
+  },
+  {
+    "query": "A Korean thriller that keeps me on the edge of my seat",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": null,
+      "avoid": [],
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [
+        "ko"
+      ],
+      "tone": [
+        "tense",
+        "exciting"
+      ],
+      "pacing": "fast",
+      "viewing_effort": "engaging",
+      "ending_feel": null,
+      "humor_style": null,
+      "themes": [
+        "suspense",
+        "danger",
+        "mystery"
+      ],
+      "semantic_description": "A tense Korean thriller that builds suspense and keeps the stakes feeling immediate. Expect a gripping, fast-moving experience that sustains a sense of danger and anticipation throughout.",
+      "specificity": "medium",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any"
+    },
+    "filtered_pool": 241,
+    "A_base": [
+      434119,
+      626872,
+      412094,
+      1296404,
+      773867,
+      921436,
+      919207,
+      727340,
+      628704,
+      429450,
+      705996,
+      435841,
+      242454,
+      563103,
+      291549,
+      396535,
+      566397,
+      766369,
+      629028,
+      488623,
+      581528,
+      2440,
+      491584,
+      537190,
+      51200
+    ],
+    "A_hybrid": [
+      626872,
+      434119,
+      412094,
+      919207,
+      1296404,
+      921436,
+      773867,
+      628704,
+      429450,
+      705996,
+      727340,
+      396535,
+      581528,
+      488623,
+      2440,
+      11423,
+      291549,
+      563103,
+      435841,
+      491584,
+      242454,
+      629028,
+      566397,
+      51200,
+      204553
+    ],
+    "B_filtered_pool": 2,
+    "B_template": [
+      1057001,
+      950253
+    ],
+    "B_description": [
+      1057001,
+      950253
+    ],
+    "B_rawtext": [
+      1057001,
+      950253
+    ],
+    "B_tmdbtext": [
+      1057001,
+      950253
+    ],
+    "rel_A_base": [
+      1,
+      2,
+      2,
+      1,
+      1
+    ],
+    "rel_A_hybrid": [
+      2,
+      1,
+      2,
+      2,
+      1
+    ],
+    "rel_B_template": [
+      2,
+      1
+    ],
+    "rel_B_description": [
+      2,
+      1
+    ],
+    "rel_B_rawtext": [
+      2,
+      1
+    ],
+    "rel_B_tmdbtext": [
+      2,
+      1
+    ],
+    "A_base_titles": [
+      "Confidential Assignment (2017)",
+      "Emergency Declaration (2022)",
+      "The Net (2016)",
+      "Good News (2025)",
+      "Seoul Vibe (2022)"
+    ],
+    "A_hybrid_titles": [
+      "Emergency Declaration (2022)",
+      "Confidential Assignment (2017)",
+      "The Net (2016)",
+      "12.12: The Day (2023)",
+      "Good News (2025)"
+    ],
+    "B_template_titles": [
+      "The Childe (2023)",
+      "Dr. Cheon and the Lost Talisman (2023)"
+    ],
+    "B_rawtext_titles": [
+      "The Childe (2023)",
+      "Dr. Cheon and the Lost Talisman (2023)"
+    ]
+  },
+  {
+    "query": "A critically acclaimed drama that makes me think, I don't mind subtitles",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": null,
+      "avoid": [],
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "tone": [
+        "thoughtful"
+      ],
+      "pacing": null,
+      "viewing_effort": "engaging",
+      "ending_feel": null,
+      "humor_style": null,
+      "themes": [
+        "reflection",
+        "human experience"
+      ],
+      "semantic_description": "A thoughtful drama that invites reflection on people and their choices, leaving room to consider its ideas after watching. Subtitles are welcome, but no particular language or national cinema is required.",
+      "specificity": "broad",
+      "era_mode": "modern_default",
+      "acclaim_preference": "critically_acclaimed"
+    },
+    "filtered_pool": 14478,
+    "A_base": [
+      60243,
+      110390,
+      423093,
+      249660,
+      216156,
+      936946,
+      1396,
+      1483525,
+      1430820,
+      12197,
+      580175,
+      374465,
+      5528,
+      354285,
+      158907,
+      44716,
+      205220,
+      74308,
+      11447,
+      253331,
+      1629,
+      1091196,
+      25050,
+      7735,
+      13689
+    ],
+    "A_hybrid": [
+      60243,
+      110390,
+      1396,
+      1483525,
+      216156,
+      580175,
+      12197,
+      423093,
+      936946,
+      5528,
+      25050,
+      1430820,
+      374465,
+      205220,
+      249660,
+      74308,
+      7735,
+      1629,
+      17962,
+      44716,
+      11602,
+      11447,
+      354285,
+      62215,
+      31977
+    ],
+    "B_filtered_pool": 300,
+    "B_template": [
+      1167351,
+      484428,
+      390056,
+      1118770,
+      519010
+    ],
+    "B_description": [
+      1167351,
+      582206,
+      519010,
+      484428,
+      201550
+    ],
+    "B_rawtext": [
+      582206,
+      216,
+      489,
+      1167351,
+      484428
+    ],
+    "B_tmdbtext": [
+      17962,
+      245844,
+      39507,
+      423333,
+      24657
+    ],
+    "rel_A_base": [
+      2,
+      1,
+      1,
+      0,
+      2
+    ],
+    "rel_A_hybrid": [
+      2,
+      1,
+      2,
+      2,
+      2
+    ],
+    "rel_B_template": [
+      1,
+      2,
+      1,
+      2,
+      2
+    ],
+    "rel_B_description": [
+      1,
+      1,
+      2,
+      2,
+      1
+    ],
+    "rel_B_rawtext": [
+      1,
+      2,
+      2,
+      1,
+      2
+    ],
+    "rel_B_tmdbtext": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "A_base_titles": [
+      "A Separation (2011)",
+      "A Pigeon Sat on a Branch Reflecting on Existence (2014)",
+      "Seven Years (2016)",
+      "God's Not Dead (2014)",
+      "Still Life (2013)"
+    ],
+    "A_hybrid_titles": [
+      "A Separation (2011)",
+      "A Pigeon Sat on a Branch Reflecting on Existence (2014)",
+      "Mirror (1975)",
+      "Possible Love (2026)",
+      "Still Life (2013)"
+    ],
+    "B_template_titles": [
+      "Longing (2024)",
+      "Becoming Astrid (2018)",
+      "Rebel in the Rye (2017)",
+      "Nineteen (2025)",
+      "Pain and Glory (2019)"
+    ],
+    "B_rawtext_titles": [
+      "The Best Is Yet to Come (2019)",
+      "Ali: Fear Eats the Soul (1974)",
+      "Good Will Hunting (1997)",
+      "Longing (2024)",
+      "Becoming Astrid (2018)"
+    ]
+  },
+  {
+    "query": "A hidden gem horror movie, not the usual mainstream stuff",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": null,
+      "avoid": [],
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "tone": [
+        "scary"
+      ],
+      "pacing": null,
+      "viewing_effort": null,
+      "ending_feel": null,
+      "humor_style": null,
+      "themes": [
+        "horror"
+      ],
+      "semantic_description": "A lesser-known horror film that favors an unusual or distinctive approach over familiar mainstream formulas. It should create an unsettling, frightening atmosphere and offer a fresh experience for horror fans.",
+      "specificity": "medium",
+      "era_mode": "modern_default",
+      "acclaim_preference": "hidden_gem"
+    },
+    "filtered_pool": 14478,
+    "A_base": [
+      351211,
+      376570,
+      437108,
+      371608,
+      11906,
+      347754,
+      444193,
+      49018,
+      252529,
+      234212,
+      46261,
+      9552,
+      300669,
+      483737,
+      323370,
+      215830,
+      293670,
+      480100,
+      364116,
+      242512,
+      48138,
+      10909,
+      463602,
+      538227,
+      82507
+    ],
+    "A_hybrid": [
+      376570,
+      11906,
+      351211,
+      437108,
+      49018,
+      371608,
+      9552,
+      347754,
+      444193,
+      252529,
+      300669,
+      293670,
+      234212,
+      46261,
+      215830,
+      48138,
+      82507,
+      480100,
+      489430,
+      538227,
+      483737,
+      256274,
+      10909,
+      276844,
+      526051
+    ],
+    "B_filtered_pool": 300,
+    "B_template": [
+      1286663,
+      6498,
+      13025,
+      11623,
+      760195
+    ],
+    "B_description": [
+      3763,
+      13025,
+      11623,
+      6498,
+      12526
+    ],
+    "B_rawtext": [
+      12526,
+      13025,
+      25300,
+      11654,
+      1405742
+    ],
+    "B_tmdbtext": [
+      32613,
+      13528,
+      354216,
+      760195,
+      4488
+    ],
+    "rel_A_base": [
+      0,
+      1,
+      2,
+      0,
+      2
+    ],
+    "rel_A_hybrid": [
+      1,
+      2,
+      0,
+      2,
+      0
+    ],
+    "rel_B_template": [
+      2,
+      2,
+      0,
+      2,
+      1
+    ],
+    "rel_B_description": [
+      2,
+      0,
+      2,
+      2,
+      2
+    ],
+    "rel_B_rawtext": [
+      2,
+      0,
+      1,
+      2,
+      2
+    ],
+    "rel_B_tmdbtext": [
+      2,
+      1,
+      2,
+      1,
+      0
+    ],
+    "A_base_titles": [
+      "Blair Witch (2016)",
+      "Hush (2016)",
+      "The Mimic (2017)",
+      "The Strangers: Prey at Night (2018)",
+      "Suspiria (1977)"
+    ],
+    "A_hybrid_titles": [
+      "Hush (2016)",
+      "Suspiria (1977)",
+      "Blair Witch (2016)",
+      "The Mimic (2017)",
+      "Insidious (2011)"
+    ],
+    "B_template_titles": [
+      "Control Freak (2025)",
+      "Nightwatch (1994)",
+      "Diary of the Dead (2007)",
+      "The Medusa Touch (1978)",
+      "Separation (2021)"
+    ],
+    "B_rawtext_titles": [
+      "Bug (2007)",
+      "Diary of the Dead (2007)",
+      "I'm Not Scared (2003)",
+      "The Hunger (1983)",
+      "Portal to Hell (2025)"
+    ]
+  },
+  {
+    "query": "Quiero llorar con una historia de amor bonita pero triste",
+    "intent": {
+      "max_runtime_minutes": null,
+      "max_intensity": null,
+      "avoid": [],
+      "year_min": null,
+      "year_max": null,
+      "audience": null,
+      "original_languages": [],
+      "tone": [
+        "romantic",
+        "melancholic",
+        "heartwarming"
+      ],
+      "pacing": null,
+      "viewing_effort": null,
+      "ending_feel": "bittersweet",
+      "humor_style": null,
+      "themes": [
+        "love",
+        "loss",
+        "emotional connection"
+      ],
+      "semantic_description": "A beautiful, emotionally moving love story with a tender warmth beneath its sadness. Expect a heartfelt romance that builds toward a bittersweet, tearful emotional arc.",
+      "specificity": "medium",
+      "era_mode": "modern_default",
+      "acclaim_preference": "any"
+    },
+    "filtered_pool": 14478,
+    "A_base": [
+      1495694,
+      1483525,
+      439552,
+      1119173,
+      1127166,
+      323674,
+      1466115,
+      9953,
+      51822,
+      42602,
+      1239198,
+      479957,
+      376867,
+      368942,
+      152603,
+      1226406,
+      48150,
+      1379963,
+      350060,
+      1290450,
+      1376838,
+      554908,
+      451713,
+      750466,
+      140222
+    ],
+    "A_hybrid": [
+      1495694,
+      1483525,
+      1466115,
+      439552,
+      51822,
+      1119173,
+      1127166,
+      9953,
+      376867,
+      42602,
+      152603,
+      323674,
+      1239198,
+      843,
+      479957,
+      48150,
+      1081676,
+      350060,
+      1458857,
+      1379963,
+      750466,
+      368942,
+      10310,
+      1376838,
+      1290450
+    ],
+    "B_filtered_pool": 300,
+    "B_template": [
+      3084,
+      32847,
+      2977,
+      369885,
+      12579
+    ],
+    "B_description": [
+      5123,
+      476292,
+      216,
+      803694,
+      353577
+    ],
+    "B_rawtext": [
+      891636,
+      606865,
+      203,
+      446132,
+      18503
+    ],
+    "B_tmdbtext": [
+      1167351,
+      10238,
+      3084,
+      32847,
+      423333
+    ],
+    "rel_A_base": [
+      2,
+      0,
+      1,
+      1,
+      1
+    ],
+    "rel_A_hybrid": [
+      2,
+      0,
+      2,
+      1,
+      1
+    ],
+    "rel_B_template": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "rel_B_description": [
+      1,
+      1,
+      2,
+      1,
+      1
+    ],
+    "rel_B_rawtext": [
+      2,
+      0,
+      1,
+      1,
+      0
+    ],
+    "rel_B_tmdbtext": [
+      1,
+      0,
+      2,
+      2,
+      0
+    ],
+    "A_base_titles": [
+      "Beauty from Pain (2025)",
+      "Possible Love (2026)",
+      "Tenderness (2017)",
+      "A Beautiful Life (2023)",
+      "The Tearsmith (2024)"
+    ],
+    "A_hybrid_titles": [
+      "Beauty from Pain (2025)",
+      "Possible Love (2026)",
+      "Even If This Love Disappears Tonight (2025)",
+      "Tenderness (2017)",
+      "Love Hurts (2002)"
+    ],
+    "B_template_titles": [
+      "Wuthering Heights (1939)",
+      "Now, Voyager (1942)",
+      "Becoming Jane (2007)",
+      "Allied (2016)",
+      "The Woman Next Door (1981)"
+    ],
+    "B_rawtext_titles": [
+      "Fireworks (2023)",
+      "The Macaluso Sisters (2020)",
+      "Mean Streets (1973)",
+      "Gauguin: Voyage to Tahiti (2017)",
+      "Caterina in the Big City (2003)"
+    ]
+  }
+]

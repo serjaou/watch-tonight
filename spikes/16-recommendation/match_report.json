@@ -1,0 +1,608 @@
+{
+  "relevance_at5": {
+    "embedding": 1.316,
+    "embedding+match": 1.228
+  },
+  "queries_with_any_field_set": 12,
+  "llm_tokens": {
+    "in": 8032,
+    "out": 1091
+  },
+  "per_query": [
+    {
+      "query": "I'm exhausted after work, I want something light and easy to",
+      "fields_set": [
+        "tone",
+        "pacing",
+        "viewing_effort"
+      ],
+      "embedding": [
+        [
+          "The Best Is Yet to Come",
+          1
+        ],
+        [
+          "After Life",
+          1
+        ],
+        [
+          "The Invisible Woman",
+          1
+        ],
+        [
+          "Just Getting Started",
+          2
+        ],
+        [
+          "Wetlands",
+          0
+        ]
+      ],
+      "embedding+match": [
+        [
+          "The Best Is Yet to Come",
+          1
+        ],
+        [
+          "Just Getting Started",
+          2
+        ],
+        [
+          "Corina",
+          1
+        ],
+        [
+          "The Invisible Woman",
+          1
+        ],
+        [
+          "Disaster Holiday",
+          2
+        ]
+      ]
+    },
+    {
+      "query": "Something funny, I really need a laugh tonight",
+      "fields_set": [
+        "tone"
+      ],
+      "embedding": [
+        [
+          "The Best Is Yet to Come",
+          1
+        ],
+        [
+          "Alvin and the Chipmunks: The Squeakquel",
+          2
+        ],
+        [
+          "Evolution",
+          2
+        ],
+        [
+          "Girl Most Likely",
+          1
+        ],
+        [
+          "Adventures in Babysitting",
+          2
+        ]
+      ],
+      "embedding+match": [
+        [
+          "Alvin and the Chipmunks: The Squeakquel",
+          2
+        ],
+        [
+          "Evolution",
+          2
+        ],
+        [
+          "Eddie Murphy Raw",
+          2
+        ],
+        [
+          "Girl Most Likely",
+          1
+        ],
+        [
+          "Adventures in Babysitting",
+          2
+        ]
+      ]
+    },
+    {
+      "query": "A feel-good movie that will leave me smiling",
+      "fields_set": [
+        "tone",
+        "ending_feel"
+      ],
+      "embedding": [
+        [
+          "The Best Is Yet to Come",
+          2
+        ],
+        [
+          "Frozen Hot Boys",
+          2
+        ],
+        [
+          "Miracle on 34th Street",
+          2
+        ],
+        [
+          "August Rush",
+          2
+        ],
+        [
+          "Going My Way",
+          2
+        ]
+      ],
+      "embedding+match": [
+        [
+          "August Rush",
+          2
+        ],
+        [
+          "Corina",
+          2
+        ],
+        [
+          "Life of a King",
+          2
+        ],
+        [
+          "Frozen Hot Boys",
+          2
+        ],
+        [
+          "Stand and Deliver",
+          2
+        ]
+      ]
+    },
+    {
+      "query": "A tense submarine or single-location thriller",
+      "fields_set": [
+        "tone",
+        "pacing",
+        "viewing_effort"
+      ],
+      "embedding": [
+        [
+          "47 Meters Down",
+          2
+        ],
+        [
+          "The Tower",
+          1
+        ],
+        [
+          "A Pure Formality",
+          2
+        ],
+        [
+          "The Escapist",
+          1
+        ],
+        [
+          "Pet",
+          1
+        ]
+      ],
+      "embedding+match": [
+        [
+          "The Tower",
+          1
+        ],
+        [
+          "The Escapist",
+          1
+        ],
+        [
+          "Pet",
+          1
+        ],
+        [
+          "Just a Breath Away",
+          1
+        ],
+        [
+          "Notorious",
+          0
+        ]
+      ]
+    },
+    {
+      "query": "A slow-burn sci-fi mystery where a small crew is trapped on ",
+      "fields_set": [
+        "tone",
+        "pacing",
+        "viewing_effort"
+      ],
+      "embedding": [
+        [
+          "A Pure Formality",
+          0
+        ],
+        [
+          "And Then There Were None",
+          1
+        ],
+        [
+          "Things Will Be Different",
+          0
+        ],
+        [
+          "The Tower",
+          1
+        ],
+        [
+          "Fantastic Voyage",
+          1
+        ]
+      ],
+      "embedding+match": [
+        [
+          "A Pure Formality",
+          0
+        ],
+        [
+          "Things Will Be Different",
+          0
+        ],
+        [
+          "And Then There Were None",
+          1
+        ],
+        [
+          "The Pale Blue Eye",
+          0
+        ],
+        [
+          "Sator",
+          0
+        ]
+      ]
+    },
+    {
+      "query": "Gritty 90s neo-noir crime with a twist ending",
+      "fields_set": [
+        "tone",
+        "viewing_effort",
+        "ending_feel"
+      ],
+      "embedding": [
+        [
+          "La Haine",
+          0
+        ],
+        [
+          "El Mariachi",
+          1
+        ],
+        [
+          "Dobermann",
+          1
+        ],
+        [
+          "A Pure Formality",
+          2
+        ],
+        [
+          "The Straight Story",
+          0
+        ]
+      ],
+      "embedding+match": [
+        [
+          "La Haine",
+          0
+        ],
+        [
+          "A Pure Formality",
+          2
+        ],
+        [
+          "Romper Stomper",
+          1
+        ],
+        [
+          "El Mariachi",
+          1
+        ],
+        [
+          "Swimming with Sharks",
+          0
+        ]
+      ]
+    },
+    {
+      "query": "A classic 80s adventure movie",
+      "fields_set": [
+        "tone",
+        "pacing",
+        "viewing_effort"
+      ],
+      "embedding": [
+        [
+          "Adventures in Babysitting",
+          1
+        ],
+        [
+          "The Right Stuff",
+          1
+        ],
+        [
+          "Tucker: The Man and His Dream",
+          0
+        ],
+        [
+          "Big Trouble in Little China",
+          2
+        ],
+        [
+          "Mad Max 2",
+          2
+        ]
+      ],
+      "embedding+match": [
+        [
+          "The Right Stuff",
+          1
+        ],
+        [
+          "Adventures in Babysitting",
+          1
+        ],
+        [
+          "Tucker: The Man and His Dream",
+          0
+        ],
+        [
+          "¡Three Amigos!",
+          1
+        ],
+        [
+          "F/X",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "Movie night with my kids (7 and 10), something fun with anim",
+      "fields_set": [
+        "tone",
+        "pacing",
+        "viewing_effort",
+        "ending_feel",
+        "humor_style"
+      ],
+      "embedding": [
+        [
+          "Miracle on 34th Street",
+          1
+        ],
+        [
+          "Ramona and Beezus",
+          1
+        ],
+        [
+          "Disaster Holiday",
+          1
+        ],
+        [
+          "Alvin and the Chipmunks: The Squeakquel",
+          2
+        ],
+        [
+          "Short Circuit",
+          2
+        ]
+      ],
+      "embedding+match": [
+        [
+          "Ramona and Beezus",
+          1
+        ],
+        [
+          "Miracle on 34th Street",
+          1
+        ],
+        [
+          "Disaster Holiday",
+          1
+        ],
+        [
+          "Short Circuit",
+          2
+        ],
+        [
+          "Return to Halloweentown",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "A Korean thriller that keeps me on the edge of my seat",
+      "fields_set": [
+        "tone",
+        "pacing",
+        "viewing_effort"
+      ],
+      "embedding": [
+        [
+          "The Childe",
+          2
+        ],
+        [
+          "Dr. Cheon and the Lost Talisman",
+          1
+        ]
+      ],
+      "embedding+match": [
+        [
+          "The Childe",
+          2
+        ],
+        [
+          "Dr. Cheon and the Lost Talisman",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "A critically acclaimed drama that makes me think, I don't mi",
+      "fields_set": [
+        "tone",
+        "viewing_effort"
+      ],
+      "embedding": [
+        [
+          "Longing",
+          1
+        ],
+        [
+          "The Best Is Yet to Come",
+          1
+        ],
+        [
+          "Pain and Glory",
+          2
+        ],
+        [
+          "Becoming Astrid",
+          2
+        ],
+        [
+          "Life of a King",
+          2
+        ]
+      ],
+      "embedding+match": [
+        [
+          "Longing",
+          1
+        ],
+        [
+          "Pain and Glory",
+          2
+        ],
+        [
+          "After Life",
+          2
+        ],
+        [
+          "Nineteen",
+          2
+        ],
+        [
+          "Becoming Astrid",
+          2
+        ]
+      ]
+    },
+    {
+      "query": "A hidden gem horror movie, not the usual mainstream stuff",
+      "fields_set": [
+        "tone"
+      ],
+      "embedding": [
+        [
+          "Onibaba",
+          2
+        ],
+        [
+          "Diary of the Dead",
+          0
+        ],
+        [
+          "The Medusa Touch",
+          1
+        ],
+        [
+          "Nightwatch",
+          2
+        ],
+        [
+          "Bug",
+          2
+        ]
+      ],
+      "embedding+match": [
+        [
+          "Diary of the Dead",
+          0
+        ],
+        [
+          "Nightwatch",
+          2
+        ],
+        [
+          "Bug",
+          2
+        ],
+        [
+          "Horror Express",
+          2
+        ],
+        [
+          "Control Freak",
+          1
+        ]
+      ]
+    },
+    {
+      "query": "Quiero llorar con una historia de amor bonita pero triste",
+      "fields_set": [
+        "tone",
+        "ending_feel"
+      ],
+      "embedding": [
+        [
+          "August Rush",
+          1
+        ],
+        [
+          "Maquia: When the Promised Flower Blooms",
+          1
+        ],
+        [
+          "Ali: Fear Eats the Soul",
+          2
+        ],
+        [
+          "Other People's Children",
+          2
+        ],
+        [
+          "Love at First Sight",
+          1
+        ]
+      ],
+      "embedding+match": [
+        [
+          "Maquia: When the Promised Flower Blooms",
+          1
+        ],
+        [
+          "Ali: Fear Eats the Soul",
+          2
+        ],
+        [
+          "Other People's Children",
+          2
+        ],
+        [
+          "Finding Neverland",
+          1
+        ],
+        [
+          "Kramer vs. Kramer",
+          0
+        ]
+      ]
+    }
+  ]
+}
