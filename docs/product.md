@@ -2,7 +2,7 @@
 
 **What this file is:** what the product does, for whom, and where it stops. It holds the product judgment an agent can't infer from the code. Architecture lives in `docs/architecture.md`; per-feature detail lives in `docs/specs/`.
 **Owner:** Sergio. Agents may propose changes but never edit this file on their own.
-**Status:** draft · **Last updated:** 2026-11-13. Items marked **(to confirm)** are proposals the owner hasn't settled yet. Items marked **(verify)** depend on the Week 1 spike.
+**Status:** draft · **Last updated:** 2026-11-16 (the age note and the P3 audience rule were added by an agent with the owner's consent). Items marked **(to confirm)** are proposals the owner hasn't settled yet. Items marked **(verify)** depend on the Week 1 spike.
 
 ---
 
@@ -26,6 +26,7 @@
 | **Output** | 5 movies. Each has a title, year, runtime, poster **(verify)**, service(s) where it's streamable, a short pitch, a link to its TMDB page, and the availability date |
 | **Countries at launch** | ES, US, BO **(verify BO provider coverage)** |
 | **Language at launch** | The mood text can be in any language. The UI, movie titles and pitches are in English only, and the UI says so. More languages later (section 8). |
+| **Audience** | A general-audience app for adults. Next to the input, the UI says: *"For adults. Under 18? Use it with a parent's or guardian's permission."* It also shows a privacy note: the mood text is sent to OpenAI to understand it, isn't used to train their models, and is kept up to 30 days for abuse monitoring (`docs/architecture.md` Q6, Q14). |
 
 The more detail the user gives, the more specific the results. Vague input (e.g. *"anything"*) still returns results.
 
@@ -37,7 +38,7 @@ Agents must not break these. Each rule should end up backed by a test or an eval
 |---|---|
 | P1 | **Never show a title that isn't streamable** (flat-rate subscription, not rent or buy) on one of the selected services in the selected country, according to the last availability refresh. |
 | P2 | **The pitch is about the movie, never about the user.** It highlights the qualities of the film that are relevant to the request (tone, pace, setting, performances, themes), stated as facts about the film. It never refers to the user, their mood or their request, and never claims the movie is a good fit for them or will make them feel better. Every fact comes from the movie's data, and there are no spoilers. It is **at most 350 characters** (about 2–3 sentences), so 5 results stay readable on a phone. |
-| P3 | **Explicit constraints are respected** (runtime, things to avoid). Breaking one counts as a failure, not as a "less good" result. Constraints set in the UI (picked from fixed options: max runtime, max intensity, content to avoid) are always applied. Constraints the LLM extracts from the free text, once extracted, are applied exactly; how well they are extracted is measured by an eval, not guaranteed. |
+| P3 | **Explicit constraints are respected** (runtime, things to avoid). Breaking one counts as a failure, not as a "less good" result. Constraints set in the UI (picked from fixed options: max runtime, max intensity, content to avoid) are always applied. Constraints the LLM extracts from the free text, once extracted, are applied exactly; how well they are extracted is measured by an eval, not guaranteed. An **audience** constraint (*kids* or *teens*, e.g. "movie night with my kids") is checked against the movie's age certification: the US one, else the Spanish one. A movie with neither counts as suitable only if its emotional profile is gentle enough (low intensity, no adult content warnings); the exact rule is `docs/architecture.md` Q16. |
 | P4 | **The free-text input is at most 500 characters.** Longer input is rejected with a validation message, not silently truncated. |
 | P5 | **Attribution is shown as the data sources require** **(verify exact terms in the spike)**: in the UI, the TMDB logo (less prominent than ours) and the notice *"This product uses the TMDB API but is not endorsed or certified by TMDB"*, plus *"Streaming availability by JustWatch"* wherever availability is shown. API and MCP responses include an attribution field. |
 | P6 | **Show how fresh the data is:** every response says when availability was last refreshed. |
