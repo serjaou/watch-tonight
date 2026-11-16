@@ -60,6 +60,7 @@ Tracks whether the harness catches issues before they reach the owner and how ea
 
 | ID | Type | Date | Machine · Tool | Stop-gate blocks | Reviewer (rounds / findings) | Escaped / owner fixes | Handoff Details |
 |---|---|---|---|---:|---|---:|---|
+| `feat-012` | `chore` | 2026-11-16 | Windows · Claude Code | 0 | 2 (18 + 9) | 0 | [feat-012.md](handoffs/feat-012.md) |
 | `feat-016` | `spike` | 2026-11-16 | Windows · Claude Code | 0 | 2 (14 + 7) | 0 | [feat-016.md](handoffs/feat-016.md) |
 | `feat-011` | `spike` | 2026-11-16 | Windows · Claude Code | 0 | 2 (9 + 6) | 0 | [feat-011.md](handoffs/feat-011.md) |
 | `feat-010` | `spike` | 2026-11-15 | Mac · Antigravity | 0 | 1 (0) | 0 | [feat-010.md](handoffs/feat-010.md) |

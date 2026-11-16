@@ -1,20 +1,26 @@
 # Progress
 
 ## Now
-- **Active feature:** `feat-016` (Spike: corpus selection, external signals, profile schema, hybrid ranking), branch `spike/recommendation-signals`. Done; its PR waits for the owner's merge.
-- **State:** `feat-016` is complete (`status: answered`; §5 findings, §6 summary and architecture-change table).
-  - Gate G7 gives 14,478 films. IMDb and reviews are recommended against. Wikidata `critic_score` stays internal.
-  - The v1 mirror schema is set, and retrieval uses K = 150 with a hybrid re-score.
-  - Spend ≈ $0.13: `gpt-6-luna`, plus ≈ $0.07 on `gpt-6.1-terra` for the reference labels.
-  - Owner decisions Q6 and Q14 are recorded in `docs/architecture.md` §7.
-- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-16 12:43 CET, Windows.
-- **Next step:** after the merge, `feat-012` (architecture refinement and MVP backlog slicing). It's a chore, so it's ready. It applies the spike 16 §6 table and the decisions below. `feat-017` (churn re-crawl) can run any time after 2026-11-17 10:41 UTC.
+- **Active feature:** `feat-012` (Architecture refinement and MVP backlog slicing), branch `chore/architecture-v1`. Done; its PR waits for the owner's merge.
+- **State:**
+  - `docs/architecture.md` is now v1, with ADRs 0005–0008.
+  - The MVP is sliced, skeleton first. `feature_list.json` is the active window (feat-017, feat-018, feat-019); later items (feat-020 to feat-025) are in `docs/backlog.md`.
+  - Sizes are guides, not caps: relevance and priority first (owner).
+  - Owner decisions this session are recorded as architecture §7 Q15–Q18 and in `docs/product.md` (with consent).
+- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-16 15:50 CET, Windows.
+- **Next step:** after the merge:
+  - `feat-017` (churn re-crawl), runnable after 2026-11-17 10:41 UTC (TMDB only, $0);
+  - then `/spec` for `feat-018` (walking skeleton) with the owner. It has no spec yet; start rule 3b applies.
+  - Start Docker Desktop before feat-018: its integration tests answer Q4 on Windows.
 - **Waiting on owner:**
-  - Merge the `feat-016` PR. The spike 16 decisions are recorded as `docs/architecture.md` §7 Q15–Q17: no IMDb, no reviews, the `audience` fallback, keep-on-churn with no eviction job.- **Unverified:**
-  - The items under "Unverified" in `docs/handoffs/feat-016.md`, including corpus-scale profile retrieval, hybrid weights without a golden set, and K = 150 latency.
+  - Merge the `feat-012` PR.
+  - Be available for the feat-018 `/spec` interview.
+- **Unverified:**
+  - The items under "Unverified" in `docs/handoffs/feat-012.md`: the extra pre-filters, `ModelRetry` on the real model, Batch support, K = 150 latency, aliasing safety, and Q4 on Windows.
   - CI on the PR.
 
 ## Log (newest first, 1 line each; full details in `docs/handoffs/`)
+- 2026-11-16 · Windows · Claude Code · `feat-012`: architecture v1 + ADRs 0005–0008, MVP sliced skeleton-first (active window + `docs/backlog.md`), sizing as guides → [feat-012.md](docs/handoffs/feat-012.md)
 - 2026-11-16 · Windows · Claude Code · `feat-016`: answered recommendation spike Q1–Q4 (G7 gate 14,478 films, no IMDb/reviews, v1 mirror schema, K=150 hybrid; $0.13) → [feat-016.md](docs/handoffs/feat-016.md)
 - 2026-11-16 · Windows · Claude Code · `feat-011`: answered runtime LLM spike Q1–Q6 (`gpt-6-luna` `$0.00067`/query, 0 schema errors; Gemini free tier not usable for EEA users) → [feat-011.md](docs/handoffs/feat-011.md)
 - 2026-11-15 · Mac · Antigravity · `feat-010`: answered embedding runtime spike Q1–Q6 (`fastembed` `bge-small-en-v1.5` 384-d: `p50=5.04ms`, `279MB` RSS, `212MB` disk) → [feat-010.md](docs/handoffs/feat-010.md)
