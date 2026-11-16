@@ -437,8 +437,8 @@ Measured on **2026-11-16** on the Windows laptop with throwaway scripts in [`spi
 | §1, §5 | `profile.evidence` ("with the evidence it used", §1 Enrich) **was not tested** in this spike. The profile feature decides whether to keep it | — |
 | §7 | New decisions for the owner (below) | — |
 
-**Owner decisions needed:**
-- (a) drop IMDb;
-- (b) drop reviews from enrichment;
-- (c) the `audience` fallback when a film has no certification (profile-based, under P3);
-- (d) the retention eviction threshold, after feat-017.
+**Owner decisions (2026-11-16, recorded in `docs/architecture.md` §7):**
+- (a) Drop IMDb, for now (Q15).
+- (b) Drop reviews from enrichment (Q15).
+- (c) `audience` fallback: US, else ES, else the profile, as proposed (Q16).
+- (d) Retention: keep films that leave streaming, with **no eviction job in the MVP**. Track `unstreamable_since` so eviction can be added if storage passes ≈ 60% of M0 (Q17). This replaces the eviction rule proposed in §5 Q1.

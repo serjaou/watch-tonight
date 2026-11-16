@@ -10,13 +10,8 @@
 - **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-16 12:43 CET, Windows.
 - **Next step:** after the merge, `feat-012` (architecture refinement and MVP backlog slicing). It's a chore, so it's ready. It applies the spike 16 §6 table and the decisions below. `feat-017` (churn re-crawl) can run any time after 2026-11-17 10:41 UTC.
 - **Waiting on owner:**
-  - Merge the `feat-016` PR.
-  - Decide spike 16 §6:
-    - (a) drop IMDb;
-    - (b) drop reviews from enrichment;
-    - (c) the `audience` fallback when a film has no certification;
-    - (d) the eviction threshold, after feat-017.
-  - Optional: add the age-note line (Q14) to `docs/product.md`.
+  - Merge the `feat-016` PR. The spike 16 decisions are recorded as `docs/architecture.md` §7 Q15–Q17: no IMDb, no reviews, the `audience` fallback, keep-on-churn with no eviction job.
+  - Optional: add the age-note line (Q14) and the `audience` fallback interpretation of P3 (Q16) to `docs/product.md`.
 - **Unverified:**
   - The items under "Unverified" in `docs/handoffs/feat-016.md`, including corpus-scale profile retrieval, hybrid weights without a golden set, and K = 150 latency.
   - CI on the PR.
