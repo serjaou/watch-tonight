@@ -15,7 +15,7 @@
 ---
 
 ## feat-020 · Ingest and daily refresh
-- **Type:** feature · **Stories:** US1 · **Depends on:** feat-018 · **Spec:** `docs/specs/20-ingest-refresh.md`
+- **Type:** feature · **Stories:** US1 · **Depends on:** feat-018, feat-026 (the corpus gate may change) · **Spec:** `docs/specs/20-ingest-refresh.md`
 - **Description:**
   - The daily `/discover` crawl of ES/US/BO flat-rate films, with **G7 admission** (ADR 0008, pinned WR constants) and the admission data checks (overview, poster, `runtime > 0`, ≥ 1 genre).
   - One TMDB bundle per admitted film; Wikidata signals by TMDB ID.

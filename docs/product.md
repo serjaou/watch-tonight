@@ -2,7 +2,7 @@
 
 **What this file is:** what the product does, for whom, and where it stops. It holds the product judgment an agent can't infer from the code. Architecture lives in `docs/architecture.md`; per-feature detail lives in `docs/specs/`.
 **Owner:** Sergio. Agents may propose changes but never edit this file on their own.
-**Status:** draft · **Last updated:** 2026-11-16. These edits were made by an agent with the owner's consent: the age note and the P3 audience rule, and the removal of three "(verify)" markers the spikes resolved (posters, BO coverage, P5 terms), and the "couldn't apply" note in §4. Items marked **(to confirm)** are proposals the owner hasn't settled yet.
+**Status:** draft · **Last updated:** 2026-11-21. These edits were made by an agent with the owner's consent: the age note and the P3 audience rule, and the removal of three "(verify)" markers the spikes resolved (posters, BO coverage, P5 terms), and the "couldn't apply" note in §4 (2026-11-16); the note on English-language films in §2 (2026-11-21). Items marked **(to confirm)** are proposals the owner hasn't settled yet.
 
 ---
 
@@ -25,7 +25,7 @@
 | **Input** | Free text (mood and preferences, max 500 characters); country; one or more streaming services; optional constraints (e.g. max runtime, "nothing too intense") |
 | **Output** | 5 movies. Each has a title, year, runtime, poster, service(s) where it's streamable, a short pitch, a link to its TMDB page, and the availability date |
 | **Countries at launch** | ES, US, BO |
-| **Language at launch** | The mood text can be in any language. The UI, movie titles and pitches are in English only, and the UI says so. More languages later (section 8). |
+| **Language at launch** | The mood text can be in any language. The UI, movie titles and pitches are in English only, and the UI says so. More languages later (section 8). The movie catalogue may lean toward English-language films: that bias is accepted, even preferred, and the corpus is not balanced by original language (owner, 2026-11-21). |
 | **Audience** | A general-audience app for adults. Next to the input, the UI says: *"For adults. Under 18? Use it with a parent's or guardian's permission."* It also shows a privacy note: the mood text is sent to OpenAI to understand it, isn't used to train their models, and is kept up to 30 days for abuse monitoring (`docs/architecture.md` Q6, Q14). |
 
 The more detail the user gives, the more specific the results. Vague input (e.g. *"anything"*) still returns results.

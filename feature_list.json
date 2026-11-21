@@ -23,13 +23,24 @@
       "evidence": ""
     },
     {
+      "id": "feat-026",
+      "type": "spike",
+      "name": "Spike: quality and notability signals beyond TMDB, and a more generous corpus gate",
+      "description": "Answer the questions in docs/spikes/26-quality-and-notability-signals.md: free, licence-clean signals beyond TMDB (Wikidata critics, awards, box office, Wikipedia languages and page views, Trakt), their coverage and distinctness, a more generous 'any signal' gate rated by the owner (keep old but popular films such as Mission: Impossible II), corpus size and cost, ranking inputs per acclaim preference, and content in the search (genre and people mirror fields, content in the vector text; dilution and over-filtering tested). $0 except question 7 (about $0.01-0.05). Owner decisions of 2026-11-21 are recorded in the spike file.",
+      "stories": ["US1", "US2"],
+      "status": "todo",
+      "dependencies": ["feat-016"],
+      "spec": "docs/spikes/26-quality-and-notability-signals.md",
+      "evidence": ""
+    },
+    {
       "id": "feat-019",
       "type": "feature",
       "name": "Profile design and owner-rated sample",
       "description": "Finalize the v1 profile vocabulary with anchored definitions (viewing_effort, tone), the enrichment prompt and prompt_version, whether profiles keep an evidence field, and a profile-quality eval on ~30 films the owner rates (ADR 0005).",
       "stories": ["US1", "US2"],
       "status": "todo",
-      "dependencies": ["feat-018"],
+      "dependencies": ["feat-018", "feat-026"],
       "spec": "docs/specs/19-profile-design.md",
       "evidence": ""
     }

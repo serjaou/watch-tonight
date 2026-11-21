@@ -1,19 +1,18 @@
 # Progress
 
 ## Now
-- **Active feature:** `feat-012` (Architecture refinement and MVP backlog slicing), branch `chore/architecture-v1`. Done; its PR waits for the owner's merge.
+- **Active feature:** none in progress. `feat-012` is merged. The owner's checkpoint (`docs/checkpoint-2026-11-16/`: learning guide and review) is merged.
 - **State:**
-  - `docs/architecture.md` is now v1, with ADRs 0005–0008.
-  - The MVP is sliced, skeleton first. `feature_list.json` is the active window (feat-017, feat-018, feat-019); later items (feat-020 to feat-025) are in `docs/backlog.md`.
-  - Sizes are guides, not caps: relevance and priority first (owner).
-  - Owner decisions this session are recorded as architecture §7 Q15–Q18 and in `docs/product.md` (with consent).
-- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-16 15:50 CET, Windows.
-- **Next step:** after the merge:
-  - `feat-017` (churn re-crawl), runnable after 2026-11-17 10:41 UTC (TMDB only, $0);
-  - then `/spec` for `feat-018` (walking skeleton) with the owner. It has no spec yet; start rule 3b applies.
+  - `docs/architecture.md` is v1, with ADRs 0005–0008.
+  - New spike `feat-026` (quality and notability signals, a more generous corpus gate, content in the search): questions approved by the owner, `docs/spikes/26-quality-and-notability-signals.md`. Placed after feat-018; feat-019 and feat-020 now depend on it.
+  - Active window: feat-017, feat-018, feat-026, feat-019; later items (feat-020 to feat-025) are in `docs/backlog.md`.
+  - Owner decision 2026-11-21: an English-language bias in the corpus is accepted (`docs/product.md` §2, with consent).
+- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-21, Windows.
+- **Next step:**
+  - `feat-017` (churn re-crawl; TMDB only, $0);
+  - then `/spec` for `feat-018` (walking skeleton) with the owner. It has no spec yet; start rule 3b applies. Consider the checkpoint review's findings 2 and 7 (verification list, explicit split).
   - Start Docker Desktop before feat-018: its integration tests answer Q4 on Windows.
 - **Waiting on owner:**
-  - Merge the `feat-012` PR.
   - Be available for the feat-018 `/spec` interview.
 - **Unverified:**
   - The items under "Unverified" in `docs/handoffs/feat-012.md`: the extra pre-filters, `ModelRetry` on the real model, Batch support, K = 150 latency, aliasing safety, and Q4 on Windows.
