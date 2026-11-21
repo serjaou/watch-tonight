@@ -2,7 +2,7 @@
 
 **What this file is:** what the product does, for whom, and where it stops. It holds the product judgment an agent can't infer from the code. Architecture lives in `docs/architecture.md`; per-feature detail lives in `docs/specs/`.
 **Owner:** Sergio. Agents may propose changes but never edit this file on their own.
-**Status:** draft · **Last updated:** 2026-11-21. These edits were made by an agent with the owner's consent: the age note and the P3 audience rule, and the removal of three "(verify)" markers the spikes resolved (posters, BO coverage, P5 terms), and the "couldn't apply" note in §4 (2026-11-16); the note on English-language films in §2 (2026-11-21). Items marked **(to confirm)** are proposals the owner hasn't settled yet.
+**Status:** draft · **Last updated:** 2026-11-21. These edits were made by an agent with the owner's consent: the age note and the P3 audience rule, and the removal of three "(verify)" markers the spikes resolved (posters, BO coverage, P5 terms), and the "couldn't apply" note in §4 (2026-11-16); the note on English-language films in §2 and the audio and subtitle line in §6 (2026-11-21). Items marked **(to confirm)** are proposals the owner hasn't settled yet.
 
 ---
 
@@ -80,6 +80,7 @@ Any state that returns results can also carry a short note listing constraints f
 - Long or complex prompts (P4).
 - A sophisticated UI: no animations, themes or design system.
 - Native mobile apps, social features, paid data APIs, music.
+- Audio and subtitle languages: whether a service offers a film with a given audio or subtitle language is not considered (owner, 2026-11-21).
 
 ## 7. Definition of done (MVP)
 

@@ -15,11 +15,22 @@
       "id": "feat-018",
       "type": "feature",
       "name": "Walking skeleton: search end to end",
-      "description": "POST /search end to end on the ~300 spike-16 movies (the seed script re-fetches their TMDB bundles; raw TMDB data is not committed) in atlas-local: QueryIntent via Pydantic AI + gpt-6-luna (incl. a note for constraints it can't map), fastembed query vector, $vectorSearch with the pre-filters (verifying the untested ones and the audience rule), step-4 checks, re-rank + pitch, response states, exclude_ids (US3), trace with timings and cost; a minimal static provider list. Adds the first deterministic evals (P1, P3 as applied, P4, pitch length, real IDs, schema). First end-to-end latency numbers (Q7); answers Q4 on Windows. Split at /spec time if it holds independent behaviours.",
+      "description": "POST /search end to end on the ~300 spike-16 movies (the seed script re-fetches their TMDB bundles; raw TMDB data is not committed) in atlas-local: QueryIntent via Pydantic AI + gpt-6-luna (incl. a note for constraints it can't map), fastembed query vector, $vectorSearch with the pre-filters (verifying the untested ones and the audience rule), step-4 checks, re-rank + pitch, response states, exclude_ids (US3), trace with timings and cost; a minimal static provider list. Adds the first deterministic evals (P1, P3 as applied, P4, pitch length, real IDs, schema). First end-to-end latency numbers (Q7); answers Q4 on Windows. Split at /spec time if it holds independent behaviours. Notes for /spec (split, verification list, owner-written part): docs/backlog.md, feat-018 section.",
       "stories": ["US1", "US2", "US3"],
       "status": "todo",
       "dependencies": ["feat-012", "feat-016"],
       "spec": "docs/specs/18-walking-skeleton.md",
+      "evidence": ""
+    },
+    {
+      "id": "feat-027",
+      "type": "chore",
+      "name": "Reviewer spike checklist, cross-tool review, and stale-number cleanup",
+      "description": "From the 2026-11-16 checkpoint review (findings 3 and 8). (1) Add a spike and design-document section to .agents/agents/reviewer.md: every number traced to a raw output file; each labelled measured, estimated or from documentation (with link and date); extrapolations and sample sizes stated; options not run marked as not run; licence and terms claims quoted; handoff and metrics summaries say no more than the report. (2) A rule in AGENTS.md and docs/workflow.md that spikes and design documents are reviewed with the other machine's tool before merge. (3) Fix the stale lines the review lists (docs/metrics.md sections 1.3-1.4, README stack and status, the spike 11 and 16 summaries) and reduce docs/metrics.md section 1.4 to links. Detail: docs/backlog.md (Proposed, moved 2026-11-21).",
+      "stories": [],
+      "status": "todo",
+      "dependencies": [],
+      "spec": null,
       "evidence": ""
     },
     {
@@ -29,7 +40,7 @@
       "description": "Answer the questions in docs/spikes/26-quality-and-notability-signals.md: free, licence-clean signals beyond TMDB (Wikidata critics, awards, box office, Wikipedia languages and page views, Trakt), their coverage and distinctness, a more generous 'any signal' gate rated by the owner (keep old but popular films such as Mission: Impossible II), corpus size and cost, ranking inputs per acclaim preference, and content in the search (genre and people mirror fields, content in the vector text; dilution and over-filtering tested). $0 except question 7 (about $0.01-0.05). Owner decisions of 2026-11-21 are recorded in the spike file.",
       "stories": ["US1", "US2"],
       "status": "todo",
-      "dependencies": ["feat-016"],
+      "dependencies": ["feat-016", "feat-027"],
       "spec": "docs/spikes/26-quality-and-notability-signals.md",
       "evidence": ""
     },

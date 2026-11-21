@@ -110,7 +110,7 @@ The corpus gate decides which films can **ever** be recommended. Today it uses o
 - Every number in the report says whether it is **measured**, **estimated** or **from documentation** (with link and date), and points to its raw output file. Commit each script together with the output it produced (checkpoint review, finding 3).
 - **Cost:** $0 for questions 1–6 (no LLM). Question 7: about $0.01–0.05 (judging, and re-embedding 300 films locally for free).
 - **Owner time:** about 30 minutes to rate the question 4 samples, plus editing the content requests in question 7.
-- **Order (owner, 2026-11-21):** after the walking skeleton (feat-018) and before profile design (feat-019), which depends on question 7. It must also be answered before the ingest task (feat-020), because it changes the gate. It does not block the walking skeleton, which uses a fixed set of 300 films.
+- **Order (owner, 2026-11-21):** after the walking skeleton (feat-018) and the reviewer spike checklist (feat-027, so this spike is reviewed with it), and before profile design (feat-019), which depends on question 7. It must also be answered before the ingest task (feat-020), because it changes the gate. It does not block the walking skeleton, which uses a fixed set of 300 films.
 
 ## Out of scope
 

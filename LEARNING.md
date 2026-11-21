@@ -24,6 +24,17 @@ Tracks Python, FastAPI, MongoDB, and agentic harness concepts encountered in `wa
 | `pathlib.Path` & `subprocess.run` (`encoding="utf-8"`, `utf-8-sig`) | Stdlib | `FileInfo` / `Path` & `Process.Start` / `StreamReader` | `Can explain` | [scripts/hooks/stop_gate.py](scripts/hooks/stop_gate.py) |
 | `@pytest.fixture` & `tmp_path` | Testing | xUnit constructor DI (`IClassFixture<T>`) + temp directory | `Can explain` | [tests/harness/test_harness.py](tests/harness/test_harness.py) |
 | `str.startswith(tuple)` & comprehensions | Language | `prefixes.Any(p => path.StartsWith(p))` / LINQ `.Where()` | `Can explain` | [scripts/ci/pr_gates.py](scripts/ci/pr_gates.py) |
+| Gate strengths (outside the agent / tool hook / instruction) | Harness | Branch policies / pre-push hook / `CONTRIBUTING.md` | `Seen` | [checkpoint Part 2](docs/checkpoint-2026-11-16/02-the-harness.md) |
+| Fakes per port in unit tests | Testing | One Moq `Setup(...).Returns(...)` per test | `Seen` | [docs/architecture.md](docs/architecture.md) §2 |
+| Embeddings (text → 384 numbers) | RAG | No direct equivalent; a "similarity-preserving hash" | `Seen` | [ADR 0007](docs/decisions/0007-embeddings-fastembed-profile-template.md), [embed_pool.py](spikes/16-recommendation/embed_pool.py) |
+| Cosine similarity | RAG | `TensorPrimitives.CosineSimilarity` (System.Numerics.Tensors) | `Seen` | [rank_eval.py](spikes/16-recommendation/rank_eval.py) |
+| HNSW / approximate nearest-neighbour index | RAG | Azure AI Search `hnsw` vs `exhaustiveKnn` | `Seen` | [probe_atlas.py](spikes/09-atlas/probe_atlas.py) |
+| Pre- vs post-filtering; exact vs approximate search | RAG | `Where` before vs after `OrderBy().Take()` | `Seen` | [docs/architecture.md](docs/architecture.md) §3 |
+| Closed vocabulary (`Literal`) + mirror schema | LLM output | C# `enum` + a JSON Schema `enum` | `Seen` | [schemas_v1.py](spikes/16-recommendation/schemas_v1.py), [ADR 0005](docs/decisions/0005-closed-vocabulary-mirror-schema.md) |
+| Structured output + `output_validator` + `ModelRetry` | LLM output | FluentValidation + a Polly retry that sends the errors back | `Seen` | [probe_pydantic_ai.py](spikes/11-llm/probe_pydantic_ai.py) |
+| Bayesian weighted rating & the corpus gate | Ranking | — | `Seen` | [corpus.py](spikes/16-recommendation/corpus.py) |
+| Hybrid re-score & min-max normalisation | Ranking | — | `Seen` | [rank_eval.py](spikes/16-recommendation/rank_eval.py) |
+| LLM-as-judge noise (self-disagreement) | Evals | Flaky-test rate as a noise floor | `Seen` | [spike 16 §5](docs/spikes/16-recommendation-signals-and-ranking.md) |
 
 ---
 
@@ -31,6 +42,7 @@ Tracks Python, FastAPI, MongoDB, and agentic harness concepts encountered in `wa
 
 | Date | Target | Topics Defended / Covered | Session File |
 |---|---|---|---|
+| 2026-11-21 | Checkpoint 2026-11-16 (guide Parts 1–4 and 6, written answers) | Gate strengths, response states, closed vocabulary, embeddings & HNSW, pre-filtering, `/discover` trap, churn, the corpus gate | [2026-11-21-checkpoint.md](docs/learning/2026-11-21-checkpoint.md) |
 | 2026-11-13 | `HEAD~10..HEAD` (`feat-004`, `feat-007`) | Cross-OS encodings (`cp1252` vs `utf-8-sig`), `@pytest.fixture` (`tmp_path` → `gate_repo`), `str.startswith(tuple)` & trailing `/` boundary | [2026-11-13-feat-004-007.md](docs/learning/2026-11-13-feat-004-007.md) |
 | 2026-11-12 | `feat-000` | `typing.Final` vs C# `const`, `.strip()` order & Rule P4 rejection, `typing.TypedDict` vs Pydantic / C# `record` | [2026-11-12-feat-000.md](docs/learning/2026-11-12-feat-000.md) |
 | 2026-11-12 | `feat-001` | `pyproject.toml` tool consolidation & `import-linter` contracts vs `.csproj` layer references | [2026-11-12-feat-001.md](docs/learning/2026-11-12-feat-001.md) |

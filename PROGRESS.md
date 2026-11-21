@@ -5,12 +5,13 @@
 - **State:**
   - `docs/architecture.md` is v1, with ADRs 0005–0008.
   - New spike `feat-026` (quality and notability signals, a more generous corpus gate, content in the search): questions approved by the owner, `docs/spikes/26-quality-and-notability-signals.md`. Placed after feat-018; feat-019 and feat-020 now depend on it.
-  - Active window: feat-017, feat-018, feat-026, feat-019; later items (feat-020 to feat-025) are in `docs/backlog.md`.
-  - Owner decision 2026-11-21: an English-language bias in the corpus is accepted (`docs/product.md` §2, with consent).
+  - Active window: feat-017, feat-018, feat-027 (reviewer spike checklist + stale-number cleanup), feat-026, feat-019; later items (feat-020 to feat-025) are in `docs/backlog.md`.
+  - Owner decisions 2026-11-21 (`docs/product.md`, with consent): an English-language bias in the corpus is accepted; audio and subtitle languages are not considered.
+  - The checkpoint's learning record: `docs/learning/2026-11-21-checkpoint.md` (new concepts marked `Seen` in `LEARNING.md`).
 - **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-21, Windows.
 - **Next step:**
   - `feat-017` (churn re-crawl; TMDB only, $0);
-  - then `/spec` for `feat-018` (walking skeleton) with the owner. It has no spec yet; start rule 3b applies. Consider the checkpoint review's findings 2 and 7 (verification list, explicit split).
+  - then `/spec` for `feat-018` (walking skeleton) with the owner. It has no spec yet; start rule 3b applies. Its notes (split, verification list, owner-written part) are in `docs/backlog.md`, feat-018 section.
   - Start Docker Desktop before feat-018: its integration tests answer Q4 on Windows.
 - **Waiting on owner:**
   - Be available for the feat-018 `/spec` interview.
