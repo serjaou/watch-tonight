@@ -238,6 +238,8 @@ Each answer records the finding, the evidence (official documentation links, com
 > How many flat-rate titles per country change from one day to the next (added or removed), and how many of the added ones are new to our corpus?
 > - *Changes:* refresh schedule, and how often ingest must re-run to add new titles (architecture Q12).
 
+> **Update (feat-017, 2026-11-21):** the week-long extrapolation in finding 1 and the "over 90% are rotations" claim in finding 2 are not supported ([checkpoint review](../checkpoint-2026-11-16/04-spikes-foundations.md)). feat-017 re-measured churn from two complete catalogue crawls 5.3 days apart: see [spike 16, Q1](16-recommendation-signals-and-ranking.md#q1-corpus-selection-the-1984-problem-retention). The per-provider changes on the Popular 500 below are still the only measurement of provider swaps within a country.
+
 - **Finding:**
   1. **Measured 24.5-hour flat-rate provider churn (`spikes/08-tmdb/snapshot_1.json` at `2026-11-14T14:48:37Z` vs. `spikes/08-tmdb/snapshot_2.json` at `2026-11-15T15:18:19Z`):**
      - Across the exact same **500 popular movies** (`common_popular_movies_compared: 500`):

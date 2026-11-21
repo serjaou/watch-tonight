@@ -195,7 +195,7 @@ Measured on **2026-11-16** on the Windows laptop with throwaway scripts in [`spi
   - age-aware minimum TMDB votes: 20 if ≤ 1 year old, 60 if ≤ 3, 120 if ≤ 10, otherwise 200;
   - TMDB Bayesian quality score `WR ≥ 5.0` for every movie;
   - `WR ≥ 6.3` for films more than 25 years old.
-- **Catalogue measured** by [catalog.py](../../spikes/16-recommendation/catalog.py), result in [catalog_stats.json](../../spikes/16-recommendation/catalog_stats.json):
+- **Catalogue measured** by [catalog.py](../../spikes/16-recommendation/catalog.py), result in [catalog_stats.json](../../spikes/16-recommendation/catalog_stats.json) (feat-017's re-crawl is in `catalog_stats_2026-11-21.json`):
   - **51,527** unique movies on flat-rate in ES/US/BO with `vote_count ≥ 10`: ES 26,110, US 42,062, BO 15,432.
   - 51,414 of them have a poster and an overview.
   - The crawl took 4,290 `/discover/movie` calls, all HTTP 200, in 256 s.
@@ -213,17 +213,37 @@ Measured on **2026-11-16** on the Windows laptop with throwaway scripts in [`spi
 
   - **G7 by country:** ES 9,952, US 11,961, BO 6,835.
   - **G7 by decade:** pre-1970 797, 1970s 371, 1980s 565, 1990s 793, 2000s 2,156, 2010s 4,797, 2020s 4,999.
-  - **What G7 drops:** poorly rated recent films (*The Anacondas* 2025, 3.6; *War of the Worlds* 2025, 4.0 with 1,208 votes) and low-vote non-English classics (see Q2, IMDb).
+  - **What G7 drops:** poorly rated recent films (*The Anacondas* 2025, 3.6 from 17 votes; *War of the Worlds* 2025, 4.0 with 1,208 votes) and low-vote non-English classics (see Q2, IMDb).
+    - *The Anacondas* passed G7 on 2026-11-21, once it reached 20 votes (feat-017; see spike 26, "Growth").
 - **Retention: keep enriched movies when they leave streaming, with a size-based eviction rule; don't buffer theatrical releases for now.**
   - **Storage, from feat-009** (27.6% of M0 for 20k docs at 384-d with HNSW, ≈ 7.2 KiB per doc): G7 is ≈ 102 MiB, **20% of M0**.
-  - **Churn rate, not yet measured for this catalogue.** feat-008 measured 0.6–2.6% of the Popular 500 *changing providers* per day (ES 2.2%, US 2.6%, BO 0.6%). That's an upper bound: most changes are provider swaps, not a movie leaving every launch country.
-  - **Assumed scenario:** if 20% of the corpus left all launch countries each year, keeping those docs adds ≈ 20.5 MiB a year (4% of M0), so about 205 MiB over 10 years, and **no LLM cost**. Re-enriching a returning title would cost $0.00007 in Batch.
-  - **Eviction rule (proposal):** delete `streamable: []` docs that have been unstreamable for more than 12 months, oldest first, whenever the collection passes 60% of M0. Keeping them is cheap but not unbounded.
-  - **Refresh cost of retained docs:** zero per-doc calls, if the daily refresh starts from the `/discover` crawl (4,290 calls, ≈ 4 min). A stored movie missing from every region's flat-rate list gets `streamable: []` without a call, and per-movie `/watch/providers` calls are needed only for movies that are listed. This proposal still has to be confirmed in feat-017 or the ingest slice.
+  - **Churn, measured in feat-017** from two complete crawls 5.31 days apart (2026-11-16 10:41 → 2026-11-21 18:10 UTC; the re-crawl took 4,320 calls, all HTTP 200, 225 s: [catalog_stats_2026-11-21.json](../../spikes/16-recommendation/catalog_stats_2026-11-21.json)). Script [churn.py](../../spikes/16-recommendation/churn.py), output [churn_report_2026-11-16_2026-11-21.json](../../spikes/16-recommendation/churn_report_2026-11-16_2026-11-21.json):
+    - **G7 corpus, films leaving:** 32 of 14,478 films left all three launch countries (**6.0 a day**; 4.1–8.5 a day within counting noise, 95%). 133 more left one or two countries but stay streamable.
+    - **G7 corpus, admissions:** **130 films** newly passed G7 (**24.5 a day**; 20.4–29.1 within counting noise).
+      - 105 of them were released in 2023 or earlier (median 450 votes). 84 of those 105 weren't in the 2026-11-16 crawl, so they newly reached flat-rate in a launch country: G7 needs at least 60 votes for these films, so they weren't simply crossing the crawl's 10-vote line. The other 21 were already streamable and only crossed a G7 vote or quality line.
+      - 25 were released in 2024–2026 (18 not in the old crawl).
+      - **So most admissions are older films entering a subscription service, not new releases.**
+    - **The whole crawl (≥ 10 votes):** 183 of 51,527 films left all launch countries (34.5 a day); 540 arrived (101.7 a day). Of those arrivals, 12 were released in the last 90 days, 182 are older with fewer than 20 votes (they may only have crossed the crawl's 10-vote line), and 346 are older, established films.
+    - **Per country, left / arrived:** ES 178 / 282, US 211 / 619, BO 25 / 79.
+    - **Checked against `/watch/providers`**, the per-movie source of `streamable`, on seeded samples: script [churn_verify.py](../../spikes/16-recommendation/churn_verify.py), output [churn_verify_report_2026-11-16_2026-11-21.json](../../spikes/16-recommendation/churn_verify_report_2026-11-16_2026-11-21.json) (964 calls, all HTTP 200).
+      - **Leavers:** 321 of 325 have no flat-rate offer in that country now. 2 only fell below 10 votes; 2 are `/discover` misses, still on Prime Video with 19–20 votes.
+      - **Arrivals:** 378 of 379 have a flat-rate offer. **Films in both crawls (control):** 300 of 300 agree.
+      - **All 32 G7 films that left everywhere** have no flat-rate offer in ES, US or BO.
+      - Where sampled leavers went: mostly rent/buy only, or no offer at all; in the US, 65 of 150 now have a free or ad-supported offer.
+    - **Limits:** one 5.3-day window, in November. Two snapshots show net change only: a film that left and came back, or arrived and left, in between is invisible. Provider swaps within a country (Netflix → Prime Video) don't change a crawl and aren't measured here; spike 08 Q7 saw them on the Popular 500 in one day.
+    - **For a longer window:** the new crawl's IDs, with its G7 IDs, are committed as `catalog_ids_2026-11-21.json.gz`. A later crawl (`catalog.py --dated`, then `churn.py --old 2026-11-21 --new <date>`) can measure a longer window, G7 included, on either machine. The outputs are named by window, so a later run doesn't overwrite these.
+  - **Growth, extrapolated linearly from that one window** (not measured over a year), at ≈ 7.2 KiB per doc. Ranges in brackets are counting noise only:
+    - **Admissions:** ≈ 8,900 films a year (7,400–10,600), ≈ +63 MiB a year (52–75 MiB; 12% of M0), and ≈ $0.63 a year of Batch profiling (price list). The error goes both ways:
+      - the two-snapshot diff over-counts, because a stored film that comes back is restored, not added;
+      - it also under-counts, because a film that crossed G7 and fell back, or arrived and left, inside the window is missed, while a daily crawl would admit and keep it (the gate applies at admission only).
+    - **Films becoming unstreamable:** ≈ 2,200 a year (1,500–3,100; ≈ 15% of G7, where this section had assumed 20%), so ≈ 15 MiB of evictable docs a year.
+    - **So storage grows with admissions, about 4× faster than films leave.** Eviction can free at most what leaves, so it can't cap growth by itself. At this rate G7 reaches 60% of M0 in about 3 years (2.7–3.9 within counting noise). If the corpus nears the limit, the gate (feat-026) is the main lever.
+  - **Retention: the owner's decision stands** ([architecture](../architecture.md), question Q17): keep films that leave streaming, with no eviction job in the MVP. `unstreamable_since` lets eviction be added if storage passes ≈ 60% of M0. The measured rates support this: at G7, 60% is about 3 years away. The rule this spike first proposed (delete `streamable: []` docs unstreamable for more than 12 months, oldest first, whenever the collection passes 60% of M0) is only a starting point if eviction is ever added.
+  - **Schedule (sets question Q12's job schedule):** keep the daily crawl and availability refresh. 165 G7 films (≈ 31 a day) lost flat-rate in at least one launch country in the window, and stale availability would break the rule that every result is streamable now. Daily admission is cheap: ≈ 25 TMDB bundle calls and ≈ $0.002 of Batch profiling a day. How often to re-fetch full metadata stays with the ingest task (feat-020).
+  - **Refresh cost of retained docs:** zero per-doc calls, if the daily refresh starts from the `/discover` crawl (≈ 4,300 calls, ≈ 4 min). A stored movie missing from every region's flat-rate list gets `streamable: []` without a call, and per-movie `/watch/providers` calls are needed only for movies that are listed. **Confirmed by feat-017:** all 32 G7 films that left everywhere had no flat-rate offer. A `/discover` miss (2 of 325 sampled leavers) hides a streamable film for a while; it never recommends a film that isn't streamable ([product rule P1](../product.md)).
   - **Admission over time (proposal):** the daily crawl admits any crawled film that passes G7 and isn't stored yet. That's how recent films already on flat-rate get in once they cross the vote or WR bar.
     - The gate applies at admission only: a stored film whose refreshed `quality_score` later drops below G7 stays.
   - **A 1,000-film theatrical buffer** would cost 7.1 MiB and $0.07, but it only pays off with the rent/buy feature (product §8), so it's deferred.
-  - **The real churn rate** is a new `todo` chore, **feat-017**: re-run `catalog.py` 24 h or more after 2026-11-16 and run [churn.py](../../spikes/16-recommendation/churn.py) against the committed snapshot. It sets the eviction threshold.
 - **Enrichment cost of G7 with the v1 profile prompt:** 754 input and 134 output tokens per movie, so **≈ $1.03 once via Batch** ($2.06 standard). feat-011 estimated $1.10 for 20k with a shorter prompt.
 
 ### Q2. External data: IMDb, critics and awards, transient reviews
@@ -405,9 +425,9 @@ Measured on **2026-11-16** on the Windows laptop with throwaway scripts in [`spi
 
 1. **Corpus (Q1):**
    - Admit with gate **G7** (≈ 14.5k movies, 20% of M0).
-   - Keep enriched movies that leave streaming (`streamable: []`), evicting those unstreamable for over 12 months once the collection passes 60% of M0.
+   - Keep enriched movies that leave streaming (`streamable: []`). The spike proposed evicting those unstreamable for over 12 months once the collection passes 60% of M0; the owner's decision (d) below replaced that with no eviction job in the MVP.
    - No theatrical buffer until the rent/buy feature.
-   - Measure real churn in **feat-017**.
+   - Real churn, measured in **feat-017** (Q1): G7 films leave at ≈ 6 a day and are admitted at ≈ 24.5 a day (one 5.3-day window), so storage grows with admissions.
 2. **Signals (Q2):**
    - `quality_score` from TMDB WR.
    - `critic_score` and `awards_count` from Wikidata (CC0), internal only.

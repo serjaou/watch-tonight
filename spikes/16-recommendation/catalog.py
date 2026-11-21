@@ -4,12 +4,15 @@
 sliced by release-year window (and split further while a slice is >= 10k). Only movies with
 vote_count >= 10 are crawled: below that is filler for any corpus gate (noted in the spike doc).
 
-Run: uv run --no-project --python 3.13 python spikes/16-recommendation/catalog.py
-Writes data/catalog.jsonl (gitignored: raw TMDB rows) and catalog_stats.json (committed).
+Run: uv run --no-project --python 3.13 python spikes/16-recommendation/catalog.py [--dated]
+Writes data/catalog.jsonl (gitignored: raw TMDB rows) and catalog_stats.json (committed): the
+2026-11-16 crawl that spike 16's tables use. With --dated (feat-017 and later re-crawls), it
+writes data/catalog_<UTC date>.jsonl and catalog_stats_<UTC date>.json instead, for churn.py.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 import time
@@ -38,7 +41,7 @@ BASE = {
 def year_windows() -> list[tuple[str, str]]:
     edges = [(1900, 1959), (1960, 1969), (1970, 1979), (1980, 1989), (1990, 1994), (1995, 1999)]
     edges += [(y, y + 1) for y in range(2000, 2016, 2)]
-    edges += [(y, y) for y in range(2016, 2027)]
+    edges += [(y, y) for y in range(2016, datetime.now(UTC).year + 1)]  # up to this year
     return [(f"{a}-01-01", f"{b}-12-31") for a, b in edges]
 
 
@@ -64,12 +67,17 @@ def plan_slices(api: Tmdb, region: str) -> list[dict[str, Any]]:
 
 
 def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--dated", action="store_true", help="write dated files (re-crawls)")
+    args = ap.parse_args()
     DATA_DIR.mkdir(exist_ok=True)
     (DATA_DIR / ".gitignore").write_text("*\n", encoding="utf-8")
     api = Tmdb()
     t0 = time.perf_counter()
     movies: dict[int, dict[str, Any]] = {}
-    stats: dict[str, Any] = {"checked_at": datetime.now(UTC).isoformat(), "regions": {}}
+    started = datetime.now(UTC)
+    suffix = f"_{started.date().isoformat()}" if args.dated else ""
+    stats: dict[str, Any] = {"checked_at": started.isoformat(), "regions": {}}
 
     for region in REGIONS:
         slices = plan_slices(api, region)
@@ -116,7 +124,7 @@ def main() -> None:
         }
         print(f"[{region}] {len(slices)} slices, {len(jobs)} pages, {seen} rows", flush=True)
 
-    with (DATA_DIR / "catalog.jsonl").open("w", encoding="utf-8") as f:
+    with (DATA_DIR / f"catalog{suffix}.jsonl").open("w", encoding="utf-8") as f:
         for m in movies.values():
             f.write(json.dumps(m, ensure_ascii=False) + "\n")
     stats["union_movies"] = len(movies)
@@ -126,7 +134,8 @@ def main() -> None:
     stats["tmdb_calls"] = api.calls
     stats["tmdb_status"] = api.status
     stats["seconds"] = round(time.perf_counter() - t0, 1)
-    (SPIKE_DIR / "catalog_stats.json").write_text(json.dumps(stats, indent=2), encoding="utf-8")
+    stats_path = SPIKE_DIR / f"catalog_stats{suffix}.json"
+    stats_path.write_text(json.dumps(stats, indent=2), encoding="utf-8")
     print(json.dumps(stats, indent=2))
 
 

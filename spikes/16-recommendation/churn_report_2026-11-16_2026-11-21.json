@@ -1,0 +1,104 @@
+{
+  "old_crawl": "2026-11-16T10:41Z",
+  "new_crawl": "2026-11-21T18:10:17.262639+00:00",
+  "days_between_crawls": 5.31,
+  "method": "two complete /discover flat-rate crawls (vote_count>=10), net change only",
+  "regions": {
+    "BO": {
+      "old": 15432,
+      "new": 15486,
+      "left": 25,
+      "left_per_day": 4.7,
+      "left_pct_of_old": 0.16,
+      "arrived": 79,
+      "arrived_per_day": 14.9,
+      "arrived_still_in_other_region_or_new_to_all": {
+        "in_old_crawl_elsewhere": 34,
+        "new_to_all_regions": 45
+      }
+    },
+    "ES": {
+      "old": 26110,
+      "new": 26214,
+      "left": 178,
+      "left_per_day": 33.5,
+      "left_pct_of_old": 0.68,
+      "arrived": 282,
+      "arrived_per_day": 53.1,
+      "arrived_still_in_other_region_or_new_to_all": {
+        "in_old_crawl_elsewhere": 145,
+        "new_to_all_regions": 137
+      }
+    },
+    "US": {
+      "old": 42062,
+      "new": 42470,
+      "left": 211,
+      "left_per_day": 39.7,
+      "left_pct_of_old": 0.5,
+      "arrived": 619,
+      "arrived_per_day": 116.5,
+      "arrived_still_in_other_region_or_new_to_all": {
+        "in_old_crawl_elsewhere": 191,
+        "new_to_all_regions": 428
+      }
+    }
+  },
+  "combined": {
+    "old": 51527,
+    "new": 51884,
+    "left_all_launch_regions": 183,
+    "left_per_day": 34.5,
+    "left_pct_of_old": 0.36,
+    "arrived_new_to_all_regions": 540,
+    "arrived_per_day": 101.7,
+    "arrived_split": {
+      "released_in_last_90_days": 12,
+      "older_and_under_20_votes (may only have crossed the 10-vote line)": 182,
+      "older_and_established (entered flat-rate)": 346
+    }
+  },
+  "g7_corpus": {
+    "gate": "G7, pinned C=6.08 m=50; poster and overview required",
+    "old": 14478,
+    "new": 14572,
+    "left_all_launch_regions": 32,
+    "left_per_day": 6.0,
+    "left_per_day_95pct_counting_noise": [
+      4.1,
+      8.5
+    ],
+    "left_pct_of_old": 0.22,
+    "left_some_but_not_all_regions": 133,
+    "lost_flat_rate_in_at_least_one_region_per_day": 31.1,
+    "admissions_new_to_g7": 130,
+    "admissions_per_day": 24.5,
+    "admissions_per_day_95pct_counting_noise": [
+      20.4,
+      29.1
+    ],
+    "admissions_by_release_year": {
+      "2026": {
+        "not_in_old_crawl": 10,
+        "in_old_crawl_below_g7": 4,
+        "median_vote_count": 42.5
+      },
+      "2025": {
+        "not_in_old_crawl": 5,
+        "in_old_crawl_below_g7": 2,
+        "median_vote_count": 42
+      },
+      "2024": {
+        "not_in_old_crawl": 3,
+        "in_old_crawl_below_g7": 1,
+        "median_vote_count": 223.0
+      },
+      "2023_or_older": {
+        "not_in_old_crawl": 84,
+        "in_old_crawl_below_g7": 21,
+        "median_vote_count": 450
+      }
+    },
+    "admissions_median_vote_count_all": 318.5
+  }
+}

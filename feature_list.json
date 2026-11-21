@@ -1,17 +1,6 @@
 {
   "features": [
     {
-      "id": "feat-017",
-      "type": "chore",
-      "name": "Measure flat-rate catalogue churn (spike 16 follow-up)",
-      "description": "At least 24 h after 2026-11-16, copy spikes/16-recommendation/catalog_stats.json aside (the re-run overwrites it), re-run catalog.py and churn.py against catalog_ids_2026-11-16.json.gz: movies leaving and entering flat-rate across ES/US/BO combined, per day. Sets the retention eviction threshold and re-ingest schedule (architecture Q12). TMDB only, $0.",
-      "stories": [],
-      "status": "todo",
-      "dependencies": ["feat-016"],
-      "spec": null,
-      "evidence": ""
-    },
-    {
       "id": "feat-018",
       "type": "feature",
       "name": "Walking skeleton: search end to end",

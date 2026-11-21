@@ -150,8 +150,8 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
   - every job run is recorded in `ingestion_runs` (counts, duration, errors).
 - **Refresh and retention (Q17):**
   - Keep films that leave streaming (`streamable: []`, `unstreamable_since` set). No eviction job in the MVP.
-  - Proposal to confirm in the ingest slice **(slice)**: films missing from every region's crawl get `streamable: []` with no per-movie call, and `/watch/providers` is called only for listed films.
-  - The churn rate is measured in feat-017 (Q12).
+  - Films missing from every region's crawl get `streamable: []` with no per-movie call, and `/watch/providers` is called only for listed films; the ingest slice builds it **(slice)**. feat-017 checked it: all 32 G7 films that left had no flat-rate offer in any launch country. A `/discover` miss (2 of 325 sampled leavers) hides a streamable film for a while; it never recommends a film that isn't streamable (P1).
+  - **Churn (feat-017, one 5.3-day window):** G7 films leave all launch countries at ≈ 6 a day and are admitted at ≈ 24.5 a day, mostly older films entering a service. Storage grows with admissions (≈ +63 MiB a year, extrapolated), about 4× faster than films leave, so the gate, not eviction, is the main storage lever. Detail: spike 16 Q1.
 
 ## 5. Data model (MongoDB, v1)
 
@@ -221,7 +221,7 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
 |---|---|---|---|
 | Q4 | Does `mongodb-atlas-local` run `$vectorSearch` on both machines? It ran on the Mac (feat-009), and the image is published for `linux/amd64`. The Windows run is pending because Docker Desktop wasn't running during feat-012. | Walking skeleton's integration tests (feat-018) | Integration tests on Windows |
 | Q7 | p95 latency target (product.md: to confirm, guess < 10 s). The LLM calls alone are p95 ≈ 6.3 s from a laptop. | feat-018 (end to end, local, small corpus), feat-021 (`$vectorSearch` at K = 150 on M0), feat-025 (from the host) | Number of LLM calls, K, caching |
-| Q12 | How often new films are admitted, and the churn rate. Plan: the daily `/discover` crawl admits films that pass G7. | feat-017 (churn), ingest slice (feat-020) | Job schedule, cost |
+| Q12 | How often new films are admitted, and the churn rate. Plan: the daily `/discover` crawl admits films that pass G7. **Measured in feat-017** over one 5.3-day window: ≈ 24.5 G7 admissions and ≈ 6 departures a day, and ≈ 31 G7 films a day lost flat-rate in at least one launch country, so the crawl, availability refresh and admission stay daily (spike 16 Q1). Still open: the rates over months, from `ingestion_runs`, and the full re-ingest cadence (feat-020). | feat-017 (done), ingest slice (feat-020) | Job schedule, cost |
 
 ### Decided (owner and spikes, 2026-11-13 to 2026-11-16)
 

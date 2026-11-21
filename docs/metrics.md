@@ -26,7 +26,7 @@ Raw data comes from the `ingestion_runs` collection in MongoDB ([docs/architectu
 | **Job counts & duration (`ingest`, `refresh`, `enrich`, `embed`)** | `ingestion_runs.{job,processed,skipped,failed,duration_s}` | Bounded by TMDB rate limits (`feat-008` Q3), laptop/host CPU (`feat-010` Q4), and LLM rate limits (`feat-011` Q1) | `skipped` verifies idempotency (`source_hash`, `prompt_version`, `embedding_model`) |
 | **Enrichment cost per 1,000 profiles (`USD` & tokens)** | `ingestion_runs` (`enrich` job) | Measured in `feat-011` Q1; must fit zero-cost / owner-approved small spend for 5–20k movies | Recorded before running full-corpus enrichment |
 | **Catalogue coverage & poster completeness** | `movies` collection / `feat-008` Q5–Q6 | ES, US and BO flat-rate movie counts per provider; `%` with English overview, keywords, reviews, and `poster_path` | Answers whether BO launches (`Q2`) and how to handle missing posters (`Q13`) |
-| **Availability freshness & daily churn** | `movies.availability_updated_at` / `feat-008` Q7 | Refreshed daily ([docs/product.md](product.md) §6); every result shows its `availability_updated_at` (P6) | Daily titles added/removed in `feat-008` Q7 set the re-ingest schedule (`Q12`) |
+| **Availability freshness & daily churn** | `movies.availability_updated_at`, `ingestion_runs` / `feat-017` | Refreshed daily ([docs/product.md](product.md) §6); every result shows its `availability_updated_at` (P6) | Baseline from `feat-017` (two complete crawls 5.3 days apart): G7 films leave all launch countries ≈ 6/day and are admitted ≈ 24.5/day; the whole ≥ 10-vote crawl ≈ 34.5 left and ≈ 101.7 arrived per day ([spike 16 Q1](spikes/16-recommendation-signals-and-ranking.md#q1-corpus-selection-the-1984-problem-retention)). Replaces the one-day estimate of `feat-008` Q7 (`Q12`) |
 
 ### 1.3 Eval & quality metrics
 Raw data comes from `evals/` (protected by the `tests-approved` PR gate) and `eval_runs` ([docs/product.md](product.md) §3 & §7, [docs/architecture.md](architecture.md) §6).
@@ -60,6 +60,7 @@ Tracks whether the harness catches issues before they reach the owner and how ea
 
 | ID | Type | Date | Machine · Tool | Stop-gate blocks | Reviewer (rounds / findings) | Escaped / owner fixes | Handoff Details |
 |---|---|---|---|---:|---|---:|---|
+| `feat-017` | `chore` | 2026-11-21 | Windows · Claude Code | 0 | 2 (6 + 2) | 0 | [feat-017.md](handoffs/feat-017.md) |
 | `feat-012` | `chore` | 2026-11-16 | Windows · Claude Code | 0 | 2 (18 + 9) | 0 | [feat-012.md](handoffs/feat-012.md) |
 | `feat-016` | `spike` | 2026-11-16 | Windows · Claude Code | 0 | 2 (14 + 7) | 0 | [feat-016.md](handoffs/feat-016.md) |
 | `feat-011` | `spike` | 2026-11-16 | Windows · Claude Code | 0 | 2 (9 + 6) | 0 | [feat-011.md](handoffs/feat-011.md) |

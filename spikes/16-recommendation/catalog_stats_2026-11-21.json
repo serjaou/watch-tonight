@@ -1,0 +1,37 @@
+{
+  "checked_at": "2026-11-21T18:10:17.262639+00:00",
+  "regions": {
+    "ES": {
+      "slices": 25,
+      "slices_over_cap": 0,
+      "sum_slice_totals": 26214,
+      "pages_fetched": 1324,
+      "rows_seen": 26214
+    },
+    "US": {
+      "slices": 25,
+      "slices_over_cap": 0,
+      "sum_slice_totals": 42470,
+      "pages_fetched": 2136,
+      "rows_seen": 42470
+    },
+    "BO": {
+      "slices": 25,
+      "slices_over_cap": 0,
+      "sum_slice_totals": 15486,
+      "pages_fetched": 785,
+      "rows_seen": 15486
+    }
+  },
+  "union_movies": 51884,
+  "by_region_count": {
+    "ES": 26214,
+    "US": 42470,
+    "BO": 15486
+  },
+  "tmdb_calls": 4320,
+  "tmdb_status": {
+    "200": 4320
+  },
+  "seconds": 225.3
+}

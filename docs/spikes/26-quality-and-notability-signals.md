@@ -51,6 +51,8 @@ The corpus gate decides which films can **ever** be recommended. Today it uses o
 - **Signals already measured in spike 16:** IMDb mostly repeats TMDB (rank correlation 0.83), and its licence rules it out (re-checked 2026-11-20: *"personal and non-commercial use"*, and not *"to create any kind of online/offline database of movie information"*). Wikidata critic scores are a different signal (rank correlation 0.58 with TMDB quality), covering 70% of G7 films but only 40% of those from 2020 on.
 - **Limits:**
   - **Storage:** the free database tier has 512 MiB in total. At the current size estimate (≈ 7 KiB per film, still to be re-measured), 14.5k films ≈ 20%, 25k ≈ 34%, and all 51k ≈ 71%.
+  - **Growth (feat-017, one 5.3-day window):** G7 admits ≈ 24.5 films a day; the whole ≥ 10-vote crawl gains ≈ 101.7 a day (some only crossing the 10-vote line). A more generous gate grows faster, and storage grows with admissions, not with films leaving ([spike 16, Q1](16-recommendation-signals-and-ranking.md#q1-corpus-selection-the-1984-problem-retention)).
+    - Seen in that window: *The Anacondas* (2025), which spike 16 gave as an example of a film G7 drops, passed G7 on 2026-11-21. It went from 17 to 20 votes (the minimum for recent films), and its average fell from 3.6 to 3.2. With 20 votes its quality score is pulled towards the mean (≈ 5.26), so the "quality at least 5.0" floor barely filters recent films with few votes.
   - **Money:** OpenAI profiling costs ≈ $0.00007 per film with the Batch API and ≈ $0.00014 without. It is paid again for every film each time the profile prompt changes.
 
 ## Questions
@@ -106,6 +108,7 @@ The corpus gate decides which films can **ever** be recommended. Today it uses o
 
 - Throwaway scripts in `spikes/26-quality-signals/`, never `src/`.
 - Re-use spike 16's catalogue. `data/catalog.jsonl` exists only on the Windows laptop; on the Mac, re-create it with `spikes/16-recommendation/catalog.py` (about 4 minutes, TMDB only).
+  - feat-017's newer crawl (2026-11-21, 51,884 films) is next to it as `data/catalog_2026-11-21.jsonl`. The numbers above come from `data/catalog.jsonl` (2026-11-16).
 - Wikidata through bulk SPARQL queries keyed by TMDB ID, as spike 16 did. Page views from monthly dumps or a sample, not 50k individual calls, unless the API's rate limit allows it comfortably.
 - Every number in the report says whether it is **measured**, **estimated** or **from documentation** (with link and date), and points to its raw output file. Commit each script together with the output it produced (checkpoint review, finding 3).
 - **Cost:** $0 for questions 1–6 (no LLM). Question 7: about $0.01–0.05 (judging, and re-embedding 300 films locally for free).

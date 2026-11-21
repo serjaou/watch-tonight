@@ -1,0 +1,175 @@
+{
+  "checked_at": "2026-11-21T18:17:57+00:00",
+  "sample_sizes": {
+    "ES.left": {
+      "population": 178,
+      "checked": 150
+    },
+    "ES.arrived": {
+      "population": 282,
+      "checked": 150
+    },
+    "ES.stayed": {
+      "population": 25932,
+      "checked": 100
+    },
+    "US.left": {
+      "population": 211,
+      "checked": 150
+    },
+    "US.arrived": {
+      "population": 619,
+      "checked": 150
+    },
+    "US.stayed": {
+      "population": 41851,
+      "checked": 100
+    },
+    "BO.left": {
+      "population": 25,
+      "checked": 25
+    },
+    "BO.arrived": {
+      "population": 79,
+      "checked": 79
+    },
+    "BO.stayed": {
+      "population": 15407,
+      "checked": 100
+    },
+    "g7_left_all": {
+      "population": 32,
+      "checked": 32
+    }
+  },
+  "seed": 17,
+  "results": {
+    "ES.left": {
+      "no_flatrate_other_offers_buy+rent": 71,
+      "no_offers_in_region": 64,
+      "no_flatrate_other_offers_ads": 4,
+      "no_flatrate_other_offers_buy+free+rent": 3,
+      "flatrate_but_under_10_votes": 2,
+      "no_flatrate_other_offers_ads+buy+rent": 2,
+      "no_flatrate_other_offers_buy": 1,
+      "no_flatrate_other_offers_free": 1,
+      "flatrate": 1,
+      "no_flatrate_other_offers_buy+free": 1
+    },
+    "ES.arrived": {
+      "flatrate": 149,
+      "no_flatrate_other_offers_buy+rent": 1
+    },
+    "ES.stayed": {
+      "flatrate": 100
+    },
+    "US.left": {
+      "no_flatrate_other_offers_buy+rent": 48,
+      "no_offers_in_region": 36,
+      "no_flatrate_other_offers_ads+buy+free+rent": 19,
+      "no_flatrate_other_offers_ads+buy+rent": 16,
+      "no_flatrate_other_offers_ads": 12,
+      "no_flatrate_other_offers_buy+free+rent": 12,
+      "no_flatrate_other_offers_ads+free": 4,
+      "no_flatrate_other_offers_free": 2,
+      "flatrate": 1
+    },
+    "US.arrived": {
+      "flatrate": 150
+    },
+    "US.stayed": {
+      "flatrate": 100
+    },
+    "BO.left": {
+      "no_offers_in_region": 14,
+      "no_flatrate_other_offers_buy+rent": 9,
+      "no_flatrate_other_offers_buy": 1,
+      "no_flatrate_other_offers_ads": 1
+    },
+    "BO.arrived": {
+      "flatrate": 79
+    },
+    "BO.stayed": {
+      "flatrate": 100
+    },
+    "g7_left_all": {
+      "no_flatrate_in_any_launch_region": 32
+    }
+  },
+  "discover_vs_watch_providers_disagreements": [
+    {
+      "group": "ES.left",
+      "id": 618748,
+      "title": "A Costume for Nicolas",
+      "vote_count": 20,
+      "flatrate_providers": [
+        "Amazon Prime Video",
+        "Filmin",
+        "Amazon Prime Video with Ads"
+      ],
+      "offer_types": [
+        "ads",
+        "flatrate"
+      ]
+    },
+    {
+      "group": "ES.left",
+      "id": 543914,
+      "title": "Feral",
+      "vote_count": 9,
+      "flatrate_providers": [
+        "Amazon Prime Video",
+        "Filmin",
+        "Amazon Prime Video with Ads"
+      ],
+      "offer_types": [
+        "flatrate"
+      ]
+    },
+    {
+      "group": "ES.left",
+      "id": 678507,
+      "title": "Mostro",
+      "vote_count": 0,
+      "flatrate_providers": [
+        "Filmin"
+      ],
+      "offer_types": [
+        "flatrate"
+      ]
+    },
+    {
+      "group": "ES.arrived",
+      "id": 1167307,
+      "title": "David",
+      "vote_count": 209,
+      "flatrate_providers": [],
+      "offer_types": [
+        "buy",
+        "rent"
+      ]
+    },
+    {
+      "group": "US.left",
+      "id": 1624961,
+      "title": "No Ordinary Heist",
+      "vote_count": 19,
+      "flatrate_providers": [
+        "Amazon Prime Video",
+        "Amazon Prime Video with Ads"
+      ],
+      "offer_types": [
+        "ads",
+        "buy",
+        "flatrate",
+        "free",
+        "rent"
+      ]
+    }
+  ],
+  "g7_left_all_but_still_flatrate_examples": [],
+  "tmdb_calls": 964,
+  "tmdb_status": {
+    "200": 964
+  }
+}
