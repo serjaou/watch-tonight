@@ -1,25 +1,24 @@
 # Progress
 
 ## Now
-- **Active feature:** none in progress. `feat-017` (catalogue churn) is done on branch `feat-017-churn`, with a PR to `main` waiting for the owner's merge.
+- **Active feature:** `feat-018` (Walking skeleton: search end to end) — `/spec` draft on branch `docs/feat-018-spec-draft` (`feat-017` is merged to `main`).
 - **State:**
-  - feat-017 measured churn from two complete crawls 5.3 days apart, checked film by film against `/watch/providers`. G7 films leave all launch countries at ≈ 6 a day and are admitted at ≈ 24.5 a day, mostly older films entering a service. The daily crawl, refresh and admission stay; the owner's "no eviction job in the MVP" stands. Detail: spike 16 Q1, [feat-017.md](docs/handoffs/feat-017.md).
-  - `docs/architecture.md` is v1, with ADRs 0005–0008. Q12 now has measured rates; still open for the rates over months (feat-020).
-  - Active window: feat-018 (walking skeleton), feat-027 (reviewer spike checklist + stale-number cleanup), feat-026 (quality signals and corpus gate spike), feat-019 (profile design); later items (feat-020 to feat-025) are in `docs/backlog.md`.
-  - Owner decisions 2026-11-21 (`docs/product.md`, with consent): an English-language bias in the corpus is accepted; audio and subtitle languages are not considered.
-  - Raw crawl rows (gitignored, Windows laptop only): `spikes/16-recommendation/data/catalog.jsonl` (2026-11-16, spike 16's tables) and `data/catalog_2026-11-21.jsonl` (feat-017). The committed `catalog_ids_2026-11-21.json.gz` lets either machine measure a longer churn window.
-- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-21 19:39 CET, Windows.
+  - Interviewed the owner for `feat-018` (`/spec`) and wrote the draft spec in `docs/specs/18-walking-skeleton.md` (`status: draft`).
+  - Agreed on a 3-way split of the walking skeleton (Checkpoint Finding 7):
+    - **Slice A (`feat-018`, in `docs/specs/18-walking-skeleton.md`):** end-to-end `POST /search` across `domain`, `application`, `infra` (`mongodb/mongodb-atlas-local:8.0`) and `api` (FastAPI) with deterministic fake `LanguageModel` and `Embedder` ports, all 5 response states (HTTP 200/422/503), step-4 deterministic checks + `collection_id` dedupe, the 6 deterministic CI evals, and Atlas pre-filter + index lifecycle verification.
+    - **Slice B (`feat-028`, in `docs/backlog.md` Proposed):** real `fastembed` (`BAAI/bge-small-en-v1.5`) `Embedder` adapter, verifying `query_embed` instruction prefixing, embedding the ~300 spike-16 seed profiles with `template(profile)`, and measuring cold/warm query-embedding latency.
+    - **Slice C (`feat-029`, in `docs/backlog.md` Proposed):** real Pydantic AI + OpenAI `gpt-6-luna` `LanguageModel` adapter, verifying `ModelRetry` on the live model, live token/cost tracking in `trace`, and first end-to-end latency numbers (Q7).
+  - Owner learning decision (Checkpoint Finding 4): agent writes the slice first, followed by a `/defend` session and owner refactoring/extension.
+  - Active window in `feature_list.json`: `feat-018`, `feat-027`, `feat-026`, `feat-019`.
+- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-22 23:53 CET, Mac.
 - **Next step:**
-  - After the merge: `/spec` for `feat-018` (walking skeleton) with the owner. It has no spec yet; start rule 3b applies. Its notes (split, verification list, owner-written part) are in `docs/backlog.md`, feat-018 section.
-  - Start Docker Desktop before feat-018: its integration tests answer Q4 on Windows.
+  - On the Windows laptop: review and approve `docs/specs/18-walking-skeleton.md` (`status: approved`), decide whether to promote `feat-028` and `feat-029` from `docs/backlog.md` (Proposed) into `feature_list.json` / Ordered, authorize writing `tests/acceptance/test_walking_skeleton.py`, and build `feat-018`.
+  - Start Docker Desktop before running `feat-018` integration tests (`uv run poe test-all` answers Q4 on Windows).
 - **Waiting on owner:**
-  - Merge the feat-017 PR.
-  - Refine feat-018: be available for its `/spec` interview.
-  - Optional: review the feat-017 PR with Antigravity on the Mac (the checkpoint's cross-tool review advice; the rule itself comes with feat-027).
+  - Refine `feat-018`: review and approve `docs/specs/18-walking-skeleton.md` and confirm ordering of the proposed split slices (`feat-028`, `feat-029`).
 - **Unverified:**
-  - feat-017: rates over months (one 5.3-day window, extrapolated linearly); provider swaps within a country; films that left and came back inside the window.
-  - The items under "Unverified" in `docs/handoffs/feat-012.md`: the extra pre-filters, `ModelRetry` on the real model, Batch support, K = 150 latency, aliasing safety, and Q4 on Windows.
-  - CI on the PR.
+  - The items under "Unverified" in `docs/handoffs/feat-012.md` and `docs/handoffs/feat-017.md`: extra pre-filters, `ModelRetry` on the real model, Batch support, K = 150 latency, aliasing safety, Q4 on Windows, and multi-month churn rates.
+  - CI on the pushed `docs/feat-018-spec-draft` branch.
 
 ## Log (newest first, 1 line each; full details in `docs/handoffs/`)
 - 2026-11-21 · Windows · Claude Code · `feat-017`: churn from two full crawls 5.3 days apart, verified against `/watch/providers` (G7: ≈ 6 leave/day, ≈ 24.5 admitted/day); daily schedule kept → [feat-017.md](docs/handoffs/feat-017.md)
