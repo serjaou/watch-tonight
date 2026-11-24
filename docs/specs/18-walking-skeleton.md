@@ -1,7 +1,7 @@
 ---
 id: feat-018
 stories: [US1, US2, US3]
-status: draft   # draft -> approved (set by the owner only)
+status: approved
 ---
 # Walking skeleton, part 1: search end to end with in-memory adapters
 

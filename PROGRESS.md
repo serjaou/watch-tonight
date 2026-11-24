@@ -1,7 +1,7 @@
 # Progress
 
 ## Now
-- **Active feature:** `feat-018` (walking skeleton, part 1). Its spec is revised and waiting for the owner's approval, on branch `docs/feat-018-spec-draft` (`feat-017` is merged to `main`).
+- **Active feature:** `feat-018` (walking skeleton, part 1). Its spec is **approved** (owner, 2026-11-24); the spec PR from branch `docs/feat-018-spec-draft` waits for the owner's merge.
 - **State:**
   - 2026-11-22 (Mac, Antigravity): `/spec` interview and first draft of `docs/specs/18-walking-skeleton.md`.
   - 2026-11-24 (Windows, Claude Code): cross-tool review of that draft; the owner accepted every recommendation:
@@ -17,10 +17,11 @@
   - Raw crawl rows (gitignored, Windows laptop only): `spikes/16-recommendation/data/catalog.jsonl` (2026-11-16) and `data/catalog_2026-11-21.jsonl`; also `data/pool_b_movies.jsonl` (spike 16's 300 films, no posters, Spanish ratings or availability).
 - **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-24 17:24 CET, Windows.
 - **Next step:**
-  - The owner approves `docs/specs/18-walking-skeleton.md` (`status: approved`) and authorizes writing `tests/acceptance/test_walking_skeleton.py` (and its fixtures) in that session; then build `feat-018`. No Docker needed for part 1.
+  - After the spec PR is merged: branch `feat-018-walking-skeleton` from `main`; the owner authorizes writing `tests/acceptance/test_walking_skeleton.py` (and its fixtures) in that session; then build `feat-018`. No Docker needed for part 1.
   - Start Docker Desktop before part 2 (`feat-030`): its integration tests answer Q4 on Windows.
 - **Waiting on owner:**
-  - Approve the part 1 spec. Later, review the part 2 draft spec.
+  - Merge the spec PR. Later, review the part 2 draft spec (`docs/specs/30-atlas-local-search.md`).
+  - Order the Proposed item "Content limits in the search" (suggested: right after `feat-026`).
   - Optional: the proposal in `docs/backlog.md` (Proposed) to give the query steps headings and link every spec reference (from your review of this spec).
 - **Unverified:**
   - The items under "Unverified" in `docs/handoffs/feat-012.md` and `docs/handoffs/feat-017.md`: extra pre-filters, `ModelRetry` on the real model, Batch support, K = 150 latency, aliasing safety, Q4 on Windows, and multi-month churn rates.
