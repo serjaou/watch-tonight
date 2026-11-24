@@ -100,6 +100,7 @@ The corpus gate decides which films can **ever** be recommended. Today it uses o
      - Count the relevant films the hard filter removes, and list the words that don't map cleanly to a TMDB genre.
      - Expected outcome: a rule for when the intent marks a genre as **required** ("only horror") and when as **preferred** ("an action movie").
    - **7c · Which content fields become exact mirror fields** (genres, director, main cast, keyword flags such as "based on a true story"), and how the intent expresses them.
+   - **Owner (2026-11-24):** content limits **will be added**; the v1 list of hard limits is not frozen ([ADR 0005](../decisions/0005-closed-vocabulary-mirror-schema.md)). This question decides how, not whether.
    - **Content requests (draft; the owner edits this list):** "an action movie that critics liked", "a heist movie", "something based on a true story", "a Christopher Nolan film", "a movie with Meryl Streep", "a time-travel movie", "a courtroom drama", "a Christmas movie for the family", "a sports underdog story", "a horror comedy".
    - Method: re-use spike 16's 300 profiled films (check first that the pool has matches for each request) and the same blind judge.
    - *Changes:* the embedding template (decision record 0007), the mirror schema and the intent (decision record 0005), architecture §3 and §5.

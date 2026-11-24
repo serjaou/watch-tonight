@@ -24,5 +24,6 @@
   5. **The channel-2 fields go to step 5 as context, not as step-4 filters.** Direct field matching lowered relevance in feat-016. It can be revisited with the owner-labelled golden set.
 - **Consequences:**
   - Adding a new kind of constraint means changing the schema in three places: the vocabulary, the profile prompt and the intent prompt. That's deliberate.
+  - **The v1 list of hard limits is a starting point, not final** (owner, 2026-11-24). Content limits such as genre, director, main cast and keyword flags (e.g. "based on a true story") will be added. Spike feat-026 question 7 decides *how* (an exact mirror field, a required or only preferred genre, or content in the vector text), not *whether*. The code keeps adding a limit cheap: each limit is one intent field, one movie field, one check and one pre-filter clause.
   - How well constraints are extracted is measured by the extraction eval (P3), not guaranteed.
   - Films with no certification can pass a kids filter on their profile alone. That relies on profile quality, which the profile design feature measures.

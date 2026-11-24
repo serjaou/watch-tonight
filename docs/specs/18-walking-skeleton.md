@@ -49,7 +49,7 @@ All in `tests/acceptance/test_walking_skeleton.py`. **Fixtures:** about 15–20 
 - The real embedder (`fastembed`), checking `query_embed`, embedding latency → part 3, `feat-028`.
 - The real LLM (Pydantic AI + `gpt-6-luna`), the retry that feeds the error back, real tokens and cost, end-to-end latency (Q7) → part 4, `feat-029`.
 - The hybrid score (`feat-022`): until then, step 4 orders by similarity.
-- Genre, people and other content fields: spike `feat-026` question 7 may add them; this slice uses the v1 `QueryIntent` ([ADR 0005](../decisions/0005-closed-vocabulary-mirror-schema.md)).
+- Genre, people and other content limits: they will be added after spike `feat-026` question 7 decides how (owner, 2026-11-24); this slice uses the v1 `QueryIntent` ([ADR 0005](../decisions/0005-closed-vocabulary-mirror-schema.md)).
 - Ingest and the real provider list (`feat-020`).
 
 ## Design notes (with C# comparison)
@@ -61,6 +61,7 @@ All in `tests/acceptance/test_walking_skeleton.py`. **Fixtures:** about 15–20 
   - `infra`: the in-memory catalogue and search (same filter meaning as the Atlas pre-filter, cosine similarity), and a deterministic fake embedder (a vector derived from a hash of the text). Both stay as fast test doubles after parts 2 and 3.
   - `api`: FastAPI `POST /search`; `Depends` wires the adapters (like ASP.NET Core DI). Locally, `uvicorn` serves it with the in-memory adapters and the fixture films.
 - **Where the retry lives** (owner, 2026-11-24): the check functions live in `domain`. In part 4 the Pydantic AI adapter calls them inside its output validators, which gives the one retry with the error fed back ([ADR 0006](../decisions/0006-runtime-llm-openai-pydantic-ai.md)). `SearchMovies` runs them again on whatever the port returns, as a final guard. So in this slice the LLM port either returns output or raises, and `application` has no retry loop. In C# terms: the retry policy sits on the client (like Polly on an `HttpClient`); the validation sits in the service.
+- **The list of hard limits will grow** (owner, 2026-11-24): genre, director, main cast and keyword flags come later ([ADR 0005](../decisions/0005-closed-vocabulary-mirror-schema.md)). Build each limit as its own unit (intent field, movie field, merge rule, check function, pre-filter clause), so adding one is additive and doesn't change the others.
 - **Tokens and cost:** the LLM port returns them with each call, and `trace` adds them up. The fake returns fixed numbers.
 - **Zero candidates** (owner, 2026-11-24): `partial`, an empty list, no re-rank call (architecture, step 5).
 - **Attribution** (owner, 2026-11-24): the wording from section 3 of TMDB's terms, now in [product.md P5](../product.md#3-product-rules).

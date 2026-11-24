@@ -54,6 +54,8 @@ Let's follow one request:
 > *"Movie night with my kids, something light and funny, under 90 minutes, no spiders please."*
 > Country: Spain. Services: Netflix and Disney+.
 
+The diagram below is a 2026-11-16 snapshot; the maintained version is in [architecture §3](../architecture.md#3-query-flow-online) (moved there on 2026-11-24).
+
 ```mermaid
 sequenceDiagram
   participant U as You

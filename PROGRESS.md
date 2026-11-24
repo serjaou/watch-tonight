@@ -10,6 +10,8 @@
     - The step-4 and step-6 check functions live in `domain`; the retry with the error fed back lives in the part-4 LLM adapter (architecture steps 5–6 updated).
     - Zero candidates → *Partial* with an empty list and no re-rank call. Response contract, input limits (`exclude_ids` ≤ 5,000, `avoid` from the vocabulary) and new dependencies are in the specs.
     - The P5 attribution notice now uses the wording from section 3 of TMDB's terms (`product.md`, README).
+    - The query-flow sequence diagram now lives in architecture §3 (the checkpoint guide keeps a dated copy).
+    - The v1 list of hard limits is not frozen: content limits (genre, director, main cast, keyword flags) will be added after spike feat-026 question 7 decides how (ADR 0005; a Proposed item in `docs/backlog.md` waits for the owner's ordering).
   - Owner learning decision (2026-11-22, kept): the agent writes the code; then `/defend`, and the owner refactors or extends a module.
   - Active window in `feature_list.json`: `feat-018`, `feat-030`, `feat-028`, `feat-029`, `feat-027`, `feat-026`, `feat-019`.
   - Raw crawl rows (gitignored, Windows laptop only): `spikes/16-recommendation/data/catalog.jsonl` (2026-11-16) and `data/catalog_2026-11-21.jsonl`; also `data/pool_b_movies.jsonl` (spike 16's 300 films, no posters, Spanish ratings or availability).

@@ -68,6 +68,31 @@ Keeping each external service behind a port lets a provider be swapped without t
 
 ## 3. Query flow (online)
 
+```mermaid
+sequenceDiagram
+  participant U as Client (web UI, API or MCP)
+  participant S as SearchMovies
+  participant L as LLM (gpt-6-luna)
+  participant E as Embedder (in process)
+  participant D as MongoDB Atlas
+  U->>S: text + country + services (+ UI limits, exclude_ids)
+  S->>S: 1. Validate (length, country, services)
+  S->>L: 2. Understand the text
+  L-->>S: QueryIntent (hard limits, description, ranking hints, unmapped)
+  S->>E: 3a. Embed the description
+  S->>D: 3b. Vector search, K = 150, with pre-filters
+  D-->>S: up to 150 candidates
+  S->>S: 4. Re-check every limit by value, rank, one per collection, keep 25
+  opt at least one candidate
+    S->>L: 5. Pick up to 5 and write pitches
+    L-->>S: picks + pitches
+    S->>S: 6. Check the answer (one retry with the error fed back)
+  end
+  S-->>U: 7. State, results, notes, attribution, freshness, trace
+```
+
+The steps in detail (the [walkthrough in the checkpoint guide](checkpoint-2026-11-16/03-the-architecture.md#2-one-search-step-by-step) follows one example request through them):
+
 1. **Validate** the request `{text, country, providers[], max_runtime?, max_intensity?, avoid[]?, exclude_ids[]}`.
    - Checks: P4 (text ≤ 500 chars, not empty), supported country, at least one provider from the curated list for that country (spike 08 Q5), and at most 5,000 `exclude_ids` (the size spike 09 tested).
      - The skeleton seeds a minimal static list of the main services.
