@@ -3,12 +3,45 @@
     {
       "id": "feat-018",
       "type": "feature",
-      "name": "Walking skeleton: search end to end",
-      "description": "POST /search end to end on the ~300 spike-16 movies (the seed script re-fetches their TMDB bundles; raw TMDB data is not committed) in atlas-local: QueryIntent via Pydantic AI + gpt-6-luna (incl. a note for constraints it can't map), fastembed query vector, $vectorSearch with the pre-filters (verifying the untested ones and the audience rule), step-4 checks, re-rank + pitch, response states, exclude_ids (US3), trace with timings and cost; a minimal static provider list. Adds the first deterministic evals (P1, P3 as applied, P4, pitch length, real IDs, schema). First end-to-end latency numbers (Q7); answers Q4 on Windows. Split at /spec time if it holds independent behaviours. Notes for /spec (split, verification list, owner-written part): docs/backlog.md, feat-018 section.",
+      "name": "Walking skeleton, part 1: search end to end with in-memory adapters",
+      "description": "POST /search end to end through domain, application and api with in-memory adapters (scripted fake LLM, hash-based fake embedder, in-memory catalogue and search) over committed fictional fixture films; no Docker, no API key. All five response states, the step-4 and step-6 check functions in domain, one film per collection, exclude_ids (US3), the response contract, a minimal static provider list, and the six deterministic evals in evals/. Parts 2-4 (Atlas, real embedder, real LLM) are feat-030, feat-028 and feat-029. Detail: docs/backlog.md, feat-018 section.",
       "stories": ["US1", "US2", "US3"],
       "status": "todo",
       "dependencies": ["feat-012", "feat-016"],
       "spec": "docs/specs/18-walking-skeleton.md",
+      "evidence": ""
+    },
+    {
+      "id": "feat-030",
+      "type": "feature",
+      "name": "Walking skeleton, part 2: search on local Atlas",
+      "description": "MovieRepository and CandidateSearch on mongodb-atlas-local pinned to an exact 8.0 tag: vector index create/update/drop from code, every pre-filter verified together with a 5,000-id exclusion list, the audience rule (Atlas pre-filter or step 4), database down maps to 503, a seed script for spike 16's 300 films (re-fetched from TMDB, never committed), testcontainers, and a CI integration job. Answers Q4 on Windows. Detail: docs/backlog.md, feat-030 section.",
+      "stories": ["US1", "US2", "US3"],
+      "status": "todo",
+      "dependencies": ["feat-018"],
+      "spec": "docs/specs/30-atlas-local-search.md",
+      "evidence": ""
+    },
+    {
+      "id": "feat-028",
+      "type": "feature",
+      "name": "Walking skeleton, part 3: real embedder",
+      "description": "The fastembed BAAI/bge-small-en-v1.5 (384-d) Embedder adapter in infra: verify that query_embed adds BGE's query instruction, embed the 300 seeded profiles with template(profile) (ADR 0007), and measure cold-start and warm query-embedding time end to end. Detail: docs/backlog.md, feat-028 section.",
+      "stories": ["US1"],
+      "status": "todo",
+      "dependencies": ["feat-030"],
+      "spec": "docs/specs/28-real-embedder.md",
+      "evidence": ""
+    },
+    {
+      "id": "feat-029",
+      "type": "feature",
+      "name": "Walking skeleton, part 4: real LLM",
+      "description": "The Pydantic AI LanguageModel adapter (OpenAIChatModel, gpt-6-luna, NativeOutput, reasoning_effort none; ADR 0006): the step-2 and step-6 check functions as output validators, with one retry that feeds the error back, verified on the real model; real tokens and cost in the trace; the deterministic evals re-run on the real model; first end-to-end latency numbers (Q7). Small paid spend (cents). Detail: docs/backlog.md, feat-029 section.",
+      "stories": ["US1", "US2"],
+      "status": "todo",
+      "dependencies": ["feat-028"],
+      "spec": "docs/specs/29-real-llm.md",
       "evidence": ""
     },
     {

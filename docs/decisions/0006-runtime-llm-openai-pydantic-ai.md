@@ -14,7 +14,7 @@
   2. **Model: OpenAI `gpt-6-luna`** with `reasoning_effort="none"`, for the online calls and for enrichment through the **Batch API**. Pin the model ID; never use `-latest` aliases.
      - The Batch path was not exercised in the spikes. Whether it goes through Pydantic AI or the `openai` SDK directly is checked in feat-021.
   3. The step-2 and step-6 checks run as `output_validator`s that raise `ModelRetry`. That gives **one retry with the error fed back**, which matches Q8.
-     - This was shown only with a scripted `FunctionModel` (feat-011), so feat-018 verifies it on the real model.
+     - This was shown only with a scripted `FunctionModel` (feat-011), so feat-029 (the walking skeleton's real-LLM part; feat-018 was split on 2026-11-24) verifies it on the real model.
      - Purely cosmetic problems are fixed deterministically instead (e.g. truncate tones to 3).
   4. **No second provider.** An OpenAI outage maps to *Service unavailable* (step 2) or *Results without pitches* (step 6). A second OpenAI model behind `FallbackModel` is only a proposal (`docs/backlog.md`, Proposed), because it would change Q8.
   5. Spend is usage-based (≈ $0.67 per 1,000 queries, ≈ $1.03 once for the corpus) and capped by the prepaid balance with auto-recharge off (owner approval, Q6). Never opt in to OpenAI's data-sharing programme.

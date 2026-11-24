@@ -17,7 +17,7 @@
      - It goes into `unmapped_constraints`, and the response tells the user it couldn't be applied (Q18).
   3. **Hard filters are applied by the data layer, never by an LLM:** as `$vectorSearch` pre-filters, then re-checked by value in step 4.
      - Spike 09 verified five of the filters together on M0.
-     - The `year`, `original_language` and certification filters are verified in feat-018.
+     - The `year`, `original_language` and certification filters are verified in feat-030 (the walking skeleton's local Atlas part; feat-018 was split on 2026-11-24).
   4. **`audience`** uses the US certification, else the ES one, else the profile (`intensity` plus excluded content warnings), as in architecture Q16.
      - A missing certification is stored as `null`.
      - If Atlas can't express the rule as one pre-filter (it needs an `$or` with the null case), it is applied in step 4 only.

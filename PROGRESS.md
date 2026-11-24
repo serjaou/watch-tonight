@@ -1,24 +1,28 @@
 # Progress
 
 ## Now
-- **Active feature:** `feat-018` (Walking skeleton: search end to end) — `/spec` draft on branch `docs/feat-018-spec-draft` (`feat-017` is merged to `main`).
+- **Active feature:** `feat-018` (walking skeleton, part 1). Its spec is revised and waiting for the owner's approval, on branch `docs/feat-018-spec-draft` (`feat-017` is merged to `main`).
 - **State:**
-  - Interviewed the owner for `feat-018` (`/spec`) and wrote the draft spec in `docs/specs/18-walking-skeleton.md` (`status: draft`).
-  - Agreed on a 3-way split of the walking skeleton (Checkpoint Finding 7):
-    - **Slice A (`feat-018`, in `docs/specs/18-walking-skeleton.md`):** end-to-end `POST /search` across `domain`, `application`, `infra` (`mongodb/mongodb-atlas-local:8.0`) and `api` (FastAPI) with deterministic fake `LanguageModel` and `Embedder` ports, all 5 response states (HTTP 200/422/503), step-4 deterministic checks + `collection_id` dedupe, the 6 deterministic CI evals, and Atlas pre-filter + index lifecycle verification.
-    - **Slice B (`feat-028`, in `docs/backlog.md` Proposed):** real `fastembed` (`BAAI/bge-small-en-v1.5`) `Embedder` adapter, verifying `query_embed` instruction prefixing, embedding the ~300 spike-16 seed profiles with `template(profile)`, and measuring cold/warm query-embedding latency.
-    - **Slice C (`feat-029`, in `docs/backlog.md` Proposed):** real Pydantic AI + OpenAI `gpt-6-luna` `LanguageModel` adapter, verifying `ModelRetry` on the live model, live token/cost tracking in `trace`, and first end-to-end latency numbers (Q7).
-  - Owner learning decision (Checkpoint Finding 4): agent writes the slice first, followed by a `/defend` session and owner refactoring/extension.
-  - Active window in `feature_list.json`: `feat-018`, `feat-027`, `feat-026`, `feat-019`.
-- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-22 23:53 CET, Mac.
+  - 2026-11-22 (Mac, Antigravity): `/spec` interview and first draft of `docs/specs/18-walking-skeleton.md`.
+  - 2026-11-24 (Windows, Claude Code): cross-tool review of that draft; the owner accepted every recommendation:
+    - The walking skeleton is split in four, in this order: part 1 in-memory, no Docker (`feat-018`); part 2 local Atlas (`feat-030`, draft spec `docs/specs/30-atlas-local-search.md`); part 3 real embedder (`feat-028`); part 4 real LLM (`feat-029`). Parts 3 and 4 have no spec yet; their notes are in `docs/backlog.md`.
+    - Tests use committed fictional fixture films; spike 16's 300 films become a seed script in part 2 (they share no collection, and the local file lacks posters, Spanish ratings and availability).
+    - The step-4 and step-6 check functions live in `domain`; the retry with the error fed back lives in the part-4 LLM adapter (architecture steps 5–6 updated).
+    - Zero candidates → *Partial* with an empty list and no re-rank call. Response contract, input limits (`exclude_ids` ≤ 5,000, `avoid` from the vocabulary) and new dependencies are in the specs.
+    - The P5 attribution notice now uses the wording from section 3 of TMDB's terms (`product.md`, README).
+  - Owner learning decision (2026-11-22, kept): the agent writes the code; then `/defend`, and the owner refactors or extends a module.
+  - Active window in `feature_list.json`: `feat-018`, `feat-030`, `feat-028`, `feat-029`, `feat-027`, `feat-026`, `feat-019`.
+  - Raw crawl rows (gitignored, Windows laptop only): `spikes/16-recommendation/data/catalog.jsonl` (2026-11-16) and `data/catalog_2026-11-21.jsonl`; also `data/pool_b_movies.jsonl` (spike 16's 300 films, no posters, Spanish ratings or availability).
+- **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-24 17:24 CET, Windows.
 - **Next step:**
-  - On the Windows laptop: review and approve `docs/specs/18-walking-skeleton.md` (`status: approved`), decide whether to promote `feat-028` and `feat-029` from `docs/backlog.md` (Proposed) into `feature_list.json` / Ordered, authorize writing `tests/acceptance/test_walking_skeleton.py`, and build `feat-018`.
-  - Start Docker Desktop before running `feat-018` integration tests (`uv run poe test-all` answers Q4 on Windows).
+  - The owner approves `docs/specs/18-walking-skeleton.md` (`status: approved`) and authorizes writing `tests/acceptance/test_walking_skeleton.py` (and its fixtures) in that session; then build `feat-018`. No Docker needed for part 1.
+  - Start Docker Desktop before part 2 (`feat-030`): its integration tests answer Q4 on Windows.
 - **Waiting on owner:**
-  - Refine `feat-018`: review and approve `docs/specs/18-walking-skeleton.md` and confirm ordering of the proposed split slices (`feat-028`, `feat-029`).
+  - Approve the part 1 spec. Later, review the part 2 draft spec.
+  - Optional: the proposal in `docs/backlog.md` (Proposed) to give the query steps headings and link every spec reference (from your review of this spec).
 - **Unverified:**
   - The items under "Unverified" in `docs/handoffs/feat-012.md` and `docs/handoffs/feat-017.md`: extra pre-filters, `ModelRetry` on the real model, Batch support, K = 150 latency, aliasing safety, Q4 on Windows, and multi-month churn rates.
-  - CI on the pushed `docs/feat-018-spec-draft` branch.
+  - CI on this branch: it runs only on PRs and `main`; no PR yet.
 
 ## Log (newest first, 1 line each; full details in `docs/handoffs/`)
 - 2026-11-21 · Windows · Claude Code · `feat-017`: churn from two full crawls 5.3 days apart, verified against `/watch/providers` (G7: ≈ 6 leave/day, ≈ 24.5 admitted/day); daily schedule kept → [feat-017.md](docs/handoffs/feat-017.md)

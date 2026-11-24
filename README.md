@@ -50,4 +50,4 @@ Agents work on branches and open PRs; these settings make sure nothing reaches `
 
 ## Attribution
 
-This product uses the TMDB API but is not endorsed or certified by TMDB. Streaming availability data provided by JustWatch via TMDB.
+This product uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB. Streaming availability by JustWatch.

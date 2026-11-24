@@ -22,7 +22,9 @@
     - (a) the end-to-end path with fake LLM and embedder ports, the real local database, all response states, and the first deterministic evals;
     - (b) the real LLM adapter: Pydantic AI, the retry with the error fed back verified on the real model, cost in the trace;
     - (c) the real embedder and the first latency numbers.
+    - **Decided** (owner, 2026-11-22 on the Mac, 2026-11-24 on Windows): four parts, in this order: part 1 in-memory (`feat-018`), part 2 local Atlas (`feat-030`), part 3 real embedder (`feat-028`), part 4 real LLM (`feat-029`).
   - **The owner writes part of it** ([review, finding 4](checkpoint-2026-11-16/review.md#finding-4-the-learning-record-misses-the-ai-engineering-half)): for example the step-4 checks (re-check every rule by value) with their unit tests. The agent reviews that code.
+    - **Changed** (owner, 2026-11-22): the agent writes the slice; then a `/defend` session, and the owner refactors or extends a module.
   - **Verify, don't assume** ([review, finding 2](checkpoint-2026-11-16/review.md#finding-2-some-weak-numbers-became-facts-in-the-decision-records)):
     - query-embedding time end to end (the 5 ms figure is a warm, in-process number from the Mac);
     - the five tested filters together with a large exclusion list, plus the new ones (`year`, `original_language`, the age ratings, and the audience rule with its null case);
@@ -32,8 +34,29 @@
   - **Start from the v1 intent.** Genre, people and content fields may come out of spike feat-026 (question 7); don't add them here.
   - The seed uses spike 16's ~300 movies in a local database, so the skeleton doesn't wait for the ingest task.
 
+## feat-030 · Walking skeleton, part 2: search on local Atlas → in feature_list.json (2026-11-24)
+- **Type:** feature · **Stories:** US1, US2, US3 · **Depends on:** feat-018 · **Spec:** `docs/specs/30-atlas-local-search.md` (draft)
+- **Description:** in `feature_list.json`; the detail is in the draft spec. It takes over the database half of the original feat-018: the verification list above (filters, index lifecycle, image pin), the seed of spike 16's 300 films, and Q4 on Windows.
+
+## feat-028 · Walking skeleton, part 3: real embedder → in feature_list.json (2026-11-24)
+- **Type:** feature · **Stories:** US1 · **Depends on:** feat-030 · **Spec:** `docs/specs/28-real-embedder.md` (not written yet)
+- **Description:** the in-process `fastembed` (`BAAI/bge-small-en-v1.5`, 384-d) `Embedder` adapter in `infra`.
+- **Notes** (from the Mac `/spec` draft, 2026-11-22):
+  - Verify that `query_embed` adds BGE's query instruction ([checkpoint, Part D](checkpoint-2026-11-16/review.md#part-d--smaller-notes)).
+  - Embed the 300 seeded profiles with `template(profile)` (ADR 0007), replacing part 2's fake vectors.
+  - Measure cold-start and warm query-embedding time end to end; the 5 ms figure is warm and in-process on the Mac ([checkpoint, finding 2](checkpoint-2026-11-16/review.md#finding-2-some-weak-numbers-became-facts-in-the-decision-records)).
+
+## feat-029 · Walking skeleton, part 4: real LLM → in feature_list.json (2026-11-24)
+- **Type:** feature · **Stories:** US1, US2 · **Depends on:** feat-028 · **Spec:** `docs/specs/29-real-llm.md` (not written yet)
+- **Description:** the `LanguageModel` adapter in `infra` with Pydantic AI (`OpenAIChatModel`, `gpt-6-luna`, `NativeOutput`, `reasoning_effort="none"`; ADR 0006).
+- **Notes** (from the Mac `/spec` draft, 2026-11-22, and the Windows review, 2026-11-24):
+  - The step-2 and step-6 check functions from part 1 (`domain`) run as output validators raising `ModelRetry`: one retry with the error fed back, verified on the real model.
+  - Real token counts and cost in the `trace`; the deterministic evals from part 1 re-run on the real model.
+  - The first end-to-end latency numbers (architecture Q7).
+  - A small paid spend (cents), reported in the handoff.
+
 ## feat-020 · Ingest and daily refresh
-- **Type:** feature · **Stories:** US1 · **Depends on:** feat-018, feat-026 (the corpus gate may change) · **Spec:** `docs/specs/20-ingest-refresh.md`
+- **Type:** feature · **Stories:** US1 · **Depends on:** feat-030, feat-026 (the corpus gate may change) · **Spec:** `docs/specs/20-ingest-refresh.md`
 - **Description:**
   - The daily `/discover` crawl of ES/US/BO flat-rate films, with **G7 admission** (ADR 0008, pinned WR constants) and the admission data checks (overview, poster, `runtime > 0`, ≥ 1 genre).
   - One TMDB bundle per admitted film; Wikidata signals by TMDB ID.
@@ -77,7 +100,7 @@
   - The **pitch-quality eval**: an LLM judge calibrated on the owner's labels (owner, 2026-11-16).
 - **Notes:**
   - **Likely split at `/spec` time:**
-    - the extraction eval only needs step 2, so it can come earlier (after feat-018);
+    - the extraction eval only needs step 2, so it can come earlier (after feat-029, the real LLM);
     - the hybrid score with the golden set;
     - the pitch-quality eval.
   - The judge disagreed with itself on 26% of items in feat-016, so measure judge agreement before trusting small differences.
@@ -112,5 +135,6 @@ Agent ideas and proposed splits wait here until the owner moves them into **Orde
 - **Clean up stale and duplicated numbers** (chore, from the [checkpoint review, finding 8](checkpoint-2026-11-16/review.md#finding-8-the-same-numbers-live-in-too-many-places)): fix the stale lines it lists (`docs/metrics.md` §1.3–§1.4, README stack and status, spike 11 and 16 summaries), and reduce `docs/metrics.md` §1.4 to links to the spike reports. **→ in `feature_list.json` as `feat-027` (owner, 2026-11-21).**
 - **"5 more" reuses the first intent** (checkpoint discussion, 2026-11-19): asking again for more results (US3) currently repeats both LLM calls (about $0.0007 and 5–6 s). Sending the first `QueryIntent` back with the request, or caching it briefly, skips LLM call 1 and roughly halves the time and cost. It changes the API contract slightly; a candidate for the web UI task or a later slice.
 - **Golden set of 30–50 requests with expected filters** (owner work, from the [checkpoint review, finding 5](checkpoint-2026-11-16/review.md#finding-5-evaluation-is-the-real-bottleneck-start-the-golden-set-early)): start early, because it needs the owner's time; it feeds the constraint-extraction eval right after the walking skeleton, and later the ranking evals.
-- **Walking skeleton Slice B (`feat-028`): real `fastembed` `Embedder` adapter and seed embeddings** (proposed split from `feat-018` `/spec`, 2026-11-22): implement the in-process `fastembed` (`BAAI/bge-small-en-v1.5`, 384-d) `Embedder` adapter in `infra`, verify that `query_embed` prefixes BGE's query instruction (Checkpoint Part D), embed the ~300 spike-16 seed profiles using `template(profile)` (ADR 0007), and measure cold-start and warm query-embedding latency end to end (Checkpoint Finding 2). Depends on `feat-018`.
-- **Walking skeleton Slice C (`feat-029`): real Pydantic AI `gpt-6-luna` `LanguageModel` adapter and end-to-end live search** (proposed split from `feat-018` `/spec`, 2026-11-22): implement the `LanguageModel` adapter in `infra` with Pydantic AI (`OpenAIChatModel`, `gpt-6-luna`, `NativeOutput`, `reasoning_effort="none"`, ADR 0006), verify `ModelRetry` with validation error feedback on the live model for steps 2 and 6, populate real token counts and USD cost in `trace`, and measure the first end-to-end search latency numbers (architecture Q7). Depends on `feat-018`, `feat-028`.
+- **Walking skeleton Slice B (`feat-028`): real `fastembed` `Embedder` adapter and seed embeddings** (proposed split from `feat-018` `/spec`, 2026-11-22): implement the in-process `fastembed` (`BAAI/bge-small-en-v1.5`, 384-d) `Embedder` adapter in `infra`, verify that `query_embed` prefixes BGE's query instruction (Checkpoint Part D), embed the ~300 spike-16 seed profiles using `template(profile)` (ADR 0007), and measure cold-start and warm query-embedding latency end to end (Checkpoint Finding 2). Depends on `feat-018`. **→ in `feature_list.json` as `feat-028`, part 3, after `feat-030` (owner, 2026-11-24).**
+- **Walking skeleton Slice C (`feat-029`): real Pydantic AI `gpt-6-luna` `LanguageModel` adapter and end-to-end live search** (proposed split from `feat-018` `/spec`, 2026-11-22): implement the `LanguageModel` adapter in `infra` with Pydantic AI (`OpenAIChatModel`, `gpt-6-luna`, `NativeOutput`, `reasoning_effort="none"`, ADR 0006), verify `ModelRetry` with validation error feedback on the live model for steps 2 and 6, populate real token counts and USD cost in `trace`, and measure the first end-to-end search latency numbers (architecture Q7). Depends on `feat-018`, `feat-028`. **→ in `feature_list.json` as `feat-029`, part 4 (owner, 2026-11-24).**
+- **References in specs are links, and the query steps get headings** (from the owner's feat-018 spec review, 2026-11-24): the owner couldn't find "the deterministic step-4 checks" in `docs/architecture.md`. They are there (§3, step 4, *Check and rank candidates*), but the steps are a numbered list with no headings, and the spec used a different name. Proposal: (1) give each query step its own heading in architecture §3, so links can point to it and GitHub's outline lists it; (2) a `/spec` rule: link every reference to another document to its section on first use, using the name that document uses; (3) keep one source per fact (architecture for how, product for rules); learning guides and specs link to it, never copy it. A candidate to fold into `feat-027`.
