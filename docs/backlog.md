@@ -55,6 +55,10 @@
   - The first end-to-end latency numbers (architecture Q7).
   - A small paid spend (cents), reported in the handoff.
 
+## feat-031 · Content limits in the search → in feature_list.json (2026-11-24)
+- **Type:** feature · **Stories:** US2 · **Depends on:** feat-026, feat-029 · **Spec:** `docs/specs/31-content-limits.md` (not written yet)
+- **Description:** in `feature_list.json`; placed right after `feat-026` (owner, 2026-11-24). The detail is in the Proposed entry it came from, below.
+
 ## feat-020 · Ingest and daily refresh
 - **Type:** feature · **Stories:** US1 · **Depends on:** feat-030, feat-026 (the corpus gate may change) · **Spec:** `docs/specs/20-ingest-refresh.md`
 - **Description:**
@@ -140,5 +144,5 @@ Agent ideas and proposed splits wait here until the owner moves them into **Orde
 - **Content limits in the search: genre, director, main cast, keyword flags** (owner requirement, 2026-11-24: "those additional constraints are added"; the v1 list is not frozen, [ADR 0005](decisions/0005-closed-vocabulary-mirror-schema.md)): build what spike feat-026 question 7 recommends.
   - New `QueryIntent` fields and intent-prompt rules (including when a genre is *required*, "only horror", and when only *preferred*, "an action movie"); the mirror fields (`genres` and `credits` are already in the data model, §5); their pre-filter paths and step-4 checks; content in the vector text if the spike recommends it.
   - Extend the deterministic evals, and add the content requests to the extraction eval.
-  - Suggested position: right after `feat-026`, since it needs the spike's answer and the real LLM (`feat-029`). Depends on `feat-026`, `feat-029`.
-- **References in specs are links, and the query steps get headings** (from the owner's feat-018 spec review, 2026-11-24): the owner couldn't find "the deterministic step-4 checks" in `docs/architecture.md`. They are there (§3, step 4, *Check and rank candidates*), but the steps are a numbered list with no headings, and the spec used a different name. Proposal: (1) give each query step its own heading in architecture §3, so links can point to it and GitHub's outline lists it; (2) a `/spec` rule: link every reference to another document to its section on first use, using the name that document uses; (3) keep one source per fact (architecture for how, product for rules); learning guides and specs link to it, never copy it. A candidate to fold into `feat-027`.
+  - Suggested position: right after `feat-026`, since it needs the spike's answer and the real LLM (`feat-029`). Depends on `feat-026`, `feat-029`. **→ in `feature_list.json` as `feat-031`, right after `feat-026` (owner, 2026-11-24).**
+- **References in specs are links, and the query steps get headings** (from the owner's feat-018 spec review, 2026-11-24): the owner couldn't find "the deterministic step-4 checks" in `docs/architecture.md`. They are there (§3, step 4, *Check and rank candidates*), but the steps are a numbered list with no headings, and the spec used a different name. Proposal: (1) give each query step its own heading in architecture §3, so links can point to it and GitHub's outline lists it; (2) a `/spec` rule: link every reference to another document to its section on first use, using the name that document uses; (3) keep one source per fact (architecture for how, product for rules); learning guides and specs link to it, never copy it. **→ in `feature_list.json` as part (4) of `feat-027` (owner, 2026-11-24).**

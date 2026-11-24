@@ -1,7 +1,7 @@
 # Progress
 
 ## Now
-- **Active feature:** `feat-018` (walking skeleton, part 1). Its spec is **approved** (owner, 2026-11-24); the spec PR from branch `docs/feat-018-spec-draft` waits for the owner's merge.
+- **Active feature:** `feat-018` (walking skeleton, part 1), `in_progress` on branch `feat-018-walking-skeleton`. Its spec is approved and merged (PR #18, 2026-11-24).
 - **State:**
   - 2026-11-22 (Mac, Antigravity): `/spec` interview and first draft of `docs/specs/18-walking-skeleton.md`.
   - 2026-11-24 (Windows, Claude Code): cross-tool review of that draft; the owner accepted every recommendation:
@@ -11,18 +11,17 @@
     - Zero candidates → *Partial* with an empty list and no re-rank call. Response contract, input limits (`exclude_ids` ≤ 5,000, `avoid` from the vocabulary) and new dependencies are in the specs.
     - The P5 attribution notice now uses the wording from section 3 of TMDB's terms (`product.md`, README).
     - The query-flow sequence diagram now lives in architecture §3 (the checkpoint guide keeps a dated copy).
-    - The v1 list of hard limits is not frozen: content limits (genre, director, main cast, keyword flags) will be added after spike feat-026 question 7 decides how (ADR 0005; a Proposed item in `docs/backlog.md` waits for the owner's ordering).
+    - The v1 list of hard limits is not frozen: content limits (genre, director, main cast, keyword flags) will be added after spike feat-026 question 7 decides how (ADR 0005); that work is `feat-031`, right after `feat-026` (owner, 2026-11-24).
+    - Step headings in architecture §3 and a "link every reference" `/spec` rule join `feat-027` as part (4) (owner, 2026-11-24).
   - Owner learning decision (2026-11-22, kept): the agent writes the code; then `/defend`, and the owner refactors or extends a module.
-  - Active window in `feature_list.json`: `feat-018`, `feat-030`, `feat-028`, `feat-029`, `feat-027`, `feat-026`, `feat-019`.
+  - Active window in `feature_list.json`: `feat-018`, `feat-030`, `feat-028`, `feat-029`, `feat-027`, `feat-026`, `feat-031`, `feat-019`.
   - Raw crawl rows (gitignored, Windows laptop only): `spikes/16-recommendation/data/catalog.jsonl` (2026-11-16) and `data/catalog_2026-11-21.jsonl`; also `data/pool_b_movies.jsonl` (spike 16's 300 films, no posters, Spanish ratings or availability).
 - **Last check:** `uv run poe check` green (ruff, format, pyright 0 errors, lint-imports 2/2, pytest 26 passed), 2026-11-24 17:24 CET, Windows.
 - **Next step:**
-  - After the spec PR is merged: branch `feat-018-walking-skeleton` from `main`; the owner authorizes writing `tests/acceptance/test_walking_skeleton.py` (and its fixtures) in that session; then build `feat-018`. No Docker needed for part 1.
+  - Build `feat-018`: acceptance tests and fixtures first (`tests/acceptance/test_walking_skeleton.py`, once the owner authorizes it in the session), then domain → application → infra (in-memory) → api → evals. No Docker needed for part 1.
   - Start Docker Desktop before part 2 (`feat-030`): its integration tests answer Q4 on Windows.
 - **Waiting on owner:**
-  - Merge the spec PR. Later, review the part 2 draft spec (`docs/specs/30-atlas-local-search.md`).
-  - Order the Proposed item "Content limits in the search" (suggested: right after `feat-026`).
-  - Optional: the proposal in `docs/backlog.md` (Proposed) to give the query steps headings and link every spec reference (from your review of this spec).
+  - Review the part 2 draft spec (`docs/specs/30-atlas-local-search.md`) before `feat-030`.
 - **Unverified:**
   - The items under "Unverified" in `docs/handoffs/feat-012.md` and `docs/handoffs/feat-017.md`: extra pre-filters, `ModelRetry` on the real model, Batch support, K = 150 latency, aliasing safety, Q4 on Windows, and multi-month churn rates.
   - CI on this branch: it runs only on PRs and `main`; no PR yet.
