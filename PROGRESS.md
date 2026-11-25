@@ -1,7 +1,7 @@
 # Progress
 
 ## Now
-- **Active feature:** none in progress. `feat-030` (walking skeleton, part 2: search on local Atlas) is done on branch `feat-030-atlas-local`; its PR waits for the owner's `tests-approved` label and merge.
+- **Active feature:** none in progress. `feat-030` (walking skeleton, part 2: search on local Atlas) is done on branch `feat-030-atlas-local`; its PR #21 (CI `check` and `integration` green) waits for the owner's `tests-approved` label and merge.
 - **State:**
   - feat-030: the search runs on `mongodb-atlas-local` (pinned `8.0.38-20261124T121746Z`): 6 acceptance tests (7 cases) green on Windows via testcontainers, so Q4 holds on Windows; all 9 filter paths verified in one query, the audience rule as a pre-filter; spike 16's 300 films seeded from TMDB; `poe db-up` / `seed` / `serve-atlas` / `db-down`. Facts learned (in-place index update fails locally, a missing index returns nothing, `timeoutMS` vs server selection) are in architecture §3 and [feat-030.md](docs/handoffs/feat-030.md).
   - feat-018 (part 1) and its follow-up are merged: `POST /search` in memory, 25 acceptance cases, six evals at 100%.
@@ -17,7 +17,7 @@
   - Refine `feat-028`: be available for its `/spec` interview.
   - On the Mac: run `uv run poe test-all` once (Q4 on the Mac with the pinned image).
 - **Unverified:**
-  - CI's new `integration` job (first run on the feat-030 PR); Q4 on the Mac.
+  - Q4 on the Mac. (CI's new `integration` job passed on Linux on PR #21, 47 s.)
   - Everything on Atlas M0 (feat-021): in-place index update, audience pre-filter, `numCandidates`, exact search above 10,000.
   - The items under "Unverified" in `docs/handoffs/feat-012.md` and `docs/handoffs/feat-017.md`: `ModelRetry` on the real model, Batch support, K = 150 latency, aliasing safety, multi-month churn rates.
 

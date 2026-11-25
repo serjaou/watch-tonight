@@ -78,7 +78,8 @@ plain -> "mappings" is required
 type=vectorSearch -> BSON field 'updateSearchIndex.type' is an unknown field.
 ```
 
+**CI on PR #21:** `check` pass (16 s); the new `integration` job pass on Linux (47 s, with the image pull); `gates` waits for the owner's `tests-approved` label.
+
 ## Unverified
 - Q4 on the Mac (`uv run poe test-all` there).
-- CI's new `integration` job (first run on the PR).
 - Everything on Atlas M0 (feat-021).
