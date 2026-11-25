@@ -5,10 +5,14 @@ description = "Mood-based movie recommender with verified streaming availability
 readme = "README.md"
 requires-python = ">=3.13"
 license = { text = "MIT" }
-dependencies = []
+dependencies = [
+    "fastapi>=0.165.0",
+    "uvicorn>=0.54.0",
+]
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
     "import-linter>=2.1",
     "poethepoet>=0.32.0",
     "pyright>=1.1.390",
@@ -29,17 +33,19 @@ packages = ["src/watch_tonight"]
 # Works identically on macOS and Windows (replaces Makefile)
 # ---------------------------------------------------------------------------
 [tool.poe.tasks]
-lint = "ruff check src tests scripts"
-fmt-check = "ruff format --check src tests scripts"
+lint = "ruff check src tests scripts evals"
+fmt-check = "ruff format --check src tests scripts evals"
 fmt = [
-    { cmd = "ruff check --fix src tests scripts" },
-    { cmd = "ruff format src tests scripts" },
+    { cmd = "ruff check --fix src tests scripts evals" },
+    { cmd = "ruff format src tests scripts evals" },
 ]
 typecheck = "pyright"
 arch = "lint-imports"
 test = "pytest -m 'not integration'"
 test-all = "pytest"
 check = ["lint", "fmt-check", "typecheck", "arch", "test"]
+# Part 1 of the walking skeleton, locally with in-memory adapters (http://127.0.0.1:8000/docs)
+serve = "uvicorn scripts.serve_skeleton:app"
 
 # ---------------------------------------------------------------------------
 # Linter & formatter: ruff (like Roslyn analyzers + dotnet format)
@@ -47,7 +53,7 @@ check = ["lint", "fmt-check", "typecheck", "arch", "test"]
 [tool.ruff]
 target-version = "py313"
 line-length = 100
-src = ["src", "tests", "scripts"]
+src = ["src", "tests", "scripts", "evals"]
 
 [tool.ruff.lint]
 select = [
@@ -66,7 +72,7 @@ select = [
 # ---------------------------------------------------------------------------
 [tool.pyright]
 pythonVersion = "3.13"
-include = ["src", "tests", "scripts"]
+include = ["src", "tests", "scripts", "evals"]
 typeCheckingMode = "strict"
 
 # ---------------------------------------------------------------------------
@@ -103,6 +109,8 @@ forbidden_modules = [
 # ---------------------------------------------------------------------------
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Repo root on sys.path, so tests can import `evals` and the acceptance fixtures
+pythonpath = ["."]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 addopts = "-ra -q"
