@@ -92,6 +92,7 @@
   - Build the Atlas M0 vector index with every filter path declared.
   - Re-run only when `source_hash`, `prompt_version` or the model changes.
 - **Notes:**
+  - **From feat-030 (2026-11-25), check on M0:** the in-place `updateSearchIndex` of a vector index (it fails on `mongodb-atlas-local` 8.0.38, so the code drops and re-creates, which means 503s until the index is queryable); the audience pre-filter (`$or` with `$eq: null`, works locally); `numCandidates` (now `20 × limit`, capped at 10,000).
   - First run on M0 at full scale, so it **measures `$vectorSearch` latency at K = 150 and sets `numCandidates`** (Q7).
   - Check whether Pydantic AI supports the Batch API, or whether the batch job uses the `openai` SDK directly.
   - **Batch or not** (owner concern, 2026-11-19): Batch fits the request/response `LanguageModel` port badly, and each provider's batch API works differently (OpenAI, Anthropic and Google all discount batch jobs by about 50%). Options:

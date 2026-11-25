@@ -21,6 +21,7 @@
   4. **`audience`** uses the US certification, else the ES one, else the profile (`intensity` plus excluded content warnings), as in architecture Q16.
      - A missing certification is stored as `null`.
      - If Atlas can't express the rule as one pre-filter (it needs an `$or` with the null case), it is applied in step 4 only.
+     - **It can** (feat-030, `mongodb-atlas-local` 8.0.38, 2026-11-25): the `$or` with `$eq: null` works as a pre-filter, so the rule runs in the database and again in step 4.
   5. **The channel-2 fields go to step 5 as context, not as step-4 filters.** Direct field matching lowered relevance in feat-016. It can be revisited with the owner-labelled golden set.
 - **Consequences:**
   - Adding a new kind of constraint means changing the schema in three places: the vocabulary, the profile prompt and the intent prompt. That's deliberate.

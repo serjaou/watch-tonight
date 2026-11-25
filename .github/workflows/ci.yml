@@ -22,3 +22,22 @@ jobs:
 
       - name: Run quality gates (ruff, pyright, import-linter, pytest)
         run: uv run poe check
+
+  integration:
+    # Atlas behaviour (pre-filters, index lifecycle, audience rule) on every PR (feat-030).
+    # testcontainers starts the pinned mongodb-atlas-local image; runners have Docker.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Sync dependencies
+        run: uv sync --locked
+
+      - name: Run integration tests (Docker)
+        run: uv run pytest -m integration

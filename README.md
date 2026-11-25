@@ -17,7 +17,7 @@ Describe how you feel tonight, pick your country and streaming services, and get
 |---|---|---|---|
 | uv | `brew install uv` | `winget install --id=astral-sh.uv -e` | Installs Python 3.13 and the locked packages |
 | pre-commit | `uv tool install pre-commit` | `uv tool install pre-commit` | Runs gitleaks and ruff before each commit |
-| Docker / Colima | `brew install docker colima && colima start --cpu 4 --memory 4` (or Docker Desktop) | Docker Desktop (optional) | Only for `uv run poe test-all` (`mongodb-atlas-local` integration tests) |
+| Docker / Colima | `brew install docker colima && colima start --cpu 4 --memory 4` (or Docker Desktop) | Docker Desktop (optional) | For `uv run poe test-all` (`mongodb-atlas-local` integration tests) and `poe db-up` |
 | GitHub CLI | `brew install gh` (optional) | `winget install --id=GitHub.cli -e` (optional) | Lets `/start` read the last CI run |
 
 Then, in the repo:

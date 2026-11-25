@@ -1,0 +1,9 @@
+# Local MongoDB Atlas for the walking skeleton (feat-030). `uv run poe db-up` starts it,
+# `uv run poe db-down` removes it (with its data: re-seed with `uv run poe seed`).
+# The image is pinned to a dated build of MongoDB 8.0, like Atlas M0; the integration
+# tests use the same tag (tests/acceptance/test_atlas_local_search.py).
+services:
+  atlas:
+    image: mongodb/mongodb-atlas-local:8.0.38-20261124T121746Z
+    ports:
+      - "127.0.0.1:27017:27017"

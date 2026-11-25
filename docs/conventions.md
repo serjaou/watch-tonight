@@ -10,7 +10,8 @@ Every task is a poethepoet task in `pyproject.toml` (`[tool.poe.tasks]`) and beh
 - `./init.sh` (macOS, Linux, Git Bash) runs `uv sync` and `uv run poe check` with `set -euo pipefail`. It exists for session start and for the guide's validator (feat-014); `poe check` stays the source of truth.
 - One test: `uv run pytest tests/unit/test_prompt_validation.py::test_subclass_of_value_error`. By name: `uv run pytest -k overlong`.
 - `uv run poe serve` runs the API locally with the walking skeleton's in-memory adapters and fictional films (feat-018); open http://127.0.0.1:8000/docs.
-- Tests that need Docker or external services carry `@pytest.mark.integration`. `poe check` skips them; `poe test-all` runs them.
+- Tests that need Docker or external services carry `@pytest.mark.integration`. `poe check` skips them; `poe test-all` runs them (testcontainers starts the pinned `mongodb-atlas-local` image; about 30 s once the 2.1 GB image is pulled). CI runs them in a separate `integration` job.
+- Local Atlas by hand (feat-030): `uv run poe db-up` (compose.yaml), `uv run poe seed` (spike 16's 300 films from TMDB, about 300 free calls), `uv run poe serve-atlas` (the API on it, fake LLM and embedder), `uv run poe db-down` (removes the data). The app's database is `WATCH_TONIGHT_MONGODB_URI` (default: that local container); `MONGODB_URI` is never read by default.
 - CI (`.github/workflows/ci.yml`) runs `uv sync --locked` and `uv run poe check`. A dependency change must include the updated `uv.lock`.
 - PR gates (`.github/workflows/pr-gates.yml` → `scripts/ci/pr_gates.py`) fail a PR that changes `tests/acceptance/` or `evals/` until the owner adds the `tests-approved` label.
 - pre-commit runs gitleaks and the project's own ruff (from `uv.lock`) before each commit.

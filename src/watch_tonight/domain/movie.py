@@ -34,8 +34,19 @@ class Profile(BaseModel):
     summary: str
 
 
+class Credits(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    directors: list[str] = Field(default_factory=list[str])
+    cast: list[str] = Field(default_factory=list[str])  # the top 5 billed
+
+
 class Movie(BaseModel):
-    """One catalogue movie. `id` is the TMDB id."""
+    """One catalogue movie (architecture §5). `id` is the TMDB id.
+
+    The fields after `embedding` are optional: part 1's fixtures don't need them, and the
+    signals that come from later features (Wikidata, the WR score) stay `None` until then.
+    """
 
     model_config = ConfigDict(frozen=True)
 
@@ -52,6 +63,27 @@ class Movie(BaseModel):
     availability_updated_at: datetime
     profile: Profile
     embedding: list[float] = Field(default_factory=list[float], repr=False)
+    # TMDB metadata
+    original_title: str | None = None
+    genres: list[str] = Field(default_factory=list[str])
+    keywords: list[str] = Field(default_factory=list[str])
+    overview: str | None = None
+    tagline: str | None = None
+    credits: Credits = Field(default_factory=Credits)
+    tmdb_vote_average: float | None = None
+    tmdb_vote_count: int | None = None
+    tmdb_popularity: float | None = None
+    # Quality signals and retention (feat-020)
+    quality_score: float | None = None
+    critic_score: float | None = None
+    awards_count: int | None = None
+    unstreamable_since: datetime | None = None
+    # Provenance: what built the profile and the vector
+    embedding_model: str | None = None
+    prompt_version: str | None = None
+    model: str | None = None
+    source_hash: str | None = None
+    updated_at: datetime | None = None
 
     @field_validator("certification_us", "certification_es")
     @classmethod

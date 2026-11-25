@@ -166,6 +166,7 @@ Each answer records the finding, the evidence (official documentation links, com
        - **Create:** `await collection.create_search_index(SearchIndexModel(definition=..., name="movies_vector_idx", type="vectorSearch"))`
        - **Inspect / poll readiness:** `cursor = await collection.list_search_indexes(name="movies_vector_idx"); indexes = await cursor.to_list()`
        - **Update in place:** `await collection.update_search_index("movies_vector_idx", new_definition)` (`updated_via_code: true` in `report.json`)
+         - **feat-030 (2026-11-25):** on `mongodb-atlas-local` 8.0.38 this fails for a vector index (`"mappings" is required`; the command has no `type` field), so the app drops and re-creates the index. The checkpoint review found that this spike silenced errors, so the M0 result is re-checked in feat-021.
        - **Drop:** `await collection.drop_search_index("movies_vector_idx")`
 - **Evidence:**
   - [PyMongo Async Migration Guide (Motor to PyMongo Async)](https://www.mongodb.com/docs/languages/python/pymongo-driver/current/reference/migration/) & [PyMongo Atlas Vector Search Indexes](https://www.mongodb.com/docs/languages/python/pymongo-driver/current/indexes/atlas-search-index/).

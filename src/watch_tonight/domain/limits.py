@@ -54,40 +54,61 @@ def merge_limits(request: SearchRequest, intent: QueryIntent) -> AppliedLimits:
 
 # --- The audience rule (architecture Q16) ------------------------------------------------
 
-_KIDS_US: Final = frozenset({"G", "PG"})
-_KIDS_ES: Final = frozenset({"A", "Ai", "7", "7i"})
-_KIDS_MAX_INTENSITY: Final = 2
-_KIDS_EXCLUDED: Final[frozenset[ContentWarning]] = frozenset(
-    {
-        "violence", "gore", "sexual_content", "nudity", "sexual_violence", "horror_scares",
-        "drug_use", "strong_language", "self_harm", "child_harm", "animal_harm",
-    }
-)  # fmt: skip
-_TEENS_US: Final = frozenset({"G", "PG", "PG-13"})
-_TEENS_ES: Final = frozenset({"A", "Ai", "7", "7i", "12"})
-_TEENS_MAX_INTENSITY: Final = 3
-_TEENS_EXCLUDED: Final[frozenset[ContentWarning]] = frozenset(
-    {"sexual_content", "nudity", "sexual_violence", "gore"}
-)
+
+class AudienceRule(BaseModel):
+    """Which films suit an audience: by US rating, else Spanish rating, else the profile."""
+
+    model_config = ConfigDict(frozen=True)
+
+    us_ratings: frozenset[str]
+    es_ratings: frozenset[str]
+    max_intensity: int
+    excluded_warnings: frozenset[ContentWarning]
+
+
+# The single source of the rule: step 4 checks it here, and the Atlas adapter builds the
+# same rule as a pre-filter from this table.
+AUDIENCE_RULES: Final[Mapping[Audience, AudienceRule]] = {
+    "kids": AudienceRule(
+        us_ratings=frozenset({"G", "PG"}),
+        es_ratings=frozenset({"A", "Ai", "7", "7i"}),
+        max_intensity=2,
+        excluded_warnings=frozenset(
+            {
+                "violence",
+                "gore",
+                "sexual_content",
+                "nudity",
+                "sexual_violence",
+                "horror_scares",
+                "drug_use",
+                "strong_language",
+                "self_harm",
+                "child_harm",
+                "animal_harm",
+            }
+        ),
+    ),
+    "teens": AudienceRule(
+        us_ratings=frozenset({"G", "PG", "PG-13"}),
+        es_ratings=frozenset({"A", "Ai", "7", "7i", "12"}),
+        max_intensity=3,
+        excluded_warnings=frozenset({"sexual_content", "nudity", "sexual_violence", "gore"}),
+    ),
+}
 
 
 def suits_audience(movie: Movie, audience: Audience) -> bool:
     """US certification first, else the Spanish one, else the emotional profile."""
-    if audience == "kids":
-        us, es, max_intensity, excluded = _KIDS_US, _KIDS_ES, _KIDS_MAX_INTENSITY, _KIDS_EXCLUDED
-    else:
-        us, es, max_intensity, excluded = (
-            _TEENS_US,
-            _TEENS_ES,
-            _TEENS_MAX_INTENSITY,
-            _TEENS_EXCLUDED,
-        )
+    rule = AUDIENCE_RULES[audience]
     if movie.certification_us is not None:
-        return movie.certification_us in us
+        return movie.certification_us in rule.us_ratings
     if movie.certification_es is not None:
-        return movie.certification_es in es
+        return movie.certification_es in rule.es_ratings
     profile = movie.profile
-    return profile.intensity <= max_intensity and excluded.isdisjoint(profile.content_warnings)
+    return profile.intensity <= rule.max_intensity and rule.excluded_warnings.isdisjoint(
+        profile.content_warnings
+    )
 
 
 # --- One check per hard limit: True means the movie breaks it ---------------------------

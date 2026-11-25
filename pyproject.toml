@@ -7,6 +7,8 @@ requires-python = ">=3.13"
 license = { text = "MIT" }
 dependencies = [
     "fastapi>=0.165.0",
+    "pydantic-settings>=2.16.3",
+    "pymongo>=4.20.1",
     "uvicorn>=0.54.0",
 ]
 
@@ -19,6 +21,7 @@ dev = [
     "pytest>=8.3.0",
     "pytest-asyncio>=0.25.0",
     "ruff>=0.9.0",
+    "testcontainers[mongodb]>=4.15.0",
 ]
 
 [build-system]
@@ -46,6 +49,11 @@ test-all = "pytest"
 check = ["lint", "fmt-check", "typecheck", "arch", "test"]
 # Part 1 of the walking skeleton, locally with in-memory adapters (http://127.0.0.1:8000/docs)
 serve = "uvicorn scripts.serve_skeleton:app"
+# Part 2 on local Atlas (compose.yaml): start it, seed spike 16's 300 films, serve on it
+db-up = "docker compose up -d --wait"
+db-down = "docker compose down"
+seed = "python scripts/seed_skeleton.py"
+serve-atlas = "uvicorn scripts.serve_atlas:app"
 
 # ---------------------------------------------------------------------------
 # Linter & formatter: ruff (like Roslyn analyzers + dotnet format)

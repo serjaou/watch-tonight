@@ -116,10 +116,7 @@ The steps in detail (the [walkthrough in the checkpoint guide](checkpoint-2026-1
    - the `audience` rule (Q16).
 
    - **What's verified:** spike 09 verified the first five filters together on M0, including `$nin` on 5,000 IDs.
-   - **Still to verify in feat-030, the walking skeleton's local Atlas part (slice):**
-     - the `year`, `original_language` and certification paths;
-     - the `audience` rule, which needs an `$or` that also matches films with a null certification.
-     - If Atlas can't express it, `audience` is applied in step 4 only.
+   - **Verified in feat-030** (`mongodb-atlas-local` 8.0.38, Windows, 2026-11-25): all the filters above in one `$vectorSearch` with a 5,000-id `$nin`, including `year`, `original_language` and the certification paths; the `audience` rule as a pre-filter (an `$or` with `$eq: null` for the no-rating case). Step 4 still re-checks everything. To confirm on M0 in feat-021.
    - `numCandidates` and the latency at K = 150 need the full corpus on M0, so they're measured in feat-021.
 4. **Check and rank candidates (deterministic, in `application`):**
    - Drop every candidate that breaks P1 (availability re-checked), US3 (`_id` in `exclude_ids`) or P3 (runtime, avoid, intensity, year, language and audience, re-checked by value, never by an LLM).
@@ -247,7 +244,6 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
 
 | # | Question | Answered by | Changes |
 |---|---|---|---|
-| Q4 | Does `mongodb-atlas-local` run `$vectorSearch` on both machines? It ran on the Mac (feat-009), and the image is published for `linux/amd64`. The Windows run is pending because Docker Desktop wasn't running during feat-012. | Walking skeleton's integration tests (feat-030) | Integration tests on Windows |
 | Q7 | p95 latency target (product.md: to confirm, guess < 10 s). The LLM calls alone are p95 ≈ 6.3 s from a laptop. | feat-029 (end to end with the real LLM, local, small corpus), feat-021 (`$vectorSearch` at K = 150 on M0), feat-025 (from the host) | Number of LLM calls, K, caching |
 | Q12 | How often new films are admitted, and the churn rate. Plan: the daily `/discover` crawl admits films that pass G7. **Measured in feat-017** over one 5.3-day window: ≈ 24.5 G7 admissions and ≈ 6 departures a day, and ≈ 31 G7 films a day lost flat-rate in at least one launch country, so the crawl, availability refresh and admission stay daily (spike 16 Q1). Still open: the rates over months, from `ingestion_runs`, and the full re-ingest cadence (feat-020). | feat-017 (done), ingest slice (feat-020) | Job schedule, cost |
 
@@ -257,7 +253,8 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
 |---|---|---|---|
 | Q1 | TMDB terms | Non-commercial use is allowed. Storing metadata for the app's own search is allowed, but bulk redistribution is not. Don't persist reviews (Q15). Don't train models on TMDB data. Attribution: the TMDB logo and the notice in P5, plus "Streaming availability by JustWatch". | docs/spikes/08-tmdb-and-providers.md Q1–Q2 |
 | Q2 | TMDB rate limits and coverage; is BO usable? | 25 req/s measured with 0 `429`s; ≈ 14 min for 20k bundle calls. **BO is usable** (62% of the Popular 500 are on flat-rate). G7 coverage: ES 9,952, US 11,961, BO 6,835 films. | spike 08 Q3–Q5, spike 16 §5 Q1 |
-| Q3 | Atlas free tier and pre-filters | The 14.5k-film corpus fits M0 at ≈ 20% (384-d). Up to 3 vector indexes, and we need 1. The **5 tested filters** (`streamable`, `runtime`, `_id` `$nin` on 5,000 IDs, `profile.intensity`, `profile.content_warnings`) combine in one `$vectorSearch`. The v1 additions are verified in feat-030 (§3 step 3). | spike 09 Q1–Q2 |
+| Q3 | Atlas free tier and pre-filters | The 14.5k-film corpus fits M0 at ≈ 20% (384-d). Up to 3 vector indexes, and we need 1. The **5 tested filters** (`streamable`, `runtime`, `_id` `$nin` on 5,000 IDs, `profile.intensity`, `profile.content_warnings`) combine in one `$vectorSearch`. feat-030 verified all of them together with the v1 additions and the audience rule on `mongodb-atlas-local` (§3 step 3). | spike 09 Q1–Q2, feat-030 |
+| Q4 | Does `mongodb-atlas-local` run `$vectorSearch` on both machines? | **Yes on Windows** (feat-030, 2026-11-25: 8.0.38 via testcontainers and compose, 7 integration cases green) and on the Mac (feat-009). In-place `updateSearchIndex` of a vector index fails locally, so the code drops and re-creates (feat-021 checks M0). | feat-009, feat-030 |
 | Q5 | Embedding model and runtime; hosting | `fastembed` `BAAI/bge-small-en-v1.5` (384-d) in-process: p50 5 ms, 279 MB RSS, +212 MB image. Hosting on Cloud Run or ACA (free). | ADR 0007, spike 10 |
 | Q6 | Runtime LLM: provider, model, cost, data use, framework, fallback | **OpenAI only, `gpt-6-luna`**, online and for enrichment (Batch). The owner approved a small usage-based spend, capped by the prepaid balance. **No Gemini.** No second provider as fallback; an outage maps to *Service unavailable* / *Results without pitches* (Q8). Framework: Pydantic AI. | ADR 0006, spike 11 |
 | Q8 | What to return when the LLM fails | The understanding call fails → *Service unavailable*. The re-rank call fails or its output stays invalid after a retry → the valid results without pitches. | product.md §4, query steps 2 and 6 |
