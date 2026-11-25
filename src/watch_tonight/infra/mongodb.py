@@ -26,6 +26,9 @@ logger = logging.getLogger(__name__)
 
 Document = dict[str, Any]
 
+# The local image, pinned to a dated build of MongoDB 8.0 like Atlas M0. compose.yaml and
+# the integration tests use it; a unit test checks compose.yaml matches.
+ATLAS_LOCAL_IMAGE: Final[str] = "mongodb/mongodb-atlas-local:8.0.38-20261124T121746Z"
 MOVIES: Final[str] = "movies"
 VECTOR_INDEX: Final[str] = "movies_vector"
 EMBEDDING_DIMENSIONS: Final[int] = 384  # BAAI/bge-small-en-v1.5 (ADR 0007)
@@ -46,10 +49,22 @@ FILTER_PATHS: Final[tuple[str, ...]] = (
 AUDIENCE_IN_PREFILTER: Final[bool] = True
 
 
-def connect(uri: str, *, timeout_ms: int = 3_000) -> AsyncMongoClient[Document]:
-    """A client with time-zone-aware dates and a short server-selection timeout (Q8: a
-    database that is down is a quick 503, not a hang)."""
-    return AsyncMongoClient(uri, tz_aware=True, serverSelectionTimeoutMS=timeout_ms)
+def connect(
+    uri: str, *, timeout_ms: int = 3_000, operation_timeout_ms: int = 10_000
+) -> AsyncMongoClient[Document]:
+    """A client with time-zone-aware dates and bounded waits (Q8: a database that is down
+    or stalls is a 503, never a hang): `timeout_ms` to find the server, and
+    `operation_timeout_ms` for a reply on an open connection (`socketTimeoutMS`).
+
+    Not pymongo's `timeoutMS`: when set, it replaces the short server-selection timeout,
+    so a database that is down took 10 s instead of 3 s to fail (feat-030 test).
+    """
+    return AsyncMongoClient(
+        uri,
+        tz_aware=True,
+        serverSelectionTimeoutMS=timeout_ms,
+        socketTimeoutMS=operation_timeout_ms,
+    )
 
 
 # --- Documents ---------------------------------------------------------------------------
@@ -191,7 +206,8 @@ async def update_vector_index(
     `mongodb-atlas-local` 8.0.38 rejects `updateSearchIndex` for vector indexes: without a
     type it reads the definition as a text index (`"mappings" is required`), and it has no
     `type` field (feat-030, verified 2026-11-25). So searches fail (503) until the new index
-    is queryable. Atlas documents an in-place update; feat-021 checks it on M0.
+    is queryable (an empty result on a missing index is turned into an error in
+    `MongoCatalogue.search`). Atlas documents an in-place update; feat-021 checks it on M0.
     """
     await drop_vector_index(collection, name=name, timeout_s=timeout_s)
     await create_vector_index(collection, definition, name=name, timeout_s=timeout_s)
@@ -209,22 +225,30 @@ async def drop_vector_index(
 
 
 async def ensure_catalogue(database: AsyncDatabase[Document]) -> None:
-    """Create the movies collection, its vector index and the freshness index if missing."""
+    """Make the movies collection ready: the collection, the freshness index, and a vector
+    index with today's filter paths (created, replaced if its paths changed, or waited for
+    if a previous run left it building)."""
     with contextlib.suppress(CollectionInvalid):  # it already exists
         await database.create_collection(MOVIES)
     movies = database[MOVIES]
     await movies.create_index("availability_updated_at")
-    if await search_index_info(movies, VECTOR_INDEX) is None:
-        await create_vector_index(movies, vector_index_definition())
+    wanted = vector_index_definition()
+    info = await search_index_info(movies, VECTOR_INDEX)
+    if info is None:
+        await create_vector_index(movies, wanted)
+    elif _paths(info.get("latestDefinition", {})) != _paths(wanted):
+        await update_vector_index(movies, wanted)
+    else:
+        await wait_until_queryable(movies, VECTOR_INDEX, wanted)
 
 
 async def wait_until_searchable(
     database: AsyncDatabase[Document], *, timeout_s: float = 120
 ) -> int:
-    """After a write, wait until the vector index sees every stored movie with a vector.
-
-    The search index syncs from the collection asynchronously (like an eventually
-    consistent read model). Returns the number of movies found.
+    """After first-time inserts, wait until the vector index sees every stored movie with a
+    vector. The search index syncs from the collection asynchronously (like an eventually
+    consistent read model). It counts documents, so after replacing existing ones it can
+    return before their new values are indexed. Returns the number of movies found.
     """
     movies = database[MOVIES]
     expected = await movies.count_documents({"embedding.0": {"$exists": True}})
@@ -238,7 +262,7 @@ async def wait_until_searchable(
                     "index": VECTOR_INDEX,
                     "path": "embedding",
                     "queryVector": probe,
-                    "numCandidates": max(expected, 1),
+                    "exact": True,  # exact search: no numCandidates cap
                     "limit": max(expected, 1),
                 }
             },
@@ -304,7 +328,15 @@ class MongoCatalogue:
             {"$unset": "embedding"},
         ]
         cursor = await self._movies.aggregate(pipeline)
-        return [
+        candidates = [
             Candidate(movie=document_to_movie(document), score=float(document["score"]))
             async for document in cursor
         ]
+        if not candidates:
+            # $vectorSearch on a missing index returns nothing instead of an error. An empty
+            # answer is only honest if the index exists and is queryable; otherwise raise,
+            # so the search is a 503, not an empty *Partial* (Q8).
+            info = await search_index_info(self._movies, VECTOR_INDEX)
+            if info is None or not info.get("queryable"):
+                raise RuntimeError(f"Vector index {VECTOR_INDEX!r} is missing or not queryable")
+        return candidates

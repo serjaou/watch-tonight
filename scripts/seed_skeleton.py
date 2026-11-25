@@ -64,8 +64,12 @@ async def fetch_bundles(ids: list[int], key: str) -> dict[int, dict[str, Any]]:
     async with httpx.AsyncClient(headers=headers, timeout=20) as client:
 
         async def fetch(movie_id: int) -> None:
-            async with gate:
-                response = await client.get(TMDB_URL.format(id=movie_id), params=params)
+            try:
+                async with gate:
+                    response = await client.get(TMDB_URL.format(id=movie_id), params=params)
+            except httpx.HTTPError as error:  # one failed call skips one film, not the run
+                print(f"  TMDB {movie_id}: {type(error).__name__}", file=sys.stderr)
+                return
             if response.status_code == 200:
                 bundles[movie_id] = response.json()
             else:
@@ -79,35 +83,37 @@ async def seed(settings: Settings, limit: int | None) -> None:
     key = settings.tmdb_api_key.get_secret_value() if settings.tmdb_api_key else ""
     if not key:
         raise SystemExit("TMDB_API_KEY is not set (environment or .env).")
-    profiles = read_profiles(limit)
-    print(f"Profiles: {len(profiles)} (spike 16, variant base)")
-    bundles = await fetch_bundles(list(profiles), key)
-    print(f"TMDB bundles: {len(bundles)} of {len(profiles)}")
-
-    refreshed_at = datetime.now(UTC)
-    embedder = HashEmbedder()
-    movies: list[Movie] = []
-    for movie_id, bundle in sorted(bundles.items()):
-        profile = profiles[movie_id]
-        try:
-            movies.append(
-                movie_from_bundle(
-                    bundle,
-                    profile=profile,
-                    embedding=embedder.embed(f"{bundle.get('title')}. {profile.summary}"),
-                    refreshed_at=refreshed_at,
-                    embedding_model=EMBEDDING_MODEL,
-                    prompt_version="spike16-base",
-                    model="gpt-6-luna",
-                )
-            )
-        except ValueError as problem:
-            print(f"  skipped: {problem}")
-
+    # Open the database first, so a database that is down fails before ~300 TMDB calls.
     client = connect(settings.mongodb_uri.get_secret_value(), timeout_ms=10_000)
     try:
         database = client[settings.mongodb_database]
         await ensure_catalogue(database)
+
+        profiles = read_profiles(limit)
+        print(f"Profiles: {len(profiles)} (spike 16, variant base)")
+        bundles = await fetch_bundles(list(profiles), key)
+        print(f"TMDB bundles: {len(bundles)} of {len(profiles)}")
+
+        refreshed_at = datetime.now(UTC)
+        embedder = HashEmbedder()
+        movies: list[Movie] = []
+        for movie_id, bundle in sorted(bundles.items()):
+            profile = profiles[movie_id]
+            try:
+                movies.append(
+                    movie_from_bundle(
+                        bundle,
+                        profile=profile,
+                        embedding=embedder.embed(f"{bundle.get('title')}. {profile.summary}"),
+                        refreshed_at=refreshed_at,
+                        embedding_model=EMBEDDING_MODEL,
+                        prompt_version="spike16-base",
+                        model="gpt-6-luna",
+                    )
+                )
+            except ValueError as problem:
+                print(f"  skipped: {problem}")
+
         await MongoCatalogue(database).upsert_many(movies)
         searchable = await wait_until_searchable(database)
         total = await database[MOVIES].count_documents({})

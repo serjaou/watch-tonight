@@ -72,6 +72,7 @@ def movie_from_bundle(
     credits: Mapping[str, Any] = bundle.get("credits", {})
     cast = sorted(credits.get("cast", []), key=lambda person: person.get("order", 0))
     collection: Mapping[str, Any] = bundle.get("belongs_to_collection") or {}
+    streamable = flat_rate_keys(bundle)
     return Movie(
         id=int(bundle["id"]),
         title=str(bundle["title"]),
@@ -100,8 +101,9 @@ def movie_from_bundle(
         tmdb_vote_average=bundle.get("vote_average"),
         tmdb_vote_count=bundle.get("vote_count"),
         tmdb_popularity=bundle.get("popularity"),
-        streamable=flat_rate_keys(bundle),
+        streamable=streamable,
         availability_updated_at=refreshed_at,
+        unstreamable_since=None if streamable else refreshed_at,  # Q17
         profile=profile,
         embedding=embedding,
         embedding_model=embedding_model,

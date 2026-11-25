@@ -95,7 +95,12 @@ class Movie(BaseModel):
 
 
 class Candidate(BaseModel):
-    """A movie returned by the vector search, with its similarity score."""
+    """A movie returned by the vector search, with its similarity score.
+
+    Higher is more similar. The scale depends on the adapter: cosine in the in-memory
+    catalogue, `(1 + cosine) / 2` from Atlas. Only the order is used until the hybrid score
+    (feat-022), which must put both on one fixed scale.
+    """
 
     model_config = ConfigDict(frozen=True)
 
