@@ -16,4 +16,5 @@ from watch_tonight.application.search_movies import SearchMovies
 from watch_tonight.infra.fakes import EchoLanguageModel, HashEmbedder
 from watch_tonight.infra.memory import InMemoryCatalogue
 
-app = create_app(SearchMovies(EchoLanguageModel(), HashEmbedder(), InMemoryCatalogue(FILMS)))
+catalogue = InMemoryCatalogue(FILMS)
+app = create_app(SearchMovies(EchoLanguageModel(), HashEmbedder(), catalogue, catalogue))

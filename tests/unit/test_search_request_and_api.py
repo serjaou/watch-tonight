@@ -1,6 +1,7 @@
 """Unit tests for request validation (step 1), the 422 mapping, models and infra."""
 
 import math
+from datetime import UTC, datetime
 
 import pytest
 from pydantic import ValidationError
@@ -94,3 +95,18 @@ def test_intent_rejects_an_inverted_year_range() -> None:
     with pytest.raises(ValidationError, match="is after year_max"):
         intent(year_min=2020, year_max=2010)
     assert intent(year_min=2010, year_max=2010).year_min == 2010
+
+
+def test_unknown_request_field_is_rejected() -> None:
+    with pytest.raises(ValidationError, match="maxRuntime"):
+        SearchRequest.model_validate(
+            {"text": "x", "country": "ES", "providers": [8], "maxRuntime": 90}
+        )
+
+
+async def test_latest_availability_update_is_the_newest_date() -> None:
+    day_1, day_2 = datetime(2026, 11, 1, tzinfo=UTC), datetime(2026, 11, 2, tzinfo=UTC)
+    older = movie(1).model_copy(update={"availability_updated_at": day_1})
+    newer = movie(2).model_copy(update={"availability_updated_at": day_2})
+    assert await InMemoryCatalogue([older, newer]).latest_availability_update() == day_2
+    assert await InMemoryCatalogue().latest_availability_update() is None

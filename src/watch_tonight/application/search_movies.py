@@ -19,6 +19,7 @@ from watch_tonight.domain.ports import (
     CandidateSearch,
     Embedder,
     LanguageModel,
+    MovieRepository,
     Pitches,
     Usage,
 )
@@ -72,12 +73,14 @@ class SearchMovies:
         language_model: LanguageModel,
         embedder: Embedder,
         candidate_search: CandidateSearch,
+        movie_repository: MovieRepository,
         *,
         clock: Callable[[], float] = time.perf_counter,
     ) -> None:
         self._language_model = language_model
         self._embedder = embedder
         self._candidate_search = candidate_search
+        self._movie_repository = movie_repository
         self._clock = clock
 
     async def execute(self, request: SearchRequest) -> SearchResponse:
@@ -130,7 +133,12 @@ class SearchMovies:
             pitches = await self._pick_and_pitch(intent, valid, usages)
             watch.lap("pick_and_pitch")
 
-        # Step 7 · Respond.
+        # Step 7 · Respond, with the catalogue's last availability refresh (P6).
+        try:
+            availability_updated_at = await self._movie_repository.latest_availability_update()
+        except Exception as error:
+            logger.exception("Step 7 (availability date) failed")
+            raise ServiceUnavailableError("respond") from error
         notes: list[Note] = []
         state: ResponseState
         if valid and pitches is None:
@@ -150,6 +158,7 @@ class SearchMovies:
         return SearchResponse(
             state=state,
             results=[_to_result(c, pitch, request) for c, pitch in chosen],
+            availability_updated_at=availability_updated_at,
             notes=notes,
             attribution=Attribution(),
             trace=Trace(

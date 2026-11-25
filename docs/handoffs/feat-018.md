@@ -23,12 +23,13 @@
 - **No `TestClient`.** The installed Starlette (1.10) types its `TestClient` against a new package, `httpx2` (published by the pydantic org; Starlette's metadata names it), and deprecates `httpx` for it. With `httpx`, `TestClient.post` is untyped under pyright strict. Swapping the dev dependency to `httpx2` was blocked by Claude Code's permission check pending your approval, so the acceptance helper calls the app in memory through `httpx.ASGITransport` (same routing, validation, handlers and serialisation; the reviewer judged it acceptable). **Your decision:** keep `httpx`, or switch to `httpx2`.
 - **Small additions found in review:** repeated providers are kept once; `""`/`NR` ratings count as no rating (Q16); a movie without a vector is never a candidate; bounds on the intent's limits (runtime > 0, years 1880–2100 in order, lowercase ISO 639-1 languages); unreadable JSON is reported on `body`; a rejected step-5 answer still counts in the trace's tokens and cost.
 
-## Open questions for the owner (from the review, not changed)
+## Open questions for the owner (from the review), answered 2026-11-25
 - **Unknown request fields (review L2):** today they are ignored, so a misspelled `"maxRuntime": 90` returns 200 without the limit. `extra="forbid"` would make it a 422 naming the field. Product rule P7 makes this your call; I'd recommend forbid, because the constraints rule (P3) says UI limits are always applied.
 - **Freshness with zero results (review L8):** P6 says every response says when availability was last refreshed, but the contract carries the date per film, so a zero-result response has none. Options: a top-level `availability_updated_at`, or accept the gap.
+- **Answers (owner, 2026-11-25), built in the follow-up PR on branch `feat-018-followups`:** reject unknown fields with 422; add a top-level `availability_updated_at`; `httpx` or `httpx2` left to the agent, which kept `httpx` (the tests don't use Starlette's `TestClient`, so its deprecation doesn't apply; no change needed).
 
 ## Notes for the next parts
-- **Part 2 (feat-030):** the acceptance helper runs `asyncio.run` per request (a new event loop each time). A shared async Mongo client breaks with that: switch to async tests on one loop. The seed's TMDB calls use `httpx` (or `httpx2`, after your decision above).
+- **Part 2 (feat-030):** the acceptance helper runs `asyncio.run` per request (a new event loop each time). A shared async Mongo client breaks with that: switch to async tests on one loop. The seed's TMDB calls use `httpx` (kept, 2026-11-25).
 - **Part 4 (feat-029):** if the adapter raises after spending tokens (invalid output twice), the usage can't reach the trace, because the port's exception carries none; decide how (e.g. an exception carrying a `Usage`). The trace has no `retries` yet; the adapter decides how it reports them (`docs/metrics.md` updated).
 
 ## Verification Evidence

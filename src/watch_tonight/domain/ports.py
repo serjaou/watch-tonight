@@ -5,6 +5,7 @@ declaring `: IMyInterface`; pyright checks the match. Adapters live in `infra`.
 """
 
 from collections.abc import Sequence
+from datetime import datetime
 from typing import Protocol
 
 from pydantic import BaseModel, ConfigDict
@@ -76,4 +77,9 @@ class CandidateSearch(Protocol):
 class MovieRepository(Protocol):
     async def upsert_many(self, movies: Sequence[Movie]) -> None:
         """Insert or replace movies by id."""
+        ...
+
+    async def latest_availability_update(self) -> datetime | None:
+        """When availability was last refreshed: the newest `availability_updated_at`
+        in the catalogue, or `None` when it is empty (P6)."""
         ...

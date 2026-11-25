@@ -247,9 +247,17 @@ def _state_rules(response: Mapping[str, Any]) -> list[str]:
 
 
 def _success_shape(response: Mapping[str, Any]) -> list[str]:
-    errors = _keys("response", response, {"state", "results", "notes", "attribution", "trace"})
+    errors = _keys(
+        "response",
+        response,
+        {"state", "results", "availability_updated_at", "notes", "attribution", "trace"},
+    )
     if errors:
         return errors
+    try:  # P6: every response says when availability was last refreshed
+        datetime.fromisoformat(response["availability_updated_at"])
+    except (TypeError, ValueError):
+        errors.append("availability_updated_at is missing or not a date (P6)")
     if response["state"] not in {"success", "partial", "results_without_pitches"}:
         errors.append(f"unknown state {response['state']!r}")
     for index, result in enumerate(response["results"]):

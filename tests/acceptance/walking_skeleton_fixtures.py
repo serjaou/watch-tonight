@@ -294,7 +294,10 @@ def client_for(
     embedder: FixedEmbedder | None = None,
 ) -> ApiClient:
     use_case = SearchMovies(
-        language_model, embedder or FixedEmbedder(), search or RecordingSearch()
+        language_model,
+        embedder or FixedEmbedder(),
+        search or RecordingSearch(),
+        InMemoryCatalogue(FILMS),  # the repository: the catalogue's last refresh (P6)
     )
     return ApiClient(create_app(use_case))
 

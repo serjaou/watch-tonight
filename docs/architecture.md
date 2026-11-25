@@ -142,6 +142,7 @@ The steps in detail (the [walkthrough in the checkpoint guide](checkpoint-2026-1
 7. **Respond:**
    - `state` (*Success*, *Partial* or *Results without pitches*) and `notes`: zero or more user-facing notes. These are the pitches note, the *Partial* note, and the "couldn't apply" note listing `unmapped_constraints` (Q18).
    - Each result: title, year, runtime, poster URL, services, pitch (when available), TMDB link, and its own `availability_updated_at` (P6).
+   - At the top level, the catalogue's last availability refresh (P6), so a response with no results still has it (owner, 2026-11-25).
    - Also attribution (P5) and a `trace`: stage timings, tokens, estimated cost.
 
 US3 needs no accounts: the client sends the IDs it has already shown as `exclude_ids`.

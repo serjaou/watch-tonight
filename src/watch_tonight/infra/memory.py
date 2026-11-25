@@ -6,6 +6,7 @@ for the Atlas adapters of part 2 (feat-030).
 
 import math
 from collections.abc import Iterable, Sequence
+from datetime import datetime
 
 from watch_tonight.domain.limits import passes_checks
 from watch_tonight.domain.movie import Candidate, Movie
@@ -30,6 +31,9 @@ class InMemoryCatalogue:
     async def upsert_many(self, movies: Sequence[Movie]) -> None:
         for movie in movies:
             self._movies[movie.id] = movie
+
+    async def latest_availability_update(self) -> datetime | None:
+        return max((m.availability_updated_at for m in self._movies.values()), default=None)
 
     async def search(self, query: CandidateQuery) -> list[Candidate]:
         exclude = set(query.exclude_ids)

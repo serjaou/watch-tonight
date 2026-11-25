@@ -27,9 +27,10 @@ All in `tests/acceptance/test_walking_skeleton.py`. **Fixtures:** about 15–20 
 // request
 { "text": "...", "country": "ES", "providers": [8, 337],       // 1–500 chars after trim; ES|US|BO; ≥ 1, from the country's list
   "max_runtime": 120, "max_intensity": 3, "avoid": ["gore"],    // optional; avoid from the closed vocabulary
-  "exclude_ids": [603] }                                        // optional, ≤ 5,000 (the size spike 09 tested)
+  "exclude_ids": [603] }                                        // optional, ≤ 5,000 (the size spike 09 tested); any other field → 422
 // 200
 { "state": "success",                                           // success | partial | results_without_pitches
+  "availability_updated_at": "2026-11-24T03:00:00Z",            // the catalogue's last refresh, also with no results (P6)
   "results": [{ "id": 603, "title": "...", "year": 1999, "runtime": 136,
                 "poster_url": "https://image.tmdb.org/t/p/w342/....jpg",
                 "services": [{ "id": 8, "name": "Netflix" }],     // only the selected services it streams on there
@@ -67,6 +68,11 @@ All in `tests/acceptance/test_walking_skeleton.py`. **Fixtures:** about 15–20 
 - **Attribution** (owner, 2026-11-24): the wording from section 3 of TMDB's terms, now in [product.md P5](../product.md#3-product-rules).
 - **Evals:** `evals/` is new. Add it to the ruff, pyright and pytest paths; the PR gate already protects it. Part 4 re-runs the same checks on the real model.
 - **New dependencies:** `fastapi` (the web framework; it brings Pydantic, which `domain` uses for its models because Pydantic does no I/O, like data annotations on a C# domain model) and `uvicorn` (the server that runs it, like Kestrel); dev: `httpx` (FastAPI's `TestClient` needs it, like `WebApplicationFactory`).
+
+## Changes after approval (owner, 2026-11-25, from the feat-018 review)
+- Unknown request fields are rejected with 422 naming the field, so a misspelled limit can't be silently ignored (P3).
+- A top-level `availability_updated_at` (the newest refresh in the catalogue, from `MovieRepository`) on every 200 response, so a response with no results still says how fresh its data is (P6).
+- The dev dependency stays `httpx`; the tests call the app through `httpx.ASGITransport` instead of Starlette's `TestClient`, which now expects `httpx2`.
 
 ## Open questions (must be empty before status: approved)
 - None

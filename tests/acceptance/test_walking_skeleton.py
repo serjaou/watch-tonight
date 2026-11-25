@@ -72,6 +72,7 @@ def test_search_returns_five_streamable_movies_with_pitches_attribution_and_fres
         {"id": 337, "name": "Disney Plus"},
     ], "a film on both selected services lists both, in the request's order"
     assert body["attribution"] == {"tmdb": TMDB_NOTICE, "availability": JUSTWATCH_NOTICE}
+    assert body["availability_updated_at"].startswith(AVAILABLE_AT.isoformat()[:19]), "P6"
     assert body["notes"] == []
     trace = body["trace"]
     assert {"understand", "embed", "retrieve", "check", "pick_and_pitch"} <= set(
@@ -174,6 +175,7 @@ def test_search_partial_state_including_zero_results() -> None:
     body = response.json()
     assert body["state"] == "partial"
     assert body["results"] == []
+    assert body["availability_updated_at"], "P6: even with no results (owner, 2026-11-25)"
     assert note_codes(body) == ["partial"]
     assert llm.pick_calls == 0, "no re-rank-and-pitch call when nothing passed"
 
@@ -254,6 +256,7 @@ def test_search_falls_back_to_results_without_pitches(
         ({"providers": [9]}, "providers"),
         ({"avoid": ["spiders"]}, "avoid"),
         ({"exclude_ids": list(range(5001))}, "exclude_ids"),
+        ({"maxRuntime": 90}, "maxRuntime"),  # unknown fields are rejected (2026-11-25)
     ],
     ids=[
         "empty-text",
@@ -264,6 +267,7 @@ def test_search_falls_back_to_results_without_pitches(
         "provider-not-in-country",
         "avoid-outside-vocabulary",
         "too-many-exclude-ids",
+        "unknown-field",
     ],
 )
 def test_search_rejects_invalid_input_with_422(changes: dict[str, Any], field: str) -> None:
@@ -364,6 +368,7 @@ def test_deterministic_evals_pass_at_100_percent() -> None:
         ),
         _case("repeated-provider", request(providers=[8, 337, 8]), ScriptedLanguageModel()),
         _case("unsupported-country", request(country="FR"), ScriptedLanguageModel()),
+        _case("unknown-field", request(maxRuntime=90), ScriptedLanguageModel()),
         _case("no-provider", request(providers=[]), ScriptedLanguageModel()),
         _case("provider-not-in-country", request(providers=[9]), ScriptedLanguageModel()),
         _case("avoid-outside-vocabulary", request(avoid=["spiders"]), ScriptedLanguageModel()),

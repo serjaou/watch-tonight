@@ -25,7 +25,13 @@ JUSTWATCH_NOTICE: Final[str] = "Streaming availability by JustWatch"
 
 
 class SearchRequest(BaseModel):
-    """Step 1, Validate. A request that fails here never reaches a port."""
+    """Step 1, Validate. A request that fails here never reaches a port.
+
+    Unknown fields are rejected (owner, 2026-11-25): a misspelled limit such as
+    `"maxRuntime"` must not return results that ignore it (P3).
+    """
+
+    model_config = ConfigDict(extra="forbid")
 
     text: str
     country: Country
@@ -99,6 +105,9 @@ class SearchResponse(BaseModel):
 
     state: ResponseState
     results: list[MovieResult]
+    # When availability was last refreshed for the whole catalogue, so even a response
+    # with no results says how fresh its data is (P6; owner, 2026-11-25).
+    availability_updated_at: datetime | None
     notes: list[Note]
     attribution: Attribution
     trace: Trace
