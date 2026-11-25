@@ -65,7 +65,12 @@ def movie_from_bundle(
     prompt_version: str | None = None,
     model: str | None = None,
 ) -> Movie:
-    """Raises `ValueError` when the bundle fails an admission data check."""
+    """Raises `ValueError` when the bundle fails an admission data check.
+
+    `unstreamable_since` is the refresh time when the film streams nowhere. That is right
+    for a first insert (the seed); a daily refresh (feat-020) must keep the earliest date,
+    or eviction by age (Q17) never triggers.
+    """
     problems = admission_problems(bundle)
     if problems:
         raise ValueError(f"TMDB movie {bundle.get('id')}: {', '.join(problems)}")

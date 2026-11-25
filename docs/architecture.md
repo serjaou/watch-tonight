@@ -117,6 +117,7 @@ The steps in detail (the [walkthrough in the checkpoint guide](checkpoint-2026-1
 
    - **What's verified:** spike 09 verified the first five filters together on M0, including `$nin` on 5,000 IDs.
    - **Verified in feat-030** (`mongodb-atlas-local` 8.0.38, Windows, 2026-11-25): all the filters above in one `$vectorSearch` with a 5,000-id `$nin`, including `year`, `original_language` and the certification paths; the `audience` rule as a pre-filter (an `$or` with `$eq: null` for the no-rating case). Step 4 still re-checks everything. To confirm on M0 in feat-021.
+   - **Also learned in feat-030:** `$vectorSearch` on a missing index returns an empty result, not an error, so the adapter checks the index when a search finds nothing and answers 503; `updateSearchIndex` fails for vector indexes on the local image, so a definition change drops and re-creates the index; pymongo's `timeoutMS` replaces the short server-selection timeout (a down database took 10 s instead of 3 s), so the client bounds stalled reads with `socketTimeoutMS` instead.
    - `numCandidates` and the latency at K = 150 need the full corpus on M0, so they're measured in feat-021.
 4. **Check and rank candidates (deterministic, in `application`):**
    - Drop every candidate that breaks P1 (availability re-checked), US3 (`_id` in `exclude_ids`) or P3 (runtime, avoid, intensity, year, language and audience, re-checked by value, never by an LLM).

@@ -34,7 +34,7 @@
   - **Start from the v1 intent.** Genre, people and content fields will be added after spike feat-026 (question 7) decides how (owner, 2026-11-24: the list is not frozen); don't add them here.
   - The seed uses spike 16's ~300 movies in a local database, so the skeleton doesn't wait for the ingest task.
 
-## feat-030 · Walking skeleton, part 2: search on local Atlas → in feature_list.json (2026-11-24)
+## feat-030 · Walking skeleton, part 2: search on local Atlas → in feature_list.json (2026-11-24) → done (2026-11-25, [handoff](handoffs/feat-030.md))
 - **Type:** feature · **Stories:** US1, US2, US3 · **Depends on:** feat-018 · **Spec:** `docs/specs/30-atlas-local-search.md` (draft)
 - **Description:** in `feature_list.json`; the detail is in the draft spec. It takes over the database half of the original feat-018: the verification list above (filters, index lifecycle, image pin), the seed of spike 16's 300 films, and Q4 on Windows.
 - **Notes from part 1** ([feat-018 handoff](handoffs/feat-018.md), 2026-11-25):
@@ -74,6 +74,7 @@
   - The curated provider list per country (spike 08 Q5).
   - `ingestion_runs` and idempotency.
 - **Notes:**
+  - **From feat-030 (2026-11-25):** `infra/tmdb_mapping.py` (`movie_from_bundle`) maps a bundle to the data model and can be reused; but the refresh must keep the earliest `unstreamable_since` (the mapping sets the refresh time), or eviction by age (Q17) never triggers. `MovieRepository.latest_availability_update()` could then read the last completed refresh from `ingestion_runs`.
   - **Likely split at `/spec` time:**
     - (a) the daily availability refresh over stored films, observable through P1/P6 in search;
     - (b) crawl + G7 admission + bundle fetch.
@@ -92,7 +93,7 @@
   - Build the Atlas M0 vector index with every filter path declared.
   - Re-run only when `source_hash`, `prompt_version` or the model changes.
 - **Notes:**
-  - **From feat-030 (2026-11-25), check on M0:** the in-place `updateSearchIndex` of a vector index (it fails on `mongodb-atlas-local` 8.0.38, so the code drops and re-creates, which means 503s until the index is queryable); the audience pre-filter (`$or` with `$eq: null`, works locally); `numCandidates` (now `20 × limit`, capped at 10,000).
+  - **From feat-030 (2026-11-25), check on M0:** the in-place `updateSearchIndex` of a vector index (it fails on `mongodb-atlas-local` 8.0.38, so the code drops and re-creates, which means 503s until the index is queryable); the audience pre-filter (`$or` with `$eq: null`, works locally); `numCandidates` (now `20 × limit`, capped at 10,000); whether `exact: true` with a `limit` above 10,000 is accepted (`wait_until_searchable` at 14.5k films).
   - First run on M0 at full scale, so it **measures `$vectorSearch` latency at K = 150 and sets `numCandidates`** (Q7).
   - Check whether Pydantic AI supports the Batch API, or whether the batch job uses the `openai` SDK directly.
   - **Batch or not** (owner concern, 2026-11-19): Batch fits the request/response `LanguageModel` port badly, and each provider's batch API works differently (OpenAI, Anthropic and Google all discount batch jobs by about 50%). Options:

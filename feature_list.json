@@ -1,17 +1,6 @@
 {
   "features": [
     {
-      "id": "feat-030",
-      "type": "feature",
-      "name": "Walking skeleton, part 2: search on local Atlas",
-      "description": "MovieRepository and CandidateSearch on mongodb-atlas-local pinned to an exact 8.0 tag: vector index create/update/drop from code, every pre-filter verified together with a 5,000-id exclusion list, the audience rule (Atlas pre-filter or step 4), database down maps to 503, a seed script for spike 16's 300 films (re-fetched from TMDB, never committed), testcontainers, and a CI integration job. Answers Q4 on Windows. Detail: docs/backlog.md, feat-030 section.",
-      "stories": ["US1", "US2", "US3"],
-      "status": "in_progress",
-      "dependencies": ["feat-018"],
-      "spec": "docs/specs/30-atlas-local-search.md",
-      "evidence": ""
-    },
-    {
       "id": "feat-028",
       "type": "feature",
       "name": "Walking skeleton, part 3: real embedder",

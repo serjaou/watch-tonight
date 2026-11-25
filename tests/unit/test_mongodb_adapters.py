@@ -99,7 +99,7 @@ def test_every_prefilter_path_is_declared_in_the_index() -> None:
 
 
 def test_compose_uses_the_pinned_image() -> None:
-    compose = Path("compose.yaml").read_text(encoding="utf-8")
+    compose = (Path(__file__).resolve().parents[2] / "compose.yaml").read_text(encoding="utf-8")
     assert f"image: {ATLAS_LOCAL_IMAGE}\n" in compose
 
 

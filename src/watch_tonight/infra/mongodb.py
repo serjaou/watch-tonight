@@ -146,7 +146,12 @@ def vector_index_definition(filter_paths: Sequence[str] = FILTER_PATHS) -> Docum
 
 
 def _paths(definition: Mapping[str, Any]) -> set[str]:
-    return {str(field["path"]) for field in definition.get("fields", [])}
+    """What makes two vector index definitions the same for us: every field's path, type,
+    and for the vector field its dimensions and similarity."""
+    return {
+        "|".join(str(field.get(key, "")) for key in ("path", "type", "numDimensions", "similarity"))
+        for field in definition.get("fields", [])
+    }
 
 
 async def search_index_info(collection: AsyncCollection[Document], name: str) -> Document | None:

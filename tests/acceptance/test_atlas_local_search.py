@@ -128,16 +128,26 @@ async def test_vector_index_create_update_drop_from_code(
     assert await ids({"runtime": {"$lte": 91}}) == set()
 
 
-# Two extra films, each breaking exactly one limit of the all-filters query, so the
-# `avoid` ($nin on an array) and language filters are each shown to exclude on their own.
+# Extra films, each breaking exactly one limit of the all-filters query (with the teens
+# audience on), so each of these filters is shown to exclude a film on its own.
 ONLY_AVOIDED: Final = film(9101, "Only Avoided", similarity=0.80, streamable=["ES:8"],
                            runtime=95, us="PG-13", warnings=["drug_use"])  # fmt: skip
 ONLY_FOREIGN: Final = film(9102, "Only Foreign", similarity=0.79, streamable=["ES:8"],
                            runtime=95, language="de", us="PG-13")  # fmt: skip
+ONLY_INTENSE: Final = film(9103, "Only Intense", similarity=0.78, streamable=["ES:8"],
+                           us="PG", intensity=4)  # fmt: skip
+ONLY_TOO_NEW: Final = film(9104, "Only Too New", similarity=0.77, streamable=["ES:8"],
+                           us="PG", year=2023)  # fmt: skip
+ONE_LIMIT_EACH: Final = [
+    (ONLY_AVOIDED, "avoid"),
+    (ONLY_FOREIGN, "original_language"),
+    (ONLY_INTENSE, "intensity"),
+    (ONLY_TOO_NEW, "year"),
+]
 
 
 async def test_vector_search_applies_all_prefilters_together(atlas_uri: str) -> None:
-    films = [*FILMS, ONLY_AVOIDED, ONLY_FOREIGN]
+    films = [*FILMS, *(extra for extra, _ in ONE_LIMIT_EACH)]
     database = await seeded(atlas_uri, "all_prefilters", films)
     limits = AppliedLimits(
         max_runtime=120,
@@ -152,8 +162,8 @@ async def test_vector_search_applies_all_prefilters_together(atlas_uri: str) -> 
     query = CandidateQuery(
         vector=QUERY_VECTOR, streamable_any=SELECTED, exclude_ids=exclude, limits=limits, limit=150
     )
-    assert broken_limits(ONLY_AVOIDED, limits) == ["avoid"]
-    assert broken_limits(ONLY_FOREIGN, limits) == ["original_language"]
+    for extra, limit in ONE_LIMIT_EACH:
+        assert broken_limits(extra, limits) == [limit]
 
     found = await MongoCatalogue(database).search(query)
 
@@ -285,6 +295,7 @@ async def test_search_returns_503_when_database_is_down(atlas_uri: str) -> None:
     response = await post(app_on(no_index, llm), BASE_REQUEST)
 
     assert response.status_code == 503
+    assert response.json()["state"] == "service_unavailable"
     assert llm.pick_calls == 0
     await client.close()
 
