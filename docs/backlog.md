@@ -40,7 +40,8 @@
 - **Notes from part 1** ([feat-018 handoff](handoffs/feat-018.md), 2026-11-25):
   - The acceptance helper (`ApiClient` in `tests/acceptance/walking_skeleton_fixtures.py`) runs `asyncio.run` per request, a new event loop each time; a shared async Mongo client breaks with that, so switch to async tests on one loop.
   - `httpx` stays (2026-11-25): the tests use `httpx.ASGITransport`, not Starlette's `TestClient` (which now expects `httpx2`); the seed's TMDB calls use `httpx` too.
-  - `MovieRepository.latest_availability_update()` (the top-level freshness date, added 2026-11-25) needs a MongoDB implementation: the newest `availability_updated_at`, served by an index on that field.
+  - `MovieRepository.latest_availability_update()` (the top-level freshness date, added 2026-11-25) needs a MongoDB implementation: the newest `availability_updated_at`, served by an index on that field. Later (feat-020), the last *completed* refresh from `ingestion_runs` is more honest: after a crashed refresh, the newest film date overstates freshness.
+  - Create the client with `tz_aware=True`: pymongo returns naive datetimes otherwise, and the evals require dates with a time zone.
 
 ## feat-028 · Walking skeleton, part 3: real embedder → in feature_list.json (2026-11-24)
 - **Type:** feature · **Stories:** US1 · **Depends on:** feat-030 · **Spec:** `docs/specs/28-real-embedder.md` (not written yet)

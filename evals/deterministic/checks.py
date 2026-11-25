@@ -246,6 +246,36 @@ def _state_rules(response: Mapping[str, Any]) -> list[str]:
     return errors
 
 
+def _aware_date(value: Any) -> datetime | None:
+    try:
+        parsed = datetime.fromisoformat(value)
+    except (TypeError, ValueError):
+        return None
+    return parsed if parsed.tzinfo is not None else None
+
+
+def _freshness(response: Mapping[str, Any]) -> list[str]:
+    """P6: the catalogue's last refresh, with a time zone, not older than any result's.
+
+    `null` is allowed only when the catalogue is empty, so only with no results.
+    """
+    top = response["availability_updated_at"]
+    results: list[Any] = response["results"]
+    if top is None:
+        return ["availability_updated_at is null but there are results (P6)"] if results else []
+    refreshed = _aware_date(top)
+    if refreshed is None:
+        return ["availability_updated_at is not a date with a time zone (P6)"]
+    errors: list[str] = []
+    for result in results:
+        own = _aware_date(result.get("availability_updated_at"))
+        if own is None:
+            errors.append(f"{result.get('id')}: availability date without a time zone (P6)")
+        elif own > refreshed:
+            errors.append(f"{result.get('id')}: refreshed after the catalogue's date (P6)")
+    return errors
+
+
 def _success_shape(response: Mapping[str, Any]) -> list[str]:
     errors = _keys(
         "response",
@@ -254,10 +284,7 @@ def _success_shape(response: Mapping[str, Any]) -> list[str]:
     )
     if errors:
         return errors
-    try:  # P6: every response says when availability was last refreshed
-        datetime.fromisoformat(response["availability_updated_at"])
-    except (TypeError, ValueError):
-        errors.append("availability_updated_at is missing or not a date (P6)")
+    errors += _freshness(response)
     if response["state"] not in {"success", "partial", "results_without_pitches"}:
         errors.append(f"unknown state {response['state']!r}")
     for index, result in enumerate(response["results"]):

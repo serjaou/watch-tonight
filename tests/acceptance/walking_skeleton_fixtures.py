@@ -10,7 +10,7 @@ vector has cosine `similarity` to it, so the search order is known in advance.
 import asyncio
 import math
 from collections.abc import Callable, Sequence
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any, Final
 
 import httpx
@@ -24,6 +24,7 @@ from watch_tonight.domain.output_checks import Pick
 from watch_tonight.domain.ports import (
     CandidateQuery,
     CandidateSearch,
+    MovieRepository,
     Pitches,
     Understanding,
     Usage,
@@ -54,6 +55,7 @@ def film(
     es: str | None = None,
     intensity: Intensity = 2,
     warnings: Sequence[ContentWarning] = (),
+    available_at: datetime = AVAILABLE_AT,
 ) -> Movie:
     return Movie(
         id=movie_id,
@@ -66,7 +68,7 @@ def film(
         certification_es=es,
         poster_path=f"/fixture-{movie_id}.jpg",
         streamable=streamable,
-        availability_updated_at=AVAILABLE_AT,
+        availability_updated_at=available_at,
         profile=Profile(
             tone=["light"],
             pacing="medium",
@@ -121,8 +123,9 @@ FILMS: Final[list[Movie]] = [
     # Limit traps: runtime, year, intensity and content.
     film(9014, "The Long Night Shift", similarity=0.90, streamable=["ES:8"], year=2012,
          runtime=165, us="R", es="18", intensity=3, warnings=["strong_language"]),
+    # Its availability was refreshed 4 days earlier: the catalogue's date is the newest.
     film(9015, "Old Reel", similarity=0.88, streamable=["ES:8"], year=1974, runtime=99,
-         us="PG", es="7"),
+         us="PG", es="7", available_at=AVAILABLE_AT - timedelta(days=4)),
     film(9016, "Blood Orchard", similarity=0.86, streamable=["ES:337"], year=2020, runtime=92,
          us="R", es="18", intensity=5, warnings=["gore", "violence"]),
     # No rating, intensity 3 with violence: fails kids, suits teens.
@@ -263,6 +266,13 @@ class UnfilteredSearch:
         ]
 
 
+class FailingRepository(InMemoryCatalogue):
+    """A repository whose database is down when asked for the last refresh."""
+
+    async def latest_availability_update(self) -> datetime | None:
+        raise ConnectionError("database unreachable")
+
+
 class FailingSearch:
     """A search port whose database is down."""
 
@@ -292,12 +302,13 @@ def client_for(
     language_model: ScriptedLanguageModel,
     search: CandidateSearch | None = None,
     embedder: FixedEmbedder | None = None,
+    repository: MovieRepository | None = None,
 ) -> ApiClient:
     use_case = SearchMovies(
         language_model,
         embedder or FixedEmbedder(),
         search or RecordingSearch(),
-        InMemoryCatalogue(FILMS),  # the repository: the catalogue's last refresh (P6)
+        repository or InMemoryCatalogue(FILMS),  # the catalogue's last refresh (P6)
     )
     return ApiClient(create_app(use_case))
 

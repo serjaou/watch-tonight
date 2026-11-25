@@ -14,6 +14,7 @@ Every task is a poethepoet task in `pyproject.toml` (`[tool.poe.tasks]`) and beh
 - CI (`.github/workflows/ci.yml`) runs `uv sync --locked` and `uv run poe check`. A dependency change must include the updated `uv.lock`.
 - PR gates (`.github/workflows/pr-gates.yml` → `scripts/ci/pr_gates.py`) fail a PR that changes `tests/acceptance/` or `evals/` until the owner adds the `tests-approved` label.
 - pre-commit runs gitleaks and the project's own ruff (from `uv.lock`) before each commit.
+- **Secrets:** never print `.env` lines or values, not even through a filter meant to hide them (a filter that fails prints the secret). Check that a variable exists with `grep -c '^NAME=' .env`; to learn something about a URI, parse it and print only the safe part (e.g. `urllib.parse.urlsplit(uri).scheme`). `MONGODB_URI` in `.env` is the cloud M0 cluster (spike 09).
 
 ### Windows notes (seen in feat-011)
 

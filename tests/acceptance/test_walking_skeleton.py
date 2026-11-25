@@ -14,6 +14,8 @@ from tests.acceptance.walking_skeleton_fixtures import (
     AVAILABLE_AT,
     BASE_REQUEST,
     CATALOGUE,
+    FILMS,
+    FailingRepository,
     FailingSearch,
     FixedEmbedder,
     PickScript,
@@ -73,6 +75,7 @@ def test_search_returns_five_streamable_movies_with_pitches_attribution_and_fres
     ], "a film on both selected services lists both, in the request's order"
     assert body["attribution"] == {"tmdb": TMDB_NOTICE, "availability": JUSTWATCH_NOTICE}
     assert body["availability_updated_at"].startswith(AVAILABLE_AT.isoformat()[:19]), "P6"
+    assert body["availability_updated_at"].endswith("Z"), "dates carry their time zone"
     assert body["notes"] == []
     trace = body["trace"]
     assert {"understand", "embed", "retrieve", "check", "pick_and_pitch"} <= set(
@@ -175,7 +178,8 @@ def test_search_partial_state_including_zero_results() -> None:
     body = response.json()
     assert body["state"] == "partial"
     assert body["results"] == []
-    assert body["availability_updated_at"], "P6: even with no results (owner, 2026-11-25)"
+    # P6 even with no results (owner, 2026-11-25): the catalogue's newest refresh.
+    assert body["availability_updated_at"].startswith(AVAILABLE_AT.isoformat()[:19])
     assert note_codes(body) == ["partial"]
     assert llm.pick_calls == 0, "no re-rank-and-pitch call when nothing passed"
 
@@ -292,15 +296,23 @@ def test_search_rejects_invalid_input_with_422(changes: dict[str, Any], field: s
 
 
 @pytest.mark.parametrize(
-    "failure", ["understand", "search"], ids=["understand-fails", "search-fails"]
+    "failure",
+    ["understand", "search", "freshness"],
+    ids=["understand-fails", "search-fails", "freshness-lookup-fails"],
 )
 def test_search_returns_503_when_understand_or_search_fails(failure: str) -> None:
-    if failure == "understand":
-        client = client_for(ScriptedLanguageModel(understand_error=RuntimeError("quota")))
+    understand_error = RuntimeError("quota") if failure == "understand" else None
+    llm = ScriptedLanguageModel(understand_error=understand_error)
+    if failure == "search":
+        client = client_for(llm, FailingSearch())
+    elif failure == "freshness":
+        client = client_for(llm, repository=FailingRepository(FILMS))
     else:
-        client = client_for(ScriptedLanguageModel(), FailingSearch())
+        client = client_for(llm)
 
     response = client.post("/search", json=request())
+
+    assert llm.pick_calls == 0, "a data-layer failure stops before the paid step-5 call"
 
     assert response.status_code == 503
     body = response.json()
@@ -423,6 +435,16 @@ def test_deterministic_evals_pass_at_100_percent() -> None:
 
     for check_name, case in planted.items():
         assert run_checks(case)[check_name], f"{check_name} misses a planted violation"
+
+    # P6: the catalogue's date must be there when there are results, and not be older
+    # than a result's own date.
+    no_date = copy.deepcopy(dict(success.response))
+    no_date["availability_updated_at"] = None
+    stale = copy.deepcopy(dict(success.response))
+    stale["availability_updated_at"] = "2026-11-01T00:00:00Z"
+    for name, broken in [("p6-null", no_date), ("p6-stale", stale)]:
+        case = EvalCase(name, success.request, 200, broken, CATALOGUE)
+        assert run_checks(case)["schema"], f"schema misses {name}"
 
     # The P3 eval must catch each limit on its own, not only runtime.
     one_limit_each: list[tuple[int, dict[str, Any], QueryIntent]] = [

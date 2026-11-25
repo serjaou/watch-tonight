@@ -72,6 +72,8 @@ All in `tests/acceptance/test_walking_skeleton.py`. **Fixtures:** about 15–20 
 ## Changes after approval (owner, 2026-11-25, from the feat-018 review)
 - Unknown request fields are rejected with 422 naming the field, so a misspelled limit can't be silently ignored (P3).
 - A top-level `availability_updated_at` (the newest refresh in the catalogue, from `MovieRepository`) on every 200 response, so a response with no results still says how fresh its data is (P6).
+  - It is read in step 3 with the search: if the lookup fails, the response is 503 before the paid step-5 call.
+  - `null` only when the catalogue is empty (not seeded yet), so only with no results; dates carry their time zone.
 - The dev dependency stays `httpx`; the tests call the app through `httpx.ASGITransport` instead of Starlette's `TestClient`, which now expects `httpx2`.
 
 ## Open questions (must be empty before status: approved)

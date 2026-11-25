@@ -6,6 +6,7 @@ Records every time an agent, hook, or handoff fails or reveals a gap. Each incid
 
 | Date | Machine · Tool | Feature | Layer | Summary & Lesson | Entry |
 |---|---|---|---|---|---|
+| 2026-11-25 | Windows · Claude Code | `feat-018` | `environment` | A `sed` filter meant to show only a URI's scheme printed the Atlas M0 password into the session; owner told to rotate it. Rule: never print `.env` values, even filtered; parse and print only the safe field. | [2026-11-25-feat-018-secret-printed-to-session.md](harness-log/2026-11-25-feat-018-secret-printed-to-session.md) |
 | 2026-11-13 | Mac · Antigravity | `feat-014` | `state` / `verification` | Validated harness with `validate-harness.mjs` (`60/100` → `92/100`); added `init.sh`, feature `description` sensor, and aligned `AGENTS.md` headings. | [2026-11-13-feat-014-validate-harness.md](harness-log/2026-11-13-feat-014-validate-harness.md) |
 | 2026-11-12 | Mac · Antigravity | `feat-007` | `verification` / `context` | `stop_gate.py` unlinks `.harness/stop_gate_attempts` when changes are reverted; `/review` uses native `TypeName: "reviewer"`. | [2026-11-12-feat-007-mac-stop-gate-and-reviewer.md](harness-log/2026-11-12-feat-007-mac-stop-gate-and-reviewer.md) |
 | 2026-11-12 | Windows · Claude Code | `feat-004` | `verification` | `stop_gate.py` test ran against the real repo and failed on clean CI checkouts; moved test to a throwaway git repo (`gate_repo`) and made `/start` check CI. | [2026-11-12-feat-004-ci-git-state-test.md](harness-log/2026-11-12-feat-004-ci-git-state-test.md) |

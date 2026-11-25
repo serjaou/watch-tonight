@@ -106,7 +106,8 @@ class SearchResponse(BaseModel):
     state: ResponseState
     results: list[MovieResult]
     # When availability was last refreshed for the whole catalogue, so even a response
-    # with no results says how fresh its data is (P6; owner, 2026-11-25).
+    # with no results says how fresh its data is (P6; owner, 2026-11-25). `None` only
+    # when the catalogue is empty (not seeded yet), which also means no results.
     availability_updated_at: datetime | None
     notes: list[Note]
     attribution: Attribution

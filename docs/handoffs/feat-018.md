@@ -28,6 +28,13 @@
 - **Freshness with zero results (review L8):** P6 says every response says when availability was last refreshed, but the contract carries the date per film, so a zero-result response has none. Options: a top-level `availability_updated_at`, or accept the gap.
 - **Answers (owner, 2026-11-25), built in the follow-up PR on branch `feat-018-followups`:** reject unknown fields with 422; add a top-level `availability_updated_at`; `httpx` or `httpx2` left to the agent, which kept `httpx` (the tests don't use Starlette's `TestClient`, so its deprecation doesn't apply; no change needed).
 
+## Follow-up (2026-11-25, branch `feat-018-followups`)
+- **Built:** unknown request fields → 422 naming the field; a top-level `availability_updated_at` (the catalogue's newest refresh, from the new `MovieRepository.latest_availability_update()`), read in step 3 so a failing lookup is a 503 before the paid step-5 call; `null` only for an empty catalogue (only with no results); `httpx` kept.
+- **Tests:** acceptance cases `unknown-field` and `freshness-lookup-fails` (25 cases in all); film 9015's availability is 4 days older, so "newest" is what the top-level date shows; evals check the date (time zone, never older than a result's, `null` only without results) with two planted violations; unit tests for the port and the 422.
+- **Reviewer:** 1 round on the follow-up: 2 medium (the 503 after the paid call; `null` undocumented) and 4 low, all fixed or recorded (part-2 notes in `docs/backlog.md`).
+- **Evidence:** `uv run poe check` green, 2026-11-25, Windows: ruff, format, pyright 0 errors, lint-imports 2/2, pytest 99 passed.
+- **Incident:** a session command printed the Atlas M0 credentials from `.env`; the owner was asked to rotate the password ([harness log](../harness-log/2026-11-25-feat-018-secret-printed-to-session.md)).
+
 ## Notes for the next parts
 - **Part 2 (feat-030):** the acceptance helper runs `asyncio.run` per request (a new event loop each time). A shared async Mongo client breaks with that: switch to async tests on one loop. The seed's TMDB calls use `httpx` (kept, 2026-11-25).
 - **Part 4 (feat-029):** if the adapter raises after spending tokens (invalid output twice), the usage can't reach the trace, because the port's exception carries none; decide how (e.g. an exception carrying a `Usage`). The trace has no `retries` yet; the adapter decides how it reports them (`docs/metrics.md` updated).

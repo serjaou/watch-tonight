@@ -98,7 +98,9 @@ class SearchMovies:
         limits = merge_limits(request, intent)
         watch.lap("understand")
 
-        # Step 3 · Retrieve: embed the description, then the filtered vector search.
+        # Step 3 · Retrieve: embed the description, then the filtered vector search, and
+        # read the catalogue's last availability refresh (P6). All three are the data
+        # layer: if one fails, nothing honest can be returned, so fail before step 5 costs.
         keys = [streamable_key(request.country, p) for p in request.providers]
         try:
             vector = await self._embedder.embed_query(intent.semantic_description)
@@ -112,10 +114,12 @@ class SearchMovies:
                     limit=SEARCH_LIMIT,
                 )
             )
+            watch.lap("retrieve")
+            availability_updated_at = await self._movie_repository.latest_availability_update()
+            watch.lap("freshness")
         except Exception as error:
             logger.exception("Step 3 (retrieve) failed")
             raise ServiceUnavailableError("retrieve") from error
-        watch.lap("retrieve")
 
         # Step 4 · Check and rank: re-check every rule by value (domain/limits.py).
         valid = check_and_rank(
@@ -133,12 +137,7 @@ class SearchMovies:
             pitches = await self._pick_and_pitch(intent, valid, usages)
             watch.lap("pick_and_pitch")
 
-        # Step 7 · Respond, with the catalogue's last availability refresh (P6).
-        try:
-            availability_updated_at = await self._movie_repository.latest_availability_update()
-        except Exception as error:
-            logger.exception("Step 7 (availability date) failed")
-            raise ServiceUnavailableError("respond") from error
+        # Step 7 · Respond.
         notes: list[Note] = []
         state: ResponseState
         if valid and pitches is None:

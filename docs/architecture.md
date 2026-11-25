@@ -94,7 +94,7 @@ sequenceDiagram
 The steps in detail (the [walkthrough in the checkpoint guide](checkpoint-2026-11-16/03-the-architecture.md#2-one-search-step-by-step) follows one example request through them):
 
 1. **Validate** the request `{text, country, providers[], max_runtime?, max_intensity?, avoid[]?, exclude_ids[]}`.
-   - Checks: P4 (text ≤ 500 chars, not empty), supported country, at least one provider from the curated list for that country (spike 08 Q5), and at most 5,000 `exclude_ids` (the size spike 09 tested).
+   - Checks: P4 (text ≤ 500 chars, not empty), supported country, at least one provider from the curated list for that country (spike 08 Q5), and at most 5,000 `exclude_ids` (the size spike 09 tested). Any other field is rejected, so a misspelled limit can't be silently ignored (owner, 2026-11-25).
      - The skeleton seeds a minimal static list of the main services.
      - feat-020 builds the real list. Aliasing ad tiers and channels onto a parent service is applied only when writing `streamable`, and only if catalogue overlap proves it safe for P1 **(slice)**.
    - UI constraints are picked from fixed options (`max_intensity` and `avoid` from the closed vocabulary), so they never go through the LLM (P3).
@@ -108,7 +108,7 @@ The steps in detail (the [walkthrough in the checkpoint guide](checkpoint-2026-1
    UI constraints are merged in as given. When the UI and the text set the same constraint, the stricter one applies (e.g. UI 120 min + text "under 90 minutes" → 90), and `avoid` lists are combined, so P3 holds for both.
 
    Validation errors are retried once with the error fed back (`ModelRetry`, ADR 0006; shown so far only with a scripted fake **(slice)**). Cosmetic problems are fixed deterministically instead, e.g. tones truncated to 3. If the call still fails, the response is *Service unavailable* (Q8).
-3. **Retrieve:** embed `semantic_description`, then run `$vectorSearch` with `limit = 150` and a pre-filter:
+3. **Retrieve:** embed `semantic_description`, read the catalogue's last availability refresh (for step 7, P6), then run `$vectorSearch` with `limit = 150` and a pre-filter:
    - `streamable` contains one of `{country}:{provider}`;
    - `runtime ≤ max_runtime`, `_id ∉ exclude_ids`;
    - `profile.intensity ≤`, `profile.content_warnings ∉ avoid`;
