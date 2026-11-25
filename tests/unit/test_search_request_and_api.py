@@ -88,3 +88,9 @@ async def test_movie_without_a_vector_is_never_a_candidate() -> None:
         limit=10,
     )
     assert [c.movie.id for c in await catalogue.search(query)] == [1]
+
+
+def test_intent_rejects_an_inverted_year_range() -> None:
+    with pytest.raises(ValidationError, match="is after year_max"):
+        intent(year_min=2020, year_max=2010)
+    assert intent(year_min=2010, year_max=2010).year_min == 2010

@@ -4,9 +4,9 @@ Every hard limit mirrors a stored movie field. The list of hard limits will grow
 2026-11-24): genre, director, main cast and keyword flags come after spike feat-026.
 """
 
-from typing import Annotated
+from typing import Annotated, Self
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from watch_tonight.domain.vocabulary import (
     AcclaimPreference,
@@ -53,3 +53,13 @@ class QueryIntent(BaseModel):
     acclaim_preference: AcclaimPreference
     # Things the text asks for that the vocabulary can't express (Q18).
     unmapped_constraints: list[str]
+
+    @model_validator(mode="after")
+    def _year_range_in_order(self) -> Self:
+        if (
+            self.year_min is not None
+            and self.year_max is not None
+            and self.year_min > self.year_max
+        ):
+            raise ValueError(f"year_min {self.year_min} is after year_max {self.year_max}")
+        return self

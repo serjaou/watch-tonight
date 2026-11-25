@@ -1,6 +1,17 @@
 {
   "features": [
     {
+      "id": "feat-018",
+      "type": "feature",
+      "name": "Walking skeleton, part 1: search end to end with in-memory adapters",
+      "description": "POST /search end to end through domain, application and api with in-memory adapters (scripted fake LLM, hash-based fake embedder, in-memory catalogue and search) over committed fictional fixture films; no Docker, no API key. All five response states, the step-4 and step-6 check functions in domain, one film per collection, exclude_ids (US3), the response contract, a minimal static provider list, and the six deterministic evals in evals/. Parts 2-4 (Atlas, real embedder, real LLM) are feat-030, feat-028 and feat-029. Detail: docs/backlog.md, feat-018 section.",
+      "stories": ["US1", "US2", "US3"],
+      "status": "done",
+      "dependencies": ["feat-012", "feat-016"],
+      "spec": "docs/specs/18-walking-skeleton.md",
+      "evidence": "docs/handoffs/feat-018.md — POST /search end to end in memory; 10 acceptance tests (23 cases), 6 evals at 100%; 95 tests; reviewer 2 (13 + 3)"
+    },
+    {
       "id": "feat-017",
       "type": "chore",
       "name": "Measure flat-rate catalogue churn (spike 16 follow-up)",

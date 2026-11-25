@@ -14,7 +14,7 @@
 
 ---
 
-## feat-018 · Walking skeleton: search end to end → in feature_list.json (2026-11-16)
+## feat-018 · Walking skeleton: search end to end → in feature_list.json (2026-11-16) → part 1 done (2026-11-25, [handoff](handoffs/feat-018.md))
 - **Type:** feature · **Stories:** US1, US2, US3 · **Depends on:** feat-012, feat-016 · **Spec:** `docs/specs/18-walking-skeleton.md`
 - **Description:** in `feature_list.json`. This section holds notes for `/spec`, added after the [2026-11-16 checkpoint](checkpoint-2026-11-16/review.md) (owner, 2026-11-21).
 - **Notes:**
@@ -37,6 +37,9 @@
 ## feat-030 · Walking skeleton, part 2: search on local Atlas → in feature_list.json (2026-11-24)
 - **Type:** feature · **Stories:** US1, US2, US3 · **Depends on:** feat-018 · **Spec:** `docs/specs/30-atlas-local-search.md` (draft)
 - **Description:** in `feature_list.json`; the detail is in the draft spec. It takes over the database half of the original feat-018: the verification list above (filters, index lifecycle, image pin), the seed of spike 16's 300 films, and Q4 on Windows.
+- **Notes from part 1** ([feat-018 handoff](handoffs/feat-018.md), 2026-11-25):
+  - The acceptance helper (`ApiClient` in `tests/acceptance/walking_skeleton_fixtures.py`) runs `asyncio.run` per request, a new event loop each time; a shared async Mongo client breaks with that, so switch to async tests on one loop.
+  - The owner decides `httpx` or `httpx2` (Starlette's `TestClient` now expects `httpx2`); the seed's TMDB calls follow that choice.
 
 ## feat-028 · Walking skeleton, part 3: real embedder → in feature_list.json (2026-11-24)
 - **Type:** feature · **Stories:** US1 · **Depends on:** feat-030 · **Spec:** `docs/specs/28-real-embedder.md` (not written yet)
@@ -54,6 +57,7 @@
   - Real token counts and cost in the `trace`; the deterministic evals from part 1 re-run on the real model.
   - The first end-to-end latency numbers (architecture Q7).
   - A small paid spend (cents), reported in the handoff.
+  - From part 1 (2026-11-25): if the adapter raises after spending tokens (invalid output twice), the usage can't reach the trace today, because the port's exception carries none; decide how (e.g. an exception carrying a `Usage`). The trace has no `retries` field yet; decide how retries are reported (`docs/metrics.md`).
 
 ## feat-031 · Content limits in the search → in feature_list.json (2026-11-24)
 - **Type:** feature · **Stories:** US2 · **Depends on:** feat-026, feat-029 · **Spec:** `docs/specs/31-content-limits.md` (not written yet)

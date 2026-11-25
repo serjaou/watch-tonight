@@ -97,9 +97,10 @@ _AUDIENCE_RULES: Final[Mapping[str, tuple[set[str], set[str], int, set[str]]]] =
 
 def _suits(movie: Movie, audience: str) -> bool:
     us, es, max_intensity, excluded = _AUDIENCE_RULES[audience]
-    if movie.certification_us:
+    no_rating = (None, "", "NR")  # Q16: the first non-empty, non-NR rating counts
+    if movie.certification_us not in no_rating:
         return movie.certification_us in us
-    if movie.certification_es:
+    if movie.certification_es not in no_rating:
         return movie.certification_es in es
     warnings = set(movie.profile.content_warnings)
     return movie.profile.intensity <= max_intensity and not warnings & excluded

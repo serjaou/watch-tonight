@@ -12,11 +12,11 @@ Raw data comes from the per-response `trace` returned by `SearchMovies` ([docs/a
 
 | Metric | Source in `trace` | Target / Budget | Notes |
 |---|---|---|---|
-| **End-to-end latency (`p50` / `p95`, ms)** | `trace.total_ms` | Initial guess `p95 < 10,000 ms` ([docs/product.md](product.md) §6); confirmed after spikes and measured in the first end-to-end slice (`Q7`) | Includes validation, LLM intent, query embedding, Atlas `$vectorSearch`, deterministic filter check, and LLM re-rank + pitch |
-| **Stage latency (`p50` / `p95`, ms)** | `trace.stages.{understand,embed,retrieve,rerank_and_pitch}_ms` | Component baselines measured in `feat-009` Q5 (`retrieve`), `feat-010` Q2 (`embed`), `feat-011` Q4 (`understand`, `rerank_and_pitch`) | Pinpoints bottlenecks and decides whether the 2 LLM calls stay separate |
+| **End-to-end latency (`p50` / `p95`, ms)** | Sum of `trace.timings_ms` (feat-018); measured end to end with the real LLM in feat-029 | Initial guess `p95 < 10,000 ms` ([docs/product.md](product.md) §6); confirmed after spikes and measured in the first end-to-end slice (`Q7`) | Includes validation, LLM intent, query embedding, Atlas `$vectorSearch`, deterministic filter check, and LLM re-rank + pitch |
+| **Stage latency (`p50` / `p95`, ms)** | `trace.timings_ms.{understand,embed,retrieve,check,pick_and_pitch}` (feat-018) | Component baselines measured in `feat-009` Q5 (`retrieve`), `feat-010` Q2 (`embed`), `feat-011` Q4 (`understand`, `rerank_and_pitch`) | Pinpoints bottlenecks and decides whether the 2 LLM calls stay separate |
 | **Response state distribution (`%`)** | `response.state` | Track share of `Success`, `Partial`, `Results without pitches`, `Invalid input`, and `Service unavailable` ([docs/product.md](product.md) §4) | Distinguishes thin catalogue coverage (`Partial`) from step-6 LLM failures (`Results without pitches`, `Q8`) and step-2/infra failures (`Service unavailable`) |
-| **LLM retry rate** | `trace.retries.{understand,rerank_and_pitch}` | Baseline measured in `feat-011` Q3 | Counts how often structured output or deterministic validation (step 2 or step 6) triggers a retry |
-| **Tokens & estimated cost per query (`USD`)** | `trace.tokens.{input,output}`, `trace.estimated_cost_usd` | **$0 by default** ([docs/product.md](product.md) §1); any paid service or recurring cost requires owner approval | Sum of both online LLM calls + query embedding; reported in README ([docs/product.md](product.md) §7) |
+| **LLM retry rate** | Not in the trace yet: the retry lives in the LLM adapter (feat-029), which decides how it is reported | Baseline measured in `feat-011` Q3 | Counts how often structured output or deterministic validation (step 2 or step 6) triggers a retry |
+| **Tokens & estimated cost per query (`USD`)** | `trace.tokens.{input,output}`, `trace.cost_usd` (feat-018; a rejected step-5 answer still counts) | **$0 by default** ([docs/product.md](product.md) §1); any paid service or recurring cost requires owner approval | Sum of both online LLM calls + query embedding; reported in README ([docs/product.md](product.md) §7) |
 
 ### 1.2 Offline pipeline metrics
 Raw data comes from the `ingestion_runs` collection in MongoDB ([docs/architecture.md](architecture.md) §4–§5).
@@ -60,6 +60,7 @@ Tracks whether the harness catches issues before they reach the owner and how ea
 
 | ID | Type | Date | Machine · Tool | Stop-gate blocks | Reviewer (rounds / findings) | Escaped / owner fixes | Handoff Details |
 |---|---|---|---|---:|---|---:|---|
+| `feat-018` | `feature` | 2026-11-25 | Windows · Claude Code | 0 | 2 (13 + 3) | 0 | [feat-018.md](handoffs/feat-018.md) |
 | `feat-017` | `chore` | 2026-11-21 | Windows · Claude Code | 0 | 2 (6 + 2) | 0 | [feat-017.md](handoffs/feat-017.md) |
 | `feat-012` | `chore` | 2026-11-16 | Windows · Claude Code | 0 | 2 (18 + 9) | 0 | [feat-012.md](handoffs/feat-012.md) |
 | `feat-016` | `spike` | 2026-11-16 | Windows · Claude Code | 0 | 2 (14 + 7) | 0 | [feat-016.md](handoffs/feat-016.md) |

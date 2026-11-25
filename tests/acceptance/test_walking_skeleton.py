@@ -418,3 +418,18 @@ def test_deterministic_evals_pass_at_100_percent() -> None:
 
     for check_name, case in planted.items():
         assert run_checks(case)[check_name], f"{check_name} misses a planted violation"
+
+    # The P3 eval must catch each limit on its own, not only runtime.
+    one_limit_each: list[tuple[int, dict[str, Any], QueryIntent]] = [
+        (9008, request(max_intensity=3), make_intent()),  # intensity 4
+        (9002, request(avoid=["strong_language"]), make_intent()),
+        (9015, request(), make_intent(year_min=2000)),  # 1974
+        (9020, request(), make_intent(year_max=2022)),  # 2023
+        (9003, request(), make_intent(original_languages=["en"])),  # French
+        (9019, request(), make_intent(audience="kids")),  # US R
+    ]
+    for movie_id, body, intent in one_limit_each:
+        response = copy.deepcopy(dict(success.response))
+        response["results"][0] = result_for(CATALOGUE[movie_id])
+        case = EvalCase(f"p3-{movie_id}", body, 200, response, CATALOGUE, intent)
+        assert run_checks(case)["limits_as_applied"], f"P3 eval misses film {movie_id}"
