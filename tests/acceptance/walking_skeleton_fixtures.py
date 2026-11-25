@@ -85,7 +85,8 @@ def film(
 # The base request is Spain (ES) with Netflix (8) and Disney Plus (337).
 FILMS: Final[list[Movie]] = [
     # Plain films, streamable on a selected service; best similarity first.
-    film(9001, "The Lantern Keeper", similarity=0.99, streamable=["ES:8", "US:8"],
+    # 9001 streams on both selected services, so it lists two.
+    film(9001, "The Lantern Keeper", similarity=0.99, streamable=["ES:8", "ES:337", "US:8"],
          runtime=104, us="PG", es="7"),
     film(9002, "Paper Comets", similarity=0.98, streamable=["ES:337"], year=2019, runtime=95,
          us="PG-13", es="12", intensity=3, warnings=["strong_language"]),
@@ -101,9 +102,10 @@ FILMS: Final[list[Movie]] = [
          runtime=101, language="es", es="7"),
     film(9007, "Static Bloom", similarity=0.93, streamable=["ES:8"], year=2023, runtime=79,
          language="ko", es="16", intensity=4, warnings=["gore"]),
-    # No rating, harsh profile: fails kids and teens by the profile fallback.
+    # No rating, harsh profile: fails kids and teens by the profile fallback. With only
+    # violence as a warning, intensity 4 is the one limit it breaks in the limits test.
     film(9008, "Grey Tide", similarity=0.92, streamable=["ES:337"], year=2017, runtime=97,
-         intensity=4, warnings=["violence", "strong_language"]),
+         intensity=4, warnings=["violence"]),
     # One collection (777): only its best-scoring film, Star Pilot II, may be kept.
     film(9009, "Star Pilot", similarity=0.87, streamable=["ES:8"], year=2001, runtime=110,
          collection=777, us="PG", es="7", intensity=3, warnings=["violence"]),
@@ -132,6 +134,10 @@ FILMS: Final[list[Movie]] = [
     # US R wins over Spanish 7: the US rating comes first.
     film(9019, "Mixed Signals", similarity=0.83, streamable=["ES:8"], year=2010, runtime=94,
          us="R", es="7", intensity=1),
+    # From 2023 and otherwise clean: the latest-year limit (2022) is the one it breaks.
+    # Rated R, so it suits neither audience.
+    film(9020, "Brand New Morning", similarity=0.82, streamable=["ES:8"], year=2023,
+         runtime=90, us="R", es="18", intensity=1),
 ]  # fmt: skip
 
 CATALOGUE: Final[dict[int, Movie]] = {m.id: m for m in FILMS}

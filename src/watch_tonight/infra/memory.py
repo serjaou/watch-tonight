@@ -36,7 +36,8 @@ class InMemoryCatalogue:
         matches = [
             Candidate(movie=m, score=cosine_similarity(query.vector, m.embedding))
             for m in self._movies.values()
-            if passes_checks(
+            if m.embedding  # like Atlas, a movie without a vector is never a candidate
+            and passes_checks(
                 m, streamable_keys=query.streamable_any, exclude_ids=exclude, limits=query.limits
             )
         ]

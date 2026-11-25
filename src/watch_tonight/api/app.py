@@ -29,7 +29,9 @@ SERVICE_UNAVAILABLE_MESSAGE: Final[str] = (
 def _field_error(error: Mapping[str, Any]) -> FieldError:
     """One Pydantic error as `{field, message}`; `field` is the path inside the body."""
     location: tuple[object, ...] = tuple(error.get("loc", ()))
-    path = [str(part) for part in location[1:]] if location[:1] == ("body",) else []
+    in_a_field = location[:1] == ("body",) and len(location) > 1 and isinstance(location[1], str)
+    # Unreadable JSON reports a character position, not a field: name the body then.
+    path = [str(part) for part in location[1:]] if in_a_field else []
     message = str(error.get("msg", "Invalid value.")).removeprefix("Value error, ")
     return FieldError(field=".".join(path) or "body", message=message)
 

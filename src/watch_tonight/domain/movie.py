@@ -5,7 +5,7 @@ Part 2 (feat-030) adds the remaining data-model fields when it maps TMDB bundles
 
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from watch_tonight.domain.vocabulary import (
     ContentWarning,
@@ -52,6 +52,14 @@ class Movie(BaseModel):
     availability_updated_at: datetime
     profile: Profile
     embedding: list[float] = Field(default_factory=list[float], repr=False)
+
+    @field_validator("certification_us", "certification_es")
+    @classmethod
+    def _no_rating_is_none(cls, value: str | None) -> str | None:
+        """An empty or `NR` rating counts as no rating (architecture Q16)."""
+        if value is None or value.strip() in {"", "NR"}:
+            return None
+        return value.strip()
 
 
 class Candidate(BaseModel):

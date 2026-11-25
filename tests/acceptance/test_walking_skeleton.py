@@ -67,6 +67,10 @@ def test_search_returns_five_streamable_movies_with_pitches_attribution_and_fres
         assert result["tmdb_url"] == f"https://www.themoviedb.org/movie/{movie.id}"
         assert 0 < len(result["pitch"]) <= 350, "P2: a pitch of at most 350 characters"
         assert result["availability_updated_at"].startswith(AVAILABLE_AT.isoformat()[:19])
+    assert body["results"][0]["services"] == [
+        {"id": 8, "name": "Netflix"},
+        {"id": 337, "name": "Disney Plus"},
+    ], "a film on both selected services lists both, in the request's order"
     assert body["attribution"] == {"tmdb": TMDB_NOTICE, "availability": JUSTWATCH_NOTICE}
     assert body["notes"] == []
     trace = body["trace"]
@@ -148,7 +152,7 @@ def test_search_excludes_seen_ids_and_deduplicates_collections() -> None:
     assert not {9001, 9004} & received, "US3: shown movies never come back"
     assert not {9001, 9004} & {r["id"] for r in response.json()["results"]}
     assert received & {9009, 9010, 9011} == {9010}, "only the best-scoring film of 777"
-    no_collection = {9002, 9003, 9005, 9006, 9007, 9008, 9014, 9015, 9016, 9017, 9018, 9019}
+    no_collection = {9002, 9003, 9005, 9006, 9007, 9008, 9014, 9015, 9016, 9017, 9018, 9019, 9020}
     assert no_collection <= received, "films without a collection are never deduplicated"
 
 
@@ -186,7 +190,7 @@ def test_search_notes_constraints_it_could_not_apply() -> None:
 
 
 def _invented_id(candidates: Sequence[Candidate]) -> list[Pick]:
-    return [Pick(movie_id=424242, pitch="An invented film."), *first_five_picks(candidates)[:4]]
+    return [Pick(movie_id=9012, pitch="Not a candidate."), *first_five_picks(candidates)[:4]]
 
 
 def _duplicate(candidates: Sequence[Candidate]) -> list[Pick]:
@@ -226,6 +230,9 @@ def test_search_falls_back_to_results_without_pitches(
     assert [r["id"] for r in body["results"]] == TOP_FIVE_BY_SCORE, "valid films, by score"
     assert all(r["pitch"] is None for r in body["results"])
     assert note_codes(body) == ["pitches_unavailable"]
+    # A call that answered is paid for, even when step 6 rejects its output.
+    expected_input = 120 if pick_error is not None else 120 + 900
+    assert body["trace"]["tokens"]["input"] == expected_input
 
     if pick_error is not None:
         # Fewer than 5 valid films and the LLM fails: the partial note comes too.
@@ -244,7 +251,7 @@ def test_search_falls_back_to_results_without_pitches(
         ({"text": "x" * 501}, "text"),
         ({"country": "FR"}, "country"),
         ({"providers": []}, "providers"),
-        ({"providers": [99999]}, "providers"),
+        ({"providers": [9]}, "providers"),
         ({"avoid": ["spiders"]}, "avoid"),
         ({"exclude_ids": list(range(5001))}, "exclude_ids"),
     ],
@@ -340,6 +347,31 @@ def test_deterministic_evals_pass_at_100_percent() -> None:
         _case("llm-invents", request(), ScriptedLanguageModel(picks=_invented_id)),
         _case("llm-duplicates", request(), ScriptedLanguageModel(picks=_duplicate)),
         _case("llm-long-pitch", request(), ScriptedLanguageModel(picks=_long_pitch)),
+        _case("llm-four-picks", request(), ScriptedLanguageModel(picks=_four_picks)),
+        _case(
+            "llm-raises-partial",
+            request(),
+            ScriptedLanguageModel(
+                make_intent(original_languages=["fr"]), pick_error=RuntimeError("down")
+            ),
+        ),
+        _case(
+            "unmapped-partial",
+            request(),
+            ScriptedLanguageModel(
+                make_intent(unmapped_constraints=["no spiders"], original_languages=["fr"])
+            ),
+        ),
+        _case("repeated-provider", request(providers=[8, 337, 8]), ScriptedLanguageModel()),
+        _case("unsupported-country", request(country="FR"), ScriptedLanguageModel()),
+        _case("no-provider", request(providers=[]), ScriptedLanguageModel()),
+        _case("provider-not-in-country", request(providers=[9]), ScriptedLanguageModel()),
+        _case("avoid-outside-vocabulary", request(avoid=["spiders"]), ScriptedLanguageModel()),
+        _case(
+            "too-many-exclude-ids",
+            request(exclude_ids=list(range(5001))),
+            ScriptedLanguageModel(),
+        ),
         _case("text-over-500", request(text="x" * 501), ScriptedLanguageModel()),
         _case("text-500", request(text="x" * 500), ScriptedLanguageModel()),
         _case("empty-text", request(text=" "), ScriptedLanguageModel()),

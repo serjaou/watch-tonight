@@ -49,7 +49,7 @@ class SearchRequest(BaseModel):
         unknown = [p for p in value if p not in PROVIDERS[country]]
         if unknown:
             raise ValueError(f"Unknown service(s) for {country}: {unknown}")
-        return value
+        return list(dict.fromkeys(value))  # drop repeats, keep the order
 
 
 ResponseState = Literal["success", "partial", "results_without_pitches"]

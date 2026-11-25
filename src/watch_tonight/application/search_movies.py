@@ -125,11 +125,10 @@ class SearchMovies:
         watch.lap("check")
 
         # Steps 5 and 6 · Pick and pitch, then check the answer. Skipped when nothing passed.
-        pitches = await self._pick_and_pitch(intent, valid) if valid else None
+        pitches: Pitches | None = None
         if valid:
+            pitches = await self._pick_and_pitch(intent, valid, usages)
             watch.lap("pick_and_pitch")
-        if pitches is not None:
-            usages.append(pitches.usage)
 
         # Step 7 · Respond.
         notes: list[Note] = []
@@ -164,14 +163,19 @@ class SearchMovies:
         )
 
     async def _pick_and_pitch(
-        self, intent: QueryIntent, candidates: Sequence[Candidate]
+        self, intent: QueryIntent, candidates: Sequence[Candidate], usages: list[Usage]
     ) -> Pitches | None:
-        """Step 5 and the step-6 guard. `None` means *Results without pitches* (Q8)."""
+        """Step 5 and the step-6 guard. `None` means *Results without pitches* (Q8).
+
+        A call that answered is paid for even when step 6 rejects its output, so its
+        usage goes into the trace either way.
+        """
         try:
             pitches = await self._language_model.pick_and_pitch(intent, candidates)
         except Exception:
             logger.exception("Step 5 (pick and pitch) failed")
             return None
+        usages.append(pitches.usage)
         errors = check_picks(pitches.picks, [c.movie.id for c in candidates])
         if errors:
             logger.warning("Step 6 rejected the LLM's output: %s", errors)
