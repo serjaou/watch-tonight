@@ -46,7 +46,7 @@ Measured on **2026-11-16** from the owner's Windows 11 laptop in Spain (Python `
 - The same script then makes the profile call for 20 movies.
 - It runs **2 rounds × [10 queries](../../spikes/11-llm/queries.json)**: 5 English, plus ES, FR, PT, DE and JA. Each query has the filters we expect it to produce.
 - Prompts are in [prompts.py](../../spikes/11-llm/prompts.py). The closed vocabulary is a throwaway placeholder; the real one comes with the profile feature.
-- Raw per-call logs are in `spikes/11-llm/runs/*.jsonl`, the summary is in [report.json](../../spikes/11-llm/report.json) (from [summarize.py](../../spikes/11-llm/summarize.py)), and the Pydantic AI runs are in [runs_pydantic_ai.json](../../spikes/11-llm/runs_pydantic_ai.json) (live) and [fallback_offline.json](../../spikes/11-llm/fallback_offline.json) (offline fakes).
+- Raw per-call logs are in `spikes/11-llm/runs/*.jsonl` (local, gitignored: they hold pitches about real films), the summary is in [report.json](../../spikes/11-llm/report.json) (from [summarize.py](../../spikes/11-llm/summarize.py)), and the Pydantic AI runs are in [runs_pydantic_ai.json](../../spikes/11-llm/runs_pydantic_ai.json) (live) and [fallback_offline.json](../../spikes/11-llm/fallback_offline.json) (offline fakes).
 - Facts labelled "from the research report" came from a desk-research subagent that cited the official URLs on 2026-11-16. Facts labelled "re-fetched" I read myself the same day.
 
 **Candidates.** Model choice came from the models list endpoints ([models.json](../../spikes/11-llm/models.json)) and the pricing and deprecation pages, all checked 2026-11-16.

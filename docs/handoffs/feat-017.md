@@ -20,7 +20,7 @@
   - **"Missing from every crawl → `streamable: []` without a call":** confirmed (32/32). A `/discover` miss hides a streamable film; it never shows one that isn't.
 - **Files:**
   - Scripts: `spikes/16-recommendation/churn.py` (rewritten: per country, combined, G7, admissions by year, counting-noise ranges, completeness guard, window-named outputs), new `churn_verify.py`, `catalog.py --dated`.
-  - Outputs (committed): `churn_report_2026-11-16_2026-11-21.json`, `churn_verify_report_2026-11-16_2026-11-21.json`, `catalog_stats_2026-11-21.json`, `catalog_ids_2026-11-21.json.gz` (ids per region plus G7 ids, for a longer-window re-measure on either machine).
+  - Outputs (committed): `churn_report_2026-11-16_2026-11-21.json`, `churn_verify_report_2026-11-16_2026-11-21.json`, `catalog_stats_2026-11-21.json`. Local (gitignored): `catalog_ids_2026-11-21.json.gz` (ids per region plus G7 ids, for a longer-window re-measure).
   - Docs: spike 16 Q1 and §6 summary, `docs/architecture.md` §4 and Q12, `docs/backlog.md` (feat-020 notes), `docs/metrics.md` (churn row), spike 26 (growth input and *The Anacondas* note), spike 08 (superseded note on its one-day estimate).
 - **Spike 16's own files are unchanged:** `data/catalog.jsonl` and `catalog_stats.json` are still the 2026-11-16 crawl, so its scripts reproduce its tables. The new raw rows are `data/catalog_2026-11-21.jsonl` (gitignored, Windows laptop only).
 

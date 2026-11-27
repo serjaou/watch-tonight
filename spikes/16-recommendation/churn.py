@@ -1,7 +1,7 @@
 """feat-016 spike Q1 follow-up, measured in feat-017: catalogue churn between two crawls. THROWAWAY.
 
 Compares two complete flat-rate crawls (catalog.py) of ES, US and BO, named by crawl date:
-  - old: the committed ids snapshot catalog_ids_<old>.json.gz (id -> region letters B/E/U).
+  - old: the local ids snapshot catalog_ids_<old>.json.gz (id -> region letters B/E/U).
     G7 membership comes from its `g7_ids` when present; otherwise from the raw rows of that
     crawl, data/catalog_<old>.jsonl (gitignored; for 2026-11-16 it is a copy of data/catalog.jsonl);
   - new: data/catalog_<new>.jsonl and catalog_stats_<new>.json, from `catalog.py --dated`.
@@ -13,7 +13,7 @@ left and came back, or arrived and left, in between is invisible.
 Run: uv run --no-project --python 3.13 python spikes/16-recommendation/catalog.py --dated
      uv run --no-project --python 3.13 python spikes/16-recommendation/churn.py \
          --old 2026-11-16 --new <date of the new crawl>
-Writes churn_report_<old>_<new>.json and catalog_ids_<new>.json.gz (committed), and
+Writes churn_report_<old>_<new>.json (committed), catalog_ids_<new>.json.gz (gitignored), and
 data/churn_sets_<old>_<new>.json (ids, for churn_verify.py). Outputs are named by window, so a
 later run never overwrites an earlier measurement.
 """

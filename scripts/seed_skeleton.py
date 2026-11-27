@@ -4,9 +4,10 @@
     uv run poe seed      # this script
 
 It fetches each film's TMDB bundle (about 300 calls; raw TMDB data is never written to
-disk), joins it with the committed spike-16 profile, gives it a fake vector (the real
-embedder is part 3, feat-028), and upserts it. It refuses any database that isn't on this
-machine unless given `--allow-remote` (owner, 2026-11-25). It never prints the URI.
+disk), joins it with the local spike-16 profile (a gitignored file), gives it a fake
+vector (the real embedder is part 3, feat-028), and upserts it. It refuses any database
+that isn't on this machine unless given `--allow-remote` (owner, 2026-11-25). It never
+prints the URI.
 """
 
 import argparse
@@ -133,6 +134,11 @@ def main() -> None:
     parser.add_argument("--allow-remote", action="store_true", help="allow a non-local database")
     parser.add_argument("--limit", type=int, help="seed only the first N films (a quick try)")
     args = parser.parse_args()
+    if not PROFILES.exists():
+        raise SystemExit(
+            f"{PROFILES} not found. It's a local spike output (gitignored): copy it from the "
+            "machine that ran spike 16, or re-run spikes/16-recommendation/enrich.py."
+        )
     settings = Settings()
     if not is_local_mongodb(settings.mongodb_uri.get_secret_value()) and not args.allow_remote:
         raise SystemExit(

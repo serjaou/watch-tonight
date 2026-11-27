@@ -76,7 +76,7 @@ Use these six questions on any spike, ours or someone else's:
 > [!WARNING]
 > **The storage finding.** The spike used an HTTP caching header as evidence about storage rules. A header tells a browser how long to keep one response; it says nothing about what an app may store. The rules are in TMDB's [API terms](https://www.themoviedb.org/api-terms-of-use) (last updated 20 Oct 2023): section 1.C forbids caching *"for longer than 6 months, any information obtained through or from TMDB or the TMDB APIs"*, and section 3 gives the exact attribution notice. So the ingest must re-fetch metadata at least every 6 months, and the notice must use section 3's wording. The [review](review.md#finding-1-the-tmdb-spike-took-its-storage-rule-from-the-wrong-source) suggests what to do.
 
-There's one more small lesson here: the committed script is not exactly the version that produced the committed output (the snapshot is missing a field the script writes, and the request counts differ). A spike's evidence is only reproducible if the code and the output are committed together.
+There's one more small lesson here: the committed script is not exactly the version that produced the saved output (the snapshot is missing a field the script writes, and the request counts differ). A spike's evidence is only reproducible if the code and the output come from the same run.
 
 ## 4. Spike 09 · MongoDB Atlas: free tier and vector search
 

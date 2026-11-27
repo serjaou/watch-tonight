@@ -166,8 +166,8 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
   - **No IMDb data and no reviews** (Q15).
 - **Metadata freshness:**
   - TMDB `popularity`, `vote_*` and `quality_score` are refreshed daily from the crawl, at no extra calls.
-  - Other metadata is fetched at admission and fetched again on purpose: a new schema field, or TMDB's storage terms. TMDB expects a daily availability refresh plus periodic metadata re-ingest (spike 08 Q1).
-  - feat-020 owns the re-fetch policy **(slice)**: recent films (whose keywords and certifications fill in after release), plus a periodic full re-ingest (≈ 14.5k calls, ≈ 10 min). When a re-fetch changes the profile inputs, `source_hash` triggers re-enrichment.
+  - Other metadata is fetched at admission and fetched again on purpose: a new schema field, or TMDB's storage terms. TMDB's terms allow caching its data for at most 6 months, so all stored metadata is re-fetched at least every 6 months (spike 08 Q1).
+  - feat-020 owns the re-fetch policy **(slice)**: recent films (whose keywords and certifications fill in after release), plus a full re-ingest at least every 6 months (≈ 14.5k calls, ≈ 10 min). When a re-fetch changes the profile inputs, `source_hash` triggers re-enrichment.
 - **Profile quality drives recommendation quality.** The profile design feature anchors the vocabulary definitions (`viewing_effort` came out nearly binary in feat-016), writes the enrichment prompt, and adds a profile-quality eval on an owner-rated sample.
 - **Enrichment:** OpenAI Batch API, `gpt-6-luna`. G7 costs ≈ $1.03 once and a new film ≈ $0.00007. These figures come from the price list; feat-016 used standard calls, and the Batch path and its Pydantic AI support are checked in feat-021 **(slice)**.
 - **Idempotency:**
@@ -252,7 +252,7 @@ US3 needs no accounts: the client sends the IDs it has already shown as `exclude
 
 | # | Question | Decision | Recorded in |
 |---|---|---|---|
-| Q1 | TMDB terms | Non-commercial use is allowed. Storing metadata for the app's own search is allowed, but bulk redistribution is not. Don't persist reviews (Q15). Don't train models on TMDB data. Attribution: the TMDB logo and the notice in P5, plus "Streaming availability by JustWatch". | docs/spikes/08-tmdb-and-providers.md Q1–Q2 |
+| Q1 | TMDB terms | Free licence for non-commercial apps. Stored metadata is re-fetched at least every 6 months (section 1.C); raw TMDB data is never redistributed or committed. Don't persist reviews (Q15). Don't train models on TMDB data. Attribution: the TMDB logo and the notice in P5, plus "Streaming availability by JustWatch". | docs/spikes/08-tmdb-and-providers.md Q1–Q2 |
 | Q2 | TMDB rate limits and coverage; is BO usable? | 25 req/s measured with 0 `429`s; ≈ 14 min for 20k bundle calls. **BO is usable** (62% of the Popular 500 are on flat-rate). G7 coverage: ES 9,952, US 11,961, BO 6,835 films. | spike 08 Q3–Q5, spike 16 §5 Q1 |
 | Q3 | Atlas free tier and pre-filters | The 14.5k-film corpus fits M0 at ≈ 20% (384-d). Up to 3 vector indexes, and we need 1. The **5 tested filters** (`streamable`, `runtime`, `_id` `$nin` on 5,000 IDs, `profile.intensity`, `profile.content_warnings`) combine in one `$vectorSearch`. feat-030 verified all of them together with the v1 additions and the audience rule on `mongodb-atlas-local` (§3 step 3). | spike 09 Q1–Q2, feat-030 |
 | Q4 | Does `mongodb-atlas-local` run `$vectorSearch` on both machines? | **Yes on Windows** (feat-030, 2026-11-25: 8.0.38 via testcontainers and compose, 7 integration cases green) and on the Mac (feat-009). In-place `updateSearchIndex` of a vector index fails locally, so the code drops and re-creates (feat-021 checks M0). | feat-009, feat-030 |

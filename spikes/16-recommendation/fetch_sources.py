@@ -5,7 +5,7 @@
   2. IMDb non-commercial dataset title.ratings.tsv.gz (measurement only; not committed, not for
      the product: see the licence finding in the spike doc) -> data/title.ratings.tsv.gz
      Git Bash curl failed on Windows (schannel CRYPT_E_NO_REVOCATION_CHECK), so Python is used.
-  3. Snapshot of the crawled catalogue IDs for the churn follow-up (committed):
+  3. Snapshot of the crawled catalogue IDs for the churn follow-up (gitignored):
      catalog_ids_<date>.json.gz with {id: region letters} (B=BO, E=ES, U=US).
 
 Run (needs data/catalog.jsonl from catalog.py for step 3):

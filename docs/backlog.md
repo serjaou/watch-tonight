@@ -80,7 +80,7 @@
     - (b) crawl + G7 admission + bundle fetch.
   - "Films missing from every region's crawl get `streamable: []`" was checked against `/watch/providers` in feat-017 (spike 16 Q1): it held for all 32 G7 leavers, and 2 of 325 sampled leavers were `/discover` misses (a hidden film, never a wrong one). Decide at `/spec` whether a periodic `/watch/providers` re-check of `streamable: []` films is worth its calls.
   - Record admitted and departed counts per run in `ingestion_runs`: feat-017's rates (≈ 24.5 admissions and ≈ 6 departures a day for G7) come from one 5.3-day window.
-  - **Metadata re-fetch policy:** for recent films (keywords and certifications fill in after release), plus a **periodic full re-ingest**, as spike 08 Q1 expects (≈ 14.5k calls, ≈ 10 min at 25 req/s).
+  - **Metadata re-fetch policy:** for recent films (keywords and certifications fill in after release), plus a **full re-ingest at least every 6 months**, because TMDB's terms (section 1.C) don't allow caching its data for longer (≈ 14.5k calls, ≈ 10 min at 25 req/s; spike 08 Q1, [review, finding 1](checkpoint-2026-11-16/review.md#finding-1-the-tmdb-spike-took-its-storage-rule-from-the-wrong-source)).
   - **Provider aliasing (P1 risk)** of ad tiers and channels onto a parent service (e.g. ES:119/ES:2100):
     - Aliases are applied only when writing `streamable`, and only if catalogue overlap is measured as near-identical: the share of films listed on the alias ID that also list the parent.
     - Otherwise, ask the owner (P7).

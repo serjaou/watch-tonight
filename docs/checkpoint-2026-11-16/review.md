@@ -220,7 +220,7 @@ Each task also touches about seven state files at handoff. That's fine for now, 
 Feedback should include this, and it's real:
 
 - **The gates are deterministic and live in the repo**, and the harness is tested by its own tests. The most important rule (agents don't edit acceptance tests) is enforced by CI, not by trust.
-- **Raw outputs are committed with the spikes.** That's what made this audit possible at all. Keep doing it.
+- **Spike reports cite the output files their numbers come from.** That's what made this audit possible at all. Keep doing it.
 - **Decisions have dated records with their price**, and the open questions have owners. Six days in, you can already explain *why* almost everything is the way it is.
 - **The product thinking is strong:** the pitch rule, the explicit response states, "never fail silently", and the "we couldn't apply: no spiders" note are the kind of details that make a portfolio project look like a product.
 - **The recommendation spike is genuinely good work:** it measured its own measuring tool, reported its own failures, and dropped two attractive data sources on evidence.

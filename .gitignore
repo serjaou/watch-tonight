@@ -26,6 +26,15 @@ htmlcov/
 .env.*
 !.env.example
 
+# Spike outputs that hold TMDB data: raw responses, movie text, LLM output about real films
+# (docs/conventions.md). Reports with aggregate numbers are committed.
+spikes/08-tmdb/report.json
+spikes/08-tmdb/snapshot_*.json
+spikes/10-embedding/sample_movies_200.json
+spikes/11-llm/runs/
+spikes/16-recommendation/pool_b_profiles.jsonl
+spikes/16-recommendation/catalog_ids_*.json.gz
+
 # Frontend (web/)
 node_modules/
 web/dist/

@@ -22,16 +22,17 @@ Each answer records the finding, the evidence (official documentation links, com
 > - *Changes:* `movies` fields (`review_snippets`), enrichment inputs.
 
 - **Finding:**
-  1. **Non-commercial license:** Allowed. Under the [TMDB API Terms of Use](https://www.themoviedb.org/api-terms-of-use) and [Developer FAQ](https://developer.themoviedb.org/docs/faq), TMDB grants a free, non-exclusive license to use the API for non-commercial applications (no revenue, fees, or advertising/monetization). `watch-tonight` is a zero-cost, non-commercial portfolio project (`docs/product.md` §1).
-  2. **Storing metadata in MongoDB Atlas:** Allowed for app performance and search indexing provided we do not redistribute bulk raw data or build a competing standalone general-purpose movie catalog. TMDB sets `Cache-Control: public, max-age=28125` (~7.8 h) on HTTP responses (`spikes/08-tmdb/report.json` → `request_telemetry.rate_or_cache_headers_seen`) and exposes `/3/movie/changes` so local caches stay synchronized rather than storing stale data indefinitely. Our daily availability refresh + periodic metadata re-ingest satisfies this.
-  3. **Review excerpts & LLM profile generation:** no model is trained on TMDB data. Profiles (`tone`, `pacing`, `intensity`, `themes`, `content_warnings`, `summary`) are written from per-movie metadata at inference time, on two conditions:
-     - the LLM provider call does **not** use prompts/inputs to train models (must be verified in `feat-011` Q2 — e.g. Gemini free tier allows Google to use inputs for training, whereas paid/tier-1 Gemini or OpenAI API with training opt-out does not); and
-     - we **do not persist or redistribute raw user-generated reviews (`review_snippets`)** in our database or API/MCP responses (user reviews are copyright-owned by their individual authors, and 17.2% of popular movies lack them anyway — see Q6).
+  1. **Licence:** TMDB grants a free, non-exclusive licence to use the API in non-commercial applications (no revenue, fees, or advertising). `watch-tonight` is a zero-cost, non-commercial project (`docs/product.md` §1).
+  2. **How long we may store metadata:** at most 6 months. Section 1.C of the terms forbids caching *"for longer than 6 months, any information obtained through or from TMDB or the TMDB APIs"*. So availability is refreshed daily, and all other stored metadata is re-fetched at least every 6 months. TMDB's `/3/movie/changes` endpoint can narrow the re-fetch to films that changed. (The `Cache-Control: public, max-age=28125` header on API responses only tells HTTP clients how long to keep one response; it isn't a storage rule.)
+  3. **No redistribution:** TMDB data stays in the app's own database. Raw API responses are never committed to the repo or served in bulk; spike outputs that contain them are gitignored (`docs/conventions.md`).
+  4. **Reviews:** we **do not persist or serve raw user reviews (`review_snippets`)**. Each review belongs to its author, and 17.2% of popular movies have none anyway (Q6).
+  5. **LLM calls:** no model is trained on TMDB data, and the LLM provider's API tier must not train on our inputs (checked in `feat-011` Q2).
 - **Evidence:**
-  - [TMDB API Terms of Use](https://www.themoviedb.org/api-terms-of-use) & [TMDB Developer FAQ](https://developer.themoviedb.org/docs/faq).
-  - Observed response headers in `spikes/08-tmdb/report.json`: `"cache-control": "public, max-age=28125"`.
+  - [TMDB API Terms of Use](https://www.themoviedb.org/api-terms-of-use) (last updated 2023-10-20), sections 1.C and 3, and the [TMDB Developer FAQ](https://developer.themoviedb.org/docs/faq).
+  - Observed response header: `"cache-control": "public, max-age=28125"` (≈ 7.8 h).
 - **Changes:**
-  - **Drop `review_snippets` from the `movies` collection** in `docs/architecture.md` §5. Build emotional profiles from `overview`, `keywords`, `genres`, `credits`, `runtime`, and `year` (all 94.6%–100% present in Q6). If review text is ever consulted transiently during enrichment, require an LLM tier that does not train on API inputs (`feat-011` Q2) and never store or serve raw review excerpts.
+  - **Drop `review_snippets` from the `movies` collection** in `docs/architecture.md` §5. Build emotional profiles from `overview`, `keywords`, `genres`, `credits`, `runtime`, and `year` (all 94.6%–100% present in Q6).
+  - **Re-fetch stored metadata at least every 6 months** (`docs/architecture.md` §4, the ingest task's re-fetch policy).
 
 ---
 

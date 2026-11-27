@@ -11,7 +11,7 @@ TMDB terms: raw review text is used in memory only; only counts/lengths are writ
 Budget guard: stops when the estimated spend passes MAX_USD.
 
 Run: uv run --no-project --python 3.13 --with openai python spikes/16-recommendation/enrich.py
-Writes data/pool_b_movies.jsonl (gitignored TMDB rows), pool_b_profiles.jsonl (committed).
+Writes data/pool_b_movies.jsonl (gitignored TMDB rows), pool_b_profiles.jsonl (gitignored).
 """
 
 from __future__ import annotations

@@ -174,8 +174,8 @@ Each answer must include the finding, empirical evidence from `spikes/16-recomme
 ## 5. Findings & Evidence
 
 Measured on **2026-11-16** on the Windows laptop with throwaway scripts in [`spikes/16-recommendation/`](../../spikes/16-recommendation/):
-- **Committed evidence:** `*_report.json`, `pool_b_profiles.jsonl`, `rank_details.json`, and the ID snapshot `catalog_ids_2026-11-16.json.gz`.
-- **Gitignored** (`data/`): the raw TMDB, IMDb and Wikidata files.
+- **Committed evidence:** `*_report.json` and `rank_details.json`.
+- **Gitignored:** the raw TMDB, IMDb and Wikidata files (`data/`), the profiles `pool_b_profiles.jsonl` and the ID snapshot `catalog_ids_2026-11-16.json.gz` (they hold TMDB-derived data; [conventions](../conventions.md)).
 - **Raw TMDB reviews are never written to disk**, only counted.
 - **Paid LLM spend: ≈ $0.13**, all `gpt-6-luna` except the 50 reference labels from `gpt-6.1-terra` ($1.00 / $5.00 per 1M tokens, re-fetched from [OpenAI pricing](https://developers.openai.com/api/docs/pricing) 2026-11-16; ≈ $0.07 of the total).
   - This deviates from PROGRESS.md's "`gpt-6-luna` only", for a reference model the A/B needed.
@@ -231,7 +231,7 @@ Measured on **2026-11-16** on the Windows laptop with throwaway scripts in [`spi
       - **All 32 G7 films that left everywhere** have no flat-rate offer in ES, US or BO.
       - Where sampled leavers went: mostly rent/buy only, or no offer at all; in the US, 65 of 150 now have a free or ad-supported offer.
     - **Limits:** one 5.3-day window, in November. Two snapshots show net change only: a film that left and came back, or arrived and left, in between is invisible. Provider swaps within a country (Netflix → Prime Video) don't change a crawl and aren't measured here; spike 08 Q7 saw them on the Popular 500 in one day.
-    - **For a longer window:** the new crawl's IDs, with its G7 IDs, are committed as `catalog_ids_2026-11-21.json.gz`. A later crawl (`catalog.py --dated`, then `churn.py --old 2026-11-21 --new <date>`) can measure a longer window, G7 included, on either machine. The outputs are named by window, so a later run doesn't overwrite these.
+    - **For a longer window:** the new crawl's IDs, with its G7 IDs, are saved as `catalog_ids_2026-11-21.json.gz` (local, gitignored, on the Windows laptop). A later crawl (`catalog.py --dated`, then `churn.py --old 2026-11-21 --new <date>`) can measure a longer window, G7 included. The outputs are named by window, so a later run doesn't overwrite these.
   - **Growth, extrapolated linearly from that one window** (not measured over a year), at ≈ 7.2 KiB per doc. Ranges in brackets are counting noise only:
     - **Admissions:** ≈ 8,900 films a year (7,400–10,600), ≈ +63 MiB a year (52–75 MiB; 12% of M0), and ≈ $0.63 a year of Batch profiling (price list). The error goes both ways:
       - the two-snapshot diff over-counts, because a stored film that comes back is restored, not added;

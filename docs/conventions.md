@@ -26,6 +26,7 @@ Every task is a poethepoet task in `pyproject.toml` (`[tool.poe.tasks]`) and beh
 - Git Bash `curl` uses Windows schannel and can fail with `CRYPT_E_NO_REVOCATION_CHECK`. Download with Python `urllib` instead of weakening TLS checks.
 - JSONL with real-world text (any OS): split on `"\n"`, never `str.splitlines()`. TMDB overviews contain U+2028/U+2029, which `splitlines()` treats as line breaks (feat-016).
 - Throwaway spike scripts with extra packages: `uv run --no-project --python 3.13 --with <pkg> python spikes/...`. Without `--python 3.13`, uv may pick the laptop's system Python 3.11.
+- **Spike outputs that hold TMDB data stay local.** Raw API responses, movie text (overviews, taglines), LLM output about real films (profiles, pitches, run logs) and catalogue ID dumps are gitignored; copy them between machines by hand if needed. Commit the scripts and the reports with aggregate numbers, titles and IDs of a few examples. Tests use fictional fixtures.
 
 ## Code
 
